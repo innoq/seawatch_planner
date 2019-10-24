@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine
+  web:
+    build: .
+    command: sh docker-entrypoint.sh
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
