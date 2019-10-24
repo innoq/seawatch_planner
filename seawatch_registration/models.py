@@ -23,12 +23,21 @@ class Profile(models.Model):
   emergency_contact = models.TextField()
   comments = models.TextField()
 
+  def __str__(self):
+    return self.last_name + ", " + self.first_name
+
 class Position(models.Model):
   name = models.CharField(max_length=100)
   profiles = models.ManyToManyField(Profile, through='ProfilePosition')
+
+  def __str__(self):
+    return self.name
 
 class ProfilePosition(models.Model):
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
   position = models.ForeignKey(Position, on_delete=models.CASCADE)
   requested = models.BooleanField()
   approved = models.BooleanField()
+
+  def __str__(self):
+    return self.profile.__str__() + "-" + self.position.__str__()
