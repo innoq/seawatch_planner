@@ -22,3 +22,13 @@ class Profile(models.Model):
   phone = models.CharField(max_length=100)
   emergency_contact = models.TextField()
   comments = models.TextField()
+
+class Position(models.Model):
+  name = models.CharField(max_length=100)
+  profiles = models.ManyToManyField(Profile, through='ProfilePosition')
+
+class ProfilePosition(models.Model):
+  profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+  position = models.ForeignKey(Position, on_delete=models.CASCADE)
+  requested = models.BooleanField()
+  approved = models.BooleanField()
