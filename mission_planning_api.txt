@@ -1,0 +1,29 @@
+
+  VerifiedCandidates
+    candidates: List<Candidates>
+
+  Candidates
+   name
+   selfDescription
+   id
+   url/link
+   availabilities: List<Availability>
+   wishPositions: List<enum>
+   verfifiedPositions: List<enum>
+   document: List<Document>
+
+  Availibility
+   start: Date
+   end: Date
+   maxDuration: Int
+   flexible: boolean
+   annotation: String
+
+  Document
+    type
+    description
+    url/link
+
+  Skill
+    name
+    description
