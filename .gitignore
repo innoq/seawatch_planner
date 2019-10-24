@@ -1,3 +1,5 @@
 .idea
 
 .ENV
+__PYCACHE__/
+venv/
