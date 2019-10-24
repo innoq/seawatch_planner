@@ -5,12 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Missions Overview</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        div.crew-editor table {
+            margin: 20px 0 20px;
+            border: 1px solid lightgray;
+            min-width: 40%;
+        }
+
+        div.crew-editor th  {
+            background: #eee;
+        }
+
+        div.crew-editor td  {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+
+        .mission-info {
+            font-size: 1.3em;
+        }
+
+    </style>
+
 </head>
 <body>
 
     <div class="container">
 
         <h1>Edit mission</h1>
+
+        <div class="mission-info">
+            <div><label>ID:</label> {{ mission_id }} </div>
+            <div><label>Start:</label> {{ start }} </div>
+            <div><label>End:</label> {{ end }} </div>
+            <div><label>Ship:</label> {{ ship }} </div>
+        </div>
+
+        <div class="crew-editor">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr>
+                         <td>Captain</td>
+                         <td>Jack Sparrow</td>
+                         <td>
+                             <button class="btn btn-sm btn-primary">edit</button>
+                         </td>
+                    </tr>
+                    <tr>
+                        <td>1st Officer</td>
+                        <td><a href="#">select</a></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="col-md-4 col-md-offset-8">
+                <button class="btn btn-sm btn-danger">Cancel</button>
+                <button class="btn btn-sm btn-primary">Add position</button>
+            </div>
+
+        </div>
 
     </div>
 
