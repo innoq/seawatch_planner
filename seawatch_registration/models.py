@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Skill(models.Model):
   name = models.CharField(max_length=50)
-  description = models.CharField(max_length=500)
+  description = models.CharField(max_length=500, blank=True)
   SKILL_GROUPS = [
     ('lang', 'language'),
     ('other', 'other')
@@ -18,7 +18,7 @@ class Profile(models.Model):
   first_name = models.CharField(max_length=100)
   last_name = models.CharField(max_length=100)
   citizenship = models.CharField(max_length=100)
-  second_citizenship = models.CharField(max_length=100)
+  second_citizenship = models.CharField(max_length=100, blank=True)
   date_of_birth = models.DateField()
   place_of_birth = models.CharField(max_length=100)
   country_of_birth = models.CharField(max_length=100)
@@ -28,12 +28,12 @@ class Profile(models.Model):
     ('d', 'diverse')
   ]
   gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-  address = models.CharField(max_length=200)
+  address = models.CharField(max_length=200, blank=True)
   email = models.CharField(max_length=100)
   needs_schengen_visa = models.BooleanField()
   phone = models.CharField(max_length=100)
-  emergency_contact = models.TextField()
-  comments = models.TextField()
+  emergency_contact = models.TextField(blank=True)
+  comments = models.TextField(blank=True)
   skills = models.ManyToManyField(Skill)
   custom_skills = models.CharField(max_length=500, blank=True)
 
@@ -73,12 +73,12 @@ class DocumentType(models.Model):
 class Document(models.Model):
   document_type = models.ForeignKey(DocumentType, on_delete=models.CASCADE)
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-  number = models.CharField(max_length=100)
-  issuing_date = models.DateField()
-  expiry_date = models.DateField()
-  issuing_authority = models.CharField(max_length=100)
-  issuing_place = models.CharField(max_length=100)
-  issuing_country = models.CharField(max_length=100)
+  number = models.CharField(max_length=100, blank=True)
+  issuing_date = models.DateField(blank=True)
+  expiry_date = models.DateField(blank=True)
+  issuing_authority = models.CharField(max_length=100, blank=True)
+  issuing_place = models.CharField(max_length=100, blank=True)
+  issuing_country = models.CharField(max_length=100, blank=True)
   file = models.BinaryField()
 
   def __str__(self):
