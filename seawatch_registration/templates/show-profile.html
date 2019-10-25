@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Personal Information | Seawatch Registration{% endblock %}
+
+{% block content %}
+  <h1>Personal Information</h1>
+
+
+  <dl class="row">
+    <dt class="col-sm-3">First name</dt>
+    <dd class="col-sm-9">{{ profile.first_name }}</dd>
+
+    <dt class="col-sm-3">Last name</dt>
+    <dd class="col-sm-9">{{ profile.last_name }}</dd>
+
+    <dt class="col-sm-3">Citizenship</dt>
+    <dd class="col-sm-9">{{ profile.citizenship }}</dd>
+
+    <dt class="col-sm-3">Second Citizenship</dt>
+    <dd class="col-sm-9">{{ profile.second_citizenship }}</dd>
+
+    <dt class="col-sm-3">Date of Birth</dt>
+    <dd class="col-sm-9">{{ profile.date_of_birth }}</dd>
+
+    <dt class="col-sm-3">Place of Birth</dt>
+    <dd class="col-sm-9">{{ profile.place_of_birth }}</dd>
+
+    <dt class="col-sm-3">Country of Birth</dt>
+    <dd class="col-sm-9">{{ profile.country_of_birth }}</dd>
+
+    <dt class="col-sm-3">Gender</dt>
+    <dd class="col-sm-9">{{ profile.gender }}</dd>
+
+    <dt class="col-sm-3">Address</dt>
+    <dd class="col-sm-9">{{ profile.address }}</dd>
+
+    <dt class="col-sm-3">Needs Schengen Visa</dt>
+    <dd class="col-sm-9">{{ profile.needs_schengen_visa }}</dd>
+
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">{{ profile.phone }}</dd>
+
+    <dt class="col-sm-3">Emergency Contact</dt>
+    <dd class="col-sm-9">{{ profile.emergency_contact }}</dd>
+
+    <dt class="col-sm-3">Comments</dt>
+    <dd class="col-sm-9">{{ profile.comments }}</dd>
+  </dl>
+
+{% endblock %}
