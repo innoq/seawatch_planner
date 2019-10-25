@@ -1,6 +1,14 @@
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Account Login | Seawatch Registration{% endblock %}
+
+{% block content %}
+  <h1>Account Login</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+{% endblock %}
