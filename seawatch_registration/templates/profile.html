@@ -1,15 +1,17 @@
-<html>
-  <body>
-    <form method="post">
-      {% csrf_token %}
-      {% for field in form %}<br>
-        {% if not field.is_hidden %}
-          {{ field.label_tag }}
-        {% endif %}
-        {{ field }}
-      {% endfor %}
+{% extends 'base.html' %}
+{% load bootstrap4 %}
 
-      <button type="submit">Save</button>
-    </form>
-  </body>
-</html>
+{% block title %}Personal Information | Seawatch Registration{% endblock %}
+
+{% block content %}
+  <h1>Personal Information</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">Next</button>
+    {% endbuttons %}
+  </form>
+{% endblock %}
