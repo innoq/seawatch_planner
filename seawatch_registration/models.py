@@ -105,7 +105,7 @@ class Availability(models.Model):
   end_date = models.DateField()
 
   def __str__(self):
-    return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")}'
+    return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")} ({self.profile})'
 
 class Assessment(models.Model):
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
