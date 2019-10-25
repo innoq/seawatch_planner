@@ -29,7 +29,6 @@ class Profile(models.Model):
   ]
   gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
   address = models.CharField(max_length=200, blank=True)
-  email = models.CharField(max_length=100)
   needs_schengen_visa = models.BooleanField()
   phone = models.CharField(max_length=100)
   emergency_contact = models.TextField(blank=True)
