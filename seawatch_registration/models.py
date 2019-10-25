@@ -1,6 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Skill(models.Model):
+  name = models.CharField(max_length=50)
+  description = models.CharField(max_length=500)
+  SKILL_GROUPS = [
+    ('lang', 'language'),
+    ('other', 'other')
+  ]
+  group = models.CharField(max_length=10, choices=SKILL_GROUPS)
+
+  def __str__(self):
+    return self.name
+
 class Profile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   first_name = models.CharField(max_length=100)
@@ -22,6 +34,8 @@ class Profile(models.Model):
   phone = models.CharField(max_length=100)
   emergency_contact = models.TextField()
   comments = models.TextField()
+  skills = models.ManyToManyField(Skill)
+  custom_skills = models.CharField(max_length=500, blank=True)
 
   def __str__(self):
     return self.last_name + ", " + self.first_name
