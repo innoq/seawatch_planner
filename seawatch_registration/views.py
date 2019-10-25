@@ -28,7 +28,11 @@ class ProfileForm(forms.ModelForm):
         widgets = { 'user': forms.HiddenInput() }
 
 def edit_profile(request):
-    profile = get_object_or_404(Profile, user = request.user)
+    try:
+        profile = Profile.objects.get(user = request.user)
+    except Profile.DoesNotExist:
+        return redirect('/accounts/add')
+
     form = ProfileForm(request.POST or None, instance = profile)
 
     if form.is_valid():
