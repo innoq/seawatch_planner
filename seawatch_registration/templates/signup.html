@@ -1,12 +1,17 @@
-<html>
-  <body>
-    <h1>hello</h1>
+{% extends 'base.html' %}
+{% load bootstrap4 %}
 
-    <h2>Sign up</h2>
+{% block title %}Account Creation | Seawatch Registration{% endblock %}
+
+{% block content %}
+  <h1>Account Creation</h1>
+
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
+    {% bootstrap_form form %}
+
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">Sign up</button>
+    {% endbuttons %}
   </form>
-  </body>
-</html>
+{% endblock %}
