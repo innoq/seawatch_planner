@@ -19,7 +19,6 @@ class ProfileForm(forms.ModelForm):
             'country_of_birth',
             'gender',
             'address',
-            'email',
             'needs_schengen_visa',
             'phone',
             'emergency_contact',
