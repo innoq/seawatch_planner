@@ -48,7 +48,7 @@ def add_profile(request):
         form = ProfileForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/admin')
+            return redirect('/accounts/show/')
 
     return render(request, 'profile.html', {'form': form})
 
@@ -73,3 +73,8 @@ def signup(request):
         form = SignupForm()
 
     return render(request, 'signup.html', {'form': form})
+
+def show_profile(request):
+  profile = request.user.profile
+
+  return render(request, 'show-profile.html', {'profile': profile})
