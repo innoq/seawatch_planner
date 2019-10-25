@@ -51,11 +51,18 @@ class AssignmentCreateView(CreateView):
 
 
 class AssignmentView(View):
+    def post(self, request, *args, **kwargs):
+        if request.POST["method"] == "DELETE":
+            return self.delete(request, args, kwargs)
+        return redirect(reverse('mission-detail', kwargs={'pk': kwargs.pop('mission__id')}))
+
     def delete(self, request, *args, **kwargs):
         print("DELETE")
         assignment = get_object_or_404(Assignment, pk=kwargs.pop('assignment__id'),
                                        mission_id=kwargs.pop('mission__id'))
         assignment.delete()
+        return redirect(reverse('mission-detail', kwargs={'pk': assignment.mission_id}))
+
 
 
 class AssigneeView(View):

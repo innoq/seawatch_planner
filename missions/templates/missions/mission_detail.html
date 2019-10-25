@@ -23,7 +23,7 @@
 
             <form method="POST" action="{% url 'assignment' object.id assignment.id %}">
                 {% csrf_token %}
-                <input method="DELETE"/>
+                <input type="hidden" name="method" value="DELETE" />
                 <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
             </form>
         </td>
