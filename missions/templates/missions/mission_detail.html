@@ -19,7 +19,7 @@
         <td>{{ assignment.user.id }}</td>
         <td>
             <a type="button" class="btn btn-outline-primary btn-sm" role="button" aria-pressed="true"
-               href="{% url 'assignee' assignment.id %}">Assign</a>
+               href="{% url 'assignee' object.id assignment.id %}">Assign</a>
 
             <form method="POST" action="{% url 'assignment' object.id assignment.id %}">
                 {% csrf_token %}
