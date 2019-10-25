@@ -46,7 +46,10 @@ class AssignmentCreateView(CreateView):
         return reverse('mission-detail', kwargs={'id': self.mission.object.id})
 
 class AssignmentView(View):
-    pass
+    def delete(self, request, *args, **kwargs):
+        print("DELETE")
+        assignment = get_object_or_404(Assignment, pk=kwargs.pop('assignment__id'), mission_id=kwargs.pop('mission__id'))
+        assignment.delete()
 
 class AssigneeView(View):
     pass

@@ -12,13 +12,16 @@
         <h1>Missions</h1>
         <ul>
         {% for mission in object_list %}
-            <li>{{ article.name }}</li>
+            <li><a href="{% url 'mission-detail' mission.id %}">{{ mission.name }}</a></li>
         {% empty %}
             <li>No missions yet.</li>
         {% endfor %}
         </ul>
 
     </div>
+
+    <a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'mission-create' %}">Add</a>
+
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
