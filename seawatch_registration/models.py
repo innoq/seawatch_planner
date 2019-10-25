@@ -99,3 +99,11 @@ class Answer(models.Model):
 
   def __str__(self):
     return self.text
+
+class Availability(models.Model):
+  profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+  start_date = models.DateField()
+  end_date = models.DateField()
+
+  def __str__(self):
+    return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")}'
