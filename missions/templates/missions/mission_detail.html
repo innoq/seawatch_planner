@@ -6,31 +6,33 @@
 <h2>Assignments</h2>
 <table class="table">
     <thead>
-      <tr>
+    <tr>
         <th scope="col">Position</th>
         <th scope="col">Assignment</th>
         <th scope="col">Actions</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
     {% for assignment in object.assignment_set.all %}
-      <tr>
+    <tr>
         <td>{{ assignment.position.name }}</td>
         <td>{{ assignment.user.id }}</td>
         <td>
-            <a type="button" class="btn btn-outline-primary btn-sm" role="button" aria-pressed="true">Assign</a>
+            <a type="button" class="btn btn-outline-primary btn-sm" role="button" aria-pressed="true"
+               href="{% url 'assignee' assignment.id %}">Assign</a>
+
             <form method="POST" action="{% url 'assignment' object.id assignment.id %}">
                 {% csrf_token %}
-                <input method="DELETE" />
+                <input method="DELETE"/>
                 <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
             </form>
         </td>
-      </tr>
-    {% endfor %} 
+    </tr>
+    {% endfor %}
     </tbody>
-  </table>
+</table>
 
-  <a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'assignment-create' object.id %}">Add</a>
+<a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'assignment-create' object.id %}">Add</a>
 
 
 {% endblock %}

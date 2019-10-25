@@ -8,17 +8,19 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views import View
 
+from seawatch_registration.models import Profile
 from .forms import AssignmentForm
 from .models import Mission, Assignment
 
-class MissionListView(ListView):
 
+class MissionListView(ListView):
     model = Mission
     paginate_by = 100  # if pagination is desired
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
 
 class MissionCreateView(CreateView):
     model = Mission
@@ -27,8 +29,10 @@ class MissionCreateView(CreateView):
     def get_success_url(self):
         return reverse('mission-detail', kwargs={'id': self.object.id})
 
+
 class MissionDetailView(DetailView):
     model = Mission
+
 
 class AssignmentCreateView(CreateView):
     model = Assignment
@@ -39,20 +43,29 @@ class AssignmentCreateView(CreateView):
         super().__init__(*args, **kwargs)
 
     def form_valid(self, form):
-         form.instance.mission_id = self.mission_id
-         return super(AssignmentCreateView, self).form_valid(form)
+        form.instance.mission_id = self.mission_id
+        return super(AssignmentCreateView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('mission-detail', kwargs={'id': self.mission.object.id})
 
+
 class AssignmentView(View):
     def delete(self, request, *args, **kwargs):
         print("DELETE")
-        assignment = get_object_or_404(Assignment, pk=kwargs.pop('assignment__id'), mission_id=kwargs.pop('mission__id'))
+        assignment = get_object_or_404(Assignment, pk=kwargs.pop('assignment__id'),
+                                       mission_id=kwargs.pop('mission__id'))
         assignment.delete()
 
+
 class AssigneeView(View):
-    pass
+    initial = {'key': 'value'}
+    template_name = 'missions/assignee_form.html'
+
+    def get(self, request, *args, **kwargs):
+        candidates = Profile.all()
+        return render(request, self.template_name, {'candidates': candidates})
+
 
 class AssignmentNewView(View):
     form_class = AssignmentForm
@@ -62,7 +75,7 @@ class AssignmentNewView(View):
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
         return render(request, self.template_name, {'form': form})
-    
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         mission = get_object_or_404(Mission, pk=kwargs.pop('mission__id'))
@@ -71,5 +84,3 @@ class AssignmentNewView(View):
             form.save()
             return redirect(reverse('mission-detail', kwargs={'pk': mission.id}))
         return render(request, self.template_name, {'form': form})
-
-
