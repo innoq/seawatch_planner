@@ -83,3 +83,19 @@ class Document(models.Model):
 
   def __str__(self):
     return f'{self.number} ({self.document_type})'
+
+class Question(models.Model):
+  text = models.CharField(max_length=500)
+  mandatory = models.BooleanField()
+  profiles = models.ManyToManyField(Profile, through='Answer')
+
+  def __str__(self):
+    return self.text
+
+class Answer(models.Model):
+  profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+  question = models.ForeignKey(Question, on_delete=models.CASCADE)
+  text = models.TextField()
+
+  def __str__(self):
+    return self.text
