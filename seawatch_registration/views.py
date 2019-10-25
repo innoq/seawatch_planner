@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -26,11 +26,26 @@ class ProfileForm(forms.ModelForm):
         )
         widgets = { 'user': forms.HiddenInput() }
 
-def profile_form(request):
-    current_user = request.user
+def edit_profile(request):
+    profile = get_object_or_404(Profile, user = request.user)
+    form = ProfileForm(request.POST or None, instance = profile)
 
-    return render(request, 'profile.html', { 'form': ProfileForm(), 'user': current_user })
+    if form.is_valid():
+        form.save()
+        return redirect('/admin')
 
+    return render(request, 'profile.html', {'form': form})
+
+def add_profile(request):
+    form = ProfileForm({ 'user': request.user })
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/admin')
+
+    return render(request, 'profile.html', {'form': form})
 
 def signup(request):
     if request.method == 'POST':
@@ -41,7 +56,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/accounts/profile')
+            return redirect('/accounts/add')
     else:
         form = UserCreationForm()
 
