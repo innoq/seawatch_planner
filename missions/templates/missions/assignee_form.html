@@ -8,10 +8,32 @@
     <input type="submit" value="Save">
 </form>
 
+<table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Availablities</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for candidate in candidates %} 
+          <tr>
+            <th scope="row"><input type="radio" name="assignee" value="{{candidate.id}}" /></th>
+            <td>{{candidate.first_name}}</td>
+            <td>{{candidate.last_name}}</td>
+            <td>
+                {% for availability in candidate.availability_set.all %}
+                <p>{{availability.start_date}} — {{availability.end_date}}</p>
+                {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-{% for candidate in candidates %}
-{{candidate}}
-{% endfor %}
+
 
 
 {% endblock %}

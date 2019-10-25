@@ -70,7 +70,7 @@ class AssigneeView(View):
     template_name = 'missions/assignee_form.html'
 
     def get(self, request, *args, **kwargs):
-        candidates = Profile.all()
+        candidates = Profile.objects.all()
         return render(request, self.template_name, {'candidates': candidates})
 
 
