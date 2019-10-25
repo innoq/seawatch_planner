@@ -107,3 +107,13 @@ class Availability(models.Model):
 
   def __str__(self):
     return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")}'
+
+class Assessment(models.Model):
+  profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+  ASSESSMENT_STATUS=[
+    ('pending', 'pending'),
+    ('accepted', 'accepted'),
+    ('rejected', 'rejected')
+  ]
+  status = models.CharField(max_length=10, choices=ASSESSMENT_STATUS)
+  comment = models.TextField(blank=True)
