@@ -62,7 +62,9 @@ def document_form(request):
             form = DocumentForm(request.POST, request.FILES, user=request.user)
             if form.is_valid():
                 form.save()
-                return redirect('/admin/')
+                return render(request,
+                              'document.html',
+                              {'form': DocumentForm(user=request.user), 'success': True})
         return render(request, 'document.html', {'form': form})
     except ObjectDoesNotExist:
         return redirect('/accounts/login/')

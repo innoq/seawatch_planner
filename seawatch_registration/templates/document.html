@@ -5,6 +5,11 @@
 
 {% block content %}
   <h1>Document Upload</h1>
+  {% if success %}
+  <div class="alert alert-success" role="alert">
+  Document was created successfully!
+  </div>
+  {% endif %}
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
