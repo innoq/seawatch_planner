@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Personal Information | Seawatch Registration{% endblock %}
+
+{% block content %}
+  <h1>Document Upload</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">Next</button>
+    {% endbuttons %}
+  </form>
+{% endblock %}
