@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django import forms
-from seawatch_registration.models import Profile
+
+from seawatch_registration.forms import ProfilePositionForm
+from seawatch_registration.models import Profile, ProfilePosition, Position
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -78,3 +80,24 @@ def show_profile(request):
   profile = request.user.profile
 
   return render(request, 'show-profile.html', {'profile': profile})
+
+
+def profileposition_form(request):
+    json = {}
+    try:
+        Profile.objects.get(user=request.user)
+        form = ProfilePositionForm(user=request.user)
+        if request.method == 'POST':
+            form = ProfilePositionForm(request.POST, user=request.user)
+            if form.is_valid():
+                profile = form.cleaned_data['profile']
+                requested_positions = form.cleaned_data['requested_positions']
+                for position in requested_positions:
+                    profileposition = ProfilePosition(profile=profile, position=Position.objects.get(name=position), requested=True, approved=False)
+                    profileposition.save()
+                return render(request,
+                              'position.html',
+                              {'form': ProfilePositionForm(user=request.user), 'success': True})
+        return render(request, 'position.html', {'form': form})
+    except ObjectDoesNotExist:
+        return redirect('/accounts/login/')
