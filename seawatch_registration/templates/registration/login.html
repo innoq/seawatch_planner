@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-registration.html' %}
 {% load bootstrap4 %}
 
 {% block title %}Account Login | Seawatch Registration{% endblock %}
@@ -8,7 +8,7 @@
 
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary">Login</button>
   </form>
 {% endblock %}
