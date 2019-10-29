@@ -107,8 +107,4 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
         return render(request, 'position.html', {'form': form, 'error': 'Choose at least one position.'})
 
     def test_func(self):
-        try:
-            Profile.objects.get(user=self.request.user)
-            return True
-        except ObjectDoesNotExist:
-            return False
+        return Profile.objects.filter(user=self.request.user).exists()
