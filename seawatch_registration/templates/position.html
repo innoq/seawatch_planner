@@ -10,6 +10,11 @@
    Reqeusted positions are saved successfully!
    </div>
    {% endif %}
+   {% if error %}
+   <div class="alert alert-danger" role="alert">
+   {{ error }}
+   </div>
+   {% endif %}
 
    <form method="post" enctype="multipart/form-data">
      {% csrf_token %}
