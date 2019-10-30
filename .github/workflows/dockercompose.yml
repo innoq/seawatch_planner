@@ -15,5 +15,5 @@ jobs:
     - name: Start services
       run: docker-compose up -d
     - name: Test with Django
-      run: docker exec -it seawatch_planner_web_1 python manage.py test
+      run: docker exec seawatch_planner_web_1 python manage.py test
 
