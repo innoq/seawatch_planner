@@ -84,7 +84,7 @@ class Document(models.Model):
     issuing_authority = models.CharField(max_length=100, blank=True)
     issuing_place = models.CharField(max_length=100, blank=True)
     issuing_country = models.CharField(max_length=100, blank=True)
-    file = models.FileField(upload_to="static/document/")
+    file = models.FileField()
 
     def __str__(self):
         return f'{self.number} ({self.document_type})'
