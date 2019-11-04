@@ -63,19 +63,19 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = ProfilePositionForm(request.POST, user=request.user)
-        if form.is_valid():
-            profile = form.cleaned_data['profile']
-            requested_positions = form.cleaned_data['requested_positions']
-            for position in requested_positions:
-                profile_position = ProfilePosition(profile=profile,
-                                                   position=Position.objects.get(name=position),
-                                                   requested=True,
-                                                   approved=False)
-                profile_position.save()
-            return render(request,
-                          'position.html',
-                          {'form': ProfilePositionForm(user=request.user), 'success': True})
-        return render(request, 'position.html', {'form': form, 'error': 'Choose at least one position.'})
+        if not form.is_valid():
+            return render(request, 'position.html', {'form': form, 'error': 'Choose at least one position.'})
+        profile = form.cleaned_data['profile']
+        requested_positions = form.cleaned_data['requested_positions']
+        for position in requested_positions:
+            profile_position = ProfilePosition(profile=profile,
+                                               position=Position.objects.get(name=position),
+                                               requested=True,
+                                               approved=False)
+            profile_position.save()
+        return render(request,
+                      'position.html',
+                      {'form': ProfilePositionForm(user=request.user), 'success': True})
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
