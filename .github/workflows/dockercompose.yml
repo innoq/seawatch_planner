@@ -1,0 +1,19 @@
+name: Docker Compose CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker images
+      run: docker-compose build
+    - name: Start services
+      run: docker-compose up -d
+    - name: Test with Django
+      run: docker exec seawatch_planner_web_1 python manage.py test
+
