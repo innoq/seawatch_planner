@@ -1,9 +1,11 @@
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from django.views.generic.base import View
 
-from seawatch_registration.models import Profile
-from .forms import DocumentForm, ProfileForm, SignupForm
+from seawatch_registration.models import Profile, ProfilePosition, Position
+from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, ProfilePositionForm
 
 
 def edit_profile(request):
@@ -54,6 +56,31 @@ def show_profile(request):
     return render(request, 'show-profile.html', {'profile': profile})
 
 
+class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'position.html', {'form': ProfilePositionForm(user=request.user)})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfilePositionForm(request.POST, user=request.user)
+        if not form.is_valid():
+            return render(request, 'position.html', {'form': form, 'error': 'Choose at least one position.'})
+        profile = form.cleaned_data['profile']
+        requested_positions = form.cleaned_data['requested_positions']
+        for position in requested_positions:
+            profile_position = ProfilePosition(profile=profile,
+                                               position=Position.objects.get(name=position),
+                                               requested=True,
+                                               approved=False)
+            profile_position.save()
+        return render(request,
+                      'position.html',
+                      {'form': ProfilePositionForm(user=request.user), 'success': True})
+
+    def test_func(self):
+        return Profile.objects.filter(user=self.request.user).exists()
+
+
 def document_form(request):
     try:
         Profile.objects.get(user=request.user)
@@ -68,4 +95,3 @@ def document_form(request):
         return render(request, 'document.html', {'form': form})
     except ObjectDoesNotExist:
         return redirect('/accounts/login/')
-
