@@ -14,8 +14,6 @@ jobs:
       run: docker-compose build
     - name: Start services
       run: docker-compose up -d
-    - name: Migrate Database
-      run: docker exec seawatch_planner_web_1 python manage.py migrate
     - name: Test with Django
       run: docker exec seawatch_planner_web_1 python manage.py test
 
