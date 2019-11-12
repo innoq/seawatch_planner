@@ -1,12 +1,16 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db import ProgrammingError
 
 from .models import Position, Profile, ProfilePosition, DocumentType, Document
 
 
 def positions_as_tuples():
-    positions = list(Position.objects.all())
+    try:
+        positions = list(Position.objects.all())
+    except ProgrammingError:
+        return {Position('-----'), Position('-----')}
     result = set()
     for position in positions:
         result.add((position, position))
@@ -14,7 +18,6 @@ def positions_as_tuples():
 
 
 class ProfilePositionForm(forms.Form):
-    listOfPositions = list(Position.objects.all())
     requested_positions = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                                     choices=positions_as_tuples())
 
