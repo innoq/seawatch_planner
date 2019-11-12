@@ -1,10 +1,8 @@
 import datetime
-import os
 import tempfile
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.http import HttpResponseRedirect
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 
