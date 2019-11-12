@@ -35,7 +35,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=100)
     emergency_contact = models.TextField(blank=True)
     comments = models.TextField(blank=True)
-    skills = models.ManyToManyField(Skill)
+    skills = models.ManyToManyField(Skill, blank=True)
     custom_skills = models.CharField(max_length=500, blank=True)
 
     def __str__(self):

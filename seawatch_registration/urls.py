@@ -1,6 +1,6 @@
 from django.urls import path
 
-from seawatch_registration.views import RequestedPositionView
+from seawatch_registration.views import RequestedPositionView, AddSkillsView
 from . import views
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('signup/', views.signup),
     path('document/', views.document_form),
     path('position/', RequestedPositionView.as_view(), name='requested_profile'),
+    path('skill/', AddSkillsView.as_view(), name='skill')
 ]

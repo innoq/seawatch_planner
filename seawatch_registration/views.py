@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from seawatch_registration.models import Profile, ProfilePosition, Position
-from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, ProfilePositionForm
+from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, ProfilePositionForm, SkillsForm
 
 
 def edit_profile(request):
@@ -56,15 +56,74 @@ def show_profile(request):
     return render(request, 'show-profile.html', {'profile': profile})
 
 
-class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
+class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
+    
+    def __init__(self):
+        super(AddSkillsView, self).__init__()
+        self.title = 'Add Skills'
+        self.success_alert = 'Skills are successfully saved!'
+        self.submit_button = 'Next'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'position.html', {'form': ProfilePositionForm(user=request.user)})
+        profile = request.user.profile
+        return render(request, 'form.html', {'form': SkillsForm(profile=profile),
+                                             'title': self.title,
+                                             'success_alert': self.success_alert,
+                                             'submit_button': self.submit_button})
+
+    def post(self, request, *args, **kwargs):
+        profile = request.user.profile
+        form = SkillsForm(request.POST, profile=profile)
+        if not form.is_valid():
+            return render(request, 'form.html', {'form': form,
+                                                 'error': 'Choose at least one skill.',
+                                                 'title': self.title,
+                                                 'success_alert': self.success_alert,
+                                                 'submit_button': self.submit_button
+                                                 })
+        languages = form.cleaned_data['languages']
+        skills = form.cleaned_data['skills']
+        profile.skills.clear()
+        if skills:
+            profile.skills.add(skills)
+        if languages:
+            profile.skills.add(languages)
+        return render(request,
+                      'form.html',
+                      {'form': SkillsForm(profile=profile),
+                       'success': True,
+                       'title': self.title,
+                       'success_alert': self.success_alert,
+                       'submit_button': self.submit_button
+                       })
+
+    def test_func(self):
+        return Profile.objects.filter(user=self.request.user).exists()
+
+
+class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
+
+    def __init__(self):
+        super(RequestedPositionView, self).__init__()
+        self.title = 'Add Requested Position'
+        self.success_alert = 'Requested Positions are successfully saved!'
+        self.submit_button = 'Next'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'form.html', {'form': ProfilePositionForm(user=request.user),
+                                             'title': self.title,
+                                             'success_alert': self.success_alert,
+                                             'submit_button': self.submit_button})
 
     def post(self, request, *args, **kwargs):
         form = ProfilePositionForm(request.POST, user=request.user)
         if not form.is_valid():
-            return render(request, 'position.html', {'form': form, 'error': 'Choose at least one position.'})
+            return render(request, 'form.html', {'form': form,
+                                                 'error': 'Choose at least one position.',
+                                                 'title': self.title,
+                                                 'success_alert': self.success_alert,
+                                                 'submit_button': self.submit_button
+                                                 })
         profile = form.cleaned_data['profile']
         requested_positions = form.cleaned_data['requested_positions']
         for position in requested_positions:
@@ -74,8 +133,13 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                approved=False)
             profile_position.save()
         return render(request,
-                      'position.html',
-                      {'form': ProfilePositionForm(user=request.user), 'success': True})
+                      'form.html',
+                      {'form': ProfilePositionForm(user=request.user),
+                       'success': True,
+                       'title': self.title,
+                       'success_alert': self.success_alert,
+                       'submit_button': self.submit_button
+                       })
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
