@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase, Client
 from django.urls import resolve, reverse
 
-from seawatch_registration.views import show_profile, add_profile, edit_profile, signup, add_document
+from seawatch_registration.views import show_profile, add_profile, edit_profile, signup, add_document, AddSkillsView
 
 
 class TestUrls(SimpleTestCase):
@@ -28,3 +28,7 @@ class TestUrls(SimpleTestCase):
     def test_urls_add_document(self):
         url = reverse('add_document')
         self.assertEquals(resolve(url).func, add_document)
+
+    def test_urls_add_skills(self):
+        url = reverse('add_skills')
+        self.assertEquals(resolve(url).func.__name__, AddSkillsView.as_view().__name__)

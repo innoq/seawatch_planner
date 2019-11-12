@@ -108,10 +108,10 @@ class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
         languages = form.cleaned_data['languages']
         skills = form.cleaned_data['skills']
         profile.skills.clear()
-        if skills:
-            profile.skills.add(skills)
-        if languages:
-            profile.skills.add(languages)
+        for skill in skills:
+            profile.skills.add(skill)
+        for language in languages:
+            profile.skills.add(language)
         return render(request,
                       'form.html',
                       {'form': SkillsForm(profile=profile),
