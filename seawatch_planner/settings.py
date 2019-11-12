@@ -126,3 +126,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 LOGIN_REDIRECT_URL = '/accounts/edit'
+
+NOSE_ARGS = ['--nocapture',
+             '--nologcapture']
+
+MEDIA_ROOT = 'media/'

@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
@@ -8,21 +8,23 @@ from seawatch_registration.models import Profile, ProfilePosition, Position
 from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, ProfilePositionForm, SkillsForm
 
 
+@login_required
 def edit_profile(request):
     try:
         profile = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
-        return redirect('/accounts/add')
+        return redirect('add_profile')
 
     form = ProfileForm(request.POST or None, instance=profile)
 
     if form.is_valid():
         form.save()
-        return redirect('/admin')
+        return redirect('show_profile')
 
     return render(request, 'profile.html', {'form': form})
 
 
+@login_required
 def add_profile(request):
     form = ProfileForm({'user': request.user})
 
@@ -44,20 +46,42 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/accounts/add')
+            return redirect('add_profile')
     else:
         form = SignupForm()
 
     return render(request, 'signup.html', {'form': form})
 
 
+def has_profile(user):
+    return Profile.objects.filter(user=user).exists()
+
+
+@login_required
 def show_profile(request):
+    if not has_profile(request.user):
+        return redirect('add_profile')
     profile = request.user.profile
     return render(request, 'show-profile.html', {'profile': profile})
 
 
+@login_required
+def add_document(request):
+    if not has_profile(request.user):
+        return redirect('add_profile')
+    form = DocumentForm(user=request.user)
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            form.save()
+            return render(request,
+                          'document.html',
+                          {'form': DocumentForm(user=request.user), 'success': True})
+    return render(request, 'document.html', {'form': form})
+
+
 class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
-    
+
     def __init__(self):
         super(AddSkillsView, self).__init__()
         self.title = 'Add Skills'
@@ -143,19 +167,3 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
-
-
-def document_form(request):
-    try:
-        Profile.objects.get(user=request.user)
-        form = DocumentForm(user=request.user)
-        if request.method == 'POST':
-            form = DocumentForm(request.POST, request.FILES, user=request.user)
-            if form.is_valid():
-                form.save()
-                return render(request,
-                              'document.html',
-                              {'form': DocumentForm(user=request.user), 'success': True})
-        return render(request, 'document.html', {'form': form})
-    except ObjectDoesNotExist:
-        return redirect('/accounts/login/')
