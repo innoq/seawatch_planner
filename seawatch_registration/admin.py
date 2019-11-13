@@ -1,10 +1,9 @@
 from django.contrib import admin
-from .models import Profile, Position, ProfilePosition, DocumentType, Document, \
+from .models import Profile, Position, DocumentType, Document, \
     Skill, Question, Answer, Availability, Assessment
 
 admin.site.register(Profile)
 admin.site.register(Position)
-admin.site.register(ProfilePosition)
 admin.site.register(DocumentType)
 admin.site.register(Document)
 admin.site.register(Skill)

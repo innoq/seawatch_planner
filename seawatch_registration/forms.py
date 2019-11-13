@@ -1,38 +1,45 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.db import ProgrammingError
 
-from .models import Position, Profile, ProfilePosition, DocumentType, Document
-
-
-def positions_as_tuples():
-    try:
-        positions = list(Position.objects.all())
-    except ProgrammingError:
-        return {Position('-----'), Position('-----')}
-    result = set()
-    for position in positions:
-        result.add((position, position))
-    return result
+from .models import Position, Profile, DocumentType, Document, Skill
 
 
-class ProfilePositionForm(forms.Form):
-    requested_positions = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                    choices=positions_as_tuples())
+class RequestedPositionForm(forms.Form):
+    requested_positions = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                         queryset=Position.objects.all())
 
     class Meta:
-        model = ProfilePosition
-        fields = ('profile', 'position', 'requested', 'approved')
-        widgets = {'profile': forms.HiddenInput(), 'approved': forms.HiddenInput()}
+        model = Position
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', '')
 
-        super(ProfilePositionForm, self).__init__(*args, **kwargs)
-        self.fields['profile'] = forms.ModelChoiceField(widget=forms.HiddenInput(),
-                                                        queryset=Profile.objects.filter(user=user),
-                                                        initial=Profile.objects.get(user=user))
+        super(RequestedPositionForm, self).__init__(*args, **kwargs)
+        if Profile.objects.filter(user=user).exists():
+            profile = Profile.objects.get(user=user)
+            self.fields['requested_positions'].initial = \
+                [p.pk for p in profile.requested_positions.all()]
+
+
+class SkillsForm(forms.Form):
+    class Meta:
+        model = Profile
+
+    languages = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                               queryset=Skill.objects.filter(group='lang'),
+                                               required=False)
+    skills = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                            queryset=Skill.objects.filter(group='other'),
+                                            required=False)
+
+    def __init__(self, *args, **kwargs):
+        profile = kwargs.pop('profile', '')
+        super(SkillsForm, self).__init__(*args, **kwargs)
+
+        if profile is not None:
+            self.fields['skills'].initial = [p.pk for p in profile.skills.filter(group='other')]
+            self.fields['languages'].initial = [p.pk for p in profile.skills.filter(group='lang')]
 
 
 class DocumentForm(forms.ModelForm):
