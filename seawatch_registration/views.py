@@ -4,8 +4,8 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from seawatch_registration.models import Profile, ProfilePosition, Position
-from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, ProfilePositionForm, SkillsForm
+from seawatch_registration.models import Profile, Position
+from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, RequestedPositionForm, SkillsForm
 
 
 @login_required
@@ -134,13 +134,13 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
         self.submit_button = 'Next'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'form.html', {'form': ProfilePositionForm(user=request.user),
+        return render(request, 'form.html', {'form': RequestedPositionForm(user=request.user),
                                              'title': self.title,
                                              'success_alert': self.success_alert,
                                              'submit_button': self.submit_button})
 
     def post(self, request, *args, **kwargs):
-        form = ProfilePositionForm(request.POST, user=request.user)
+        form = RequestedPositionForm(request.POST, user=request.user)
         if not form.is_valid():
             return render(request, 'form.html', {'form': form,
                                                  'error': 'Choose at least one position.',
@@ -148,17 +148,14 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                  'success_alert': self.success_alert,
                                                  'submit_button': self.submit_button
                                                  })
-        profile = form.cleaned_data['profile']
+        profile = Profile.objects.get(user=request.user)
         requested_positions = form.cleaned_data['requested_positions']
+        profile.requested_positions.clear()
         for position in requested_positions:
-            profile_position = ProfilePosition(profile=profile,
-                                               position=Position.objects.get(name=position),
-                                               requested=True,
-                                               approved=False)
-            profile_position.save()
+            profile.requested_positions.add(position)
         return render(request,
                       'form.html',
-                      {'form': ProfilePositionForm(user=request.user),
+                      {'form': RequestedPositionForm(user=request.user),
                        'success': True,
                        'title': self.title,
                        'success_alert': self.success_alert,
