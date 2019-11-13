@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from seawatch_registration.models import Profile, Position
+from seawatch_registration.models import Profile
 from seawatch_registration.forms import DocumentForm, ProfileForm, SignupForm, RequestedPositionForm, SkillsForm
 
 
