@@ -45,7 +45,7 @@ class Profile(models.Model):
     skills = models.ManyToManyField(Skill, blank=True)
     custom_skills = models.CharField(max_length=500, blank=True)
     requested_positions = models.ManyToManyField(Position, related_name='requested_profiles')
-    approved_positions = models.ManyToManyField(Position, related_name='approved_profiles')
+    approved_positions = models.ManyToManyField(Position, related_name='approved_profiles', blank=True)
 
     def __str__(self):
         return self.last_name + ", " + self.first_name
