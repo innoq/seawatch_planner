@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db import ProgrammingError
 
-from .models import Position, Profile, DocumentType, Document, Skill
+from .models import Position, Profile, DocumentType, Document, Skill, Question, Answer
 
 
 class RequestedPositionForm(forms.Form):
@@ -89,3 +90,17 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+
+class DynamicQuestionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        questions = kwargs.pop('questions')
+        answers = kwargs.pop('answers', None)
+        super(DynamicQuestionForm, self).__init__(*args, **kwargs)
+        for question in questions:
+            self.fields['question' + str(question.pk)] = \
+                forms.CharField(label=question.text, max_length=1000, required=question.mandatory)
+            if answers:
+                answer = answers.filter(question=question).first()
+                if answer:
+                    self.fields['question' + str(question.pk)].initial = answer.text
