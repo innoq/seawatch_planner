@@ -558,7 +558,6 @@ class TestViews(TestCase):
         # Arrange
         profile: Profile = self.get_profile()
         profile.save()
-        question = Question.objects.filter().first()
 
         self.client.login(username=self.username, password=self.password)
 
@@ -569,6 +568,30 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'form.html')
         self.assertEquals(Answer.objects.filter().count(), 0)
+
+    def test_views__questions__post__should_remove_mandatory_answer_when_no_answer_for_question_is_sent(self):
+        # Arrange
+        profile: Profile = self.get_profile()
+        profile.save()
+        question_required = Question.objects.filter().first()
+        question_optional = Question(text="Question Optional", mandatory=False)
+        question_optional.save()
+        answer_required = Answer(text="Answer required", question=question_required, profile=profile)
+        answer_required.save()
+        answer_optional = Answer(text="Answer optional", question=question_optional, profile=profile)
+        answer_optional.save()
+
+        self.client.login(username=self.username, password=self.password)
+        data = {'question' + str(question_required.pk): 'Answer required new'}
+
+        # Act
+        response = self.client.post(self.url_questions, data, user=self.user)
+
+        # Assert
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'form.html')
+        self.assertEquals(Answer.objects.all().count(), 1)
+        self.assertEquals(Answer.objects.all().first().text, 'Answer required new')
 
     def test_views__questions__post__should_render_success_when_question_is_answered(self):
         # Arrange

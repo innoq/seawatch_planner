@@ -198,14 +198,13 @@ class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                  })
 
         for question in Question.objects.all():
-            if 'question'+str(question.pk) in form.cleaned_data.keys():
-                answer_text = form.cleaned_data['question'+str(question.pk)]
-                if answer_text:
-                    actual_answers = Answer.objects.filter(profile=profile, question=question)
-                    if actual_answers.exists():
-                        actual_answers.delete()
-                    answer = Answer(profile=profile, question=question, text=answer_text)
-                    answer.save()
+            answer_text = form.cleaned_data['question'+str(question.pk)]
+            actual_answers = Answer.objects.filter(profile=profile, question=question)
+            if actual_answers.exists():
+                actual_answers.delete()
+            if answer_text:
+                answer = Answer(profile=profile, question=question, text=answer_text)
+                answer.save()
         return render(request,
                       'form.html',
                       {'form': DynamicQuestionForm(questions=list(Question.objects.all()),
