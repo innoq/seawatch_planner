@@ -1,49 +1,26 @@
 import tempfile
 from datetime import date
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, override_settings, Client
+from django.test import override_settings
 from django.urls import reverse
 
 from seawatch_registration.models import Profile, DocumentType, Document
-from seawatch_registration.tests.views import util
+from seawatch_registration.tests.views.test_base import TestBase
 
 
-class TestAddDocumentView(TestCase):
+class TestAddDocumentView(TestBase):
 
     def setUp(self) -> None:
-        self.client = Client()
-        self.username = 'testuser1'
-        self.password = '1X<ISRUkw+tuK'
-        self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.user.save()
-        self.url_add_document = reverse('add_document')
-
-    def test_views__add_document__get__should_redirect_to_login_when_not_logged_in(self):
-        # Act
-        response = self.client.get(self.url_add_document, user=self.user)
-
-        # Assert
-        self.assertRedirects(response, '/accounts/login/?next=/accounts/document/add/')
-
-    def test_views__add_document__get__should_return_403_when_profile_does_not_exist(self):
-        # Arrange
-        self.client.login(username=self.username, password=self.password)
-
-        # Act
-        response = self.client.get(self.url_add_document, user=self.user)
-
-        # Assert
-        self.assertEquals(response.status_code, 403)
+        self.base_set_up(url=reverse('add_document'), login_required=True, profile_required=True)
 
     def test_views__add_document__get__should_render_with_document_html_when_profile_exists(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(self.url_add_document, user=self.user)
+        response = self.client.get(self.url, user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -53,14 +30,14 @@ class TestAddDocumentView(TestCase):
     def test_views__add_document__post__should_render_success_when_form_is_valid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         document_type: DocumentType = DocumentType(name='Passport', group='ident')
         document_type.save()
         image = SimpleUploadedFile("testfile.jpg", b"file_content", content_type="image/jpg")
 
         # Act
-        response = self.client.post(self.url_add_document,
+        response = self.client.post(self.url,
                                     {'document_type': document_type.id,
                                      'number': '1234',
                                      'issuing_date': date.today(),
@@ -81,13 +58,13 @@ class TestAddDocumentView(TestCase):
     def test_views__add_document__post__should_render_when_form_is_invalid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         document_type: DocumentType = DocumentType(name='Passport', group='ident')
         document_type.save()
 
         # Act
-        response = self.client.post(self.url_add_document,
+        response = self.client.post(self.url,
                                     {'document_type': document_type.id},
                                     user=self.user)
 

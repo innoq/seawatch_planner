@@ -1,46 +1,21 @@
 from datetime import date
-
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
 from django.urls import reverse
 
 from seawatch_registration.models import Profile
+from seawatch_registration.tests.views.test_base import TestBase
 
 
-class TestViews(TestCase):
+class TestAddProfileView(TestBase):
 
     def setUp(self) -> None:
-        self.client = Client()
-        self.username = 'testuser1'
-        self.password = '1X<ISRUkw+tuK'
-        self.user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
-        self.user.save()
-        self.url_add_profile = reverse('add_profile')
-
-    def test_views__add_profile__get__should_redirect_to_login_when_user_is_not_logged_in(self):
-        # Act
-        response = self.client.get(self.url_add_profile, user=self.user)
-
-        # Assert
-        self.assertRedirects(response, '/accounts/login/?next=/accounts/add/')
-
-    def test_views__add_profile__get__should_return_profile_form(self):
-        # Arrange
-        self.client.login(username=self.username, password=self.password)
-
-        # Act
-        response = self.client.get(self.url_add_profile, user=self.user)
-
-        # Assert
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.base_set_up(url=reverse('add_profile'), login_required=True)
 
     def test_views__add_profile__post__should_redirect_when_form_is_valid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(self.url_add_profile,
+        response = self.client.post(self.url,
                                     {'user': self.user.id,
                                      'first_name': 'Test',
                                      'last_name': 'User',
@@ -62,7 +37,7 @@ class TestViews(TestCase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(self.url_add_profile,
+        response = self.client.post(self.url,
                                     {'user': self.user.id,
                                      'first_name': 'Test',
                                      'last_name': 'User',

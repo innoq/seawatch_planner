@@ -1,46 +1,22 @@
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
 from django.urls import reverse
 
 from seawatch_registration.models import Profile, Skill
-from seawatch_registration.tests.views import util
+from seawatch_registration.tests.views.test_base import TestBase
 
 
-class TestAddSkillsView(TestCase):
+class TestAddSkillsView(TestBase):
 
     def setUp(self) -> None:
-        self.client = Client()
-        self.username = 'testuser1'
-        self.password = '1X<ISRUkw+tuK'
-        self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.user.save()
-        self.url_add_skills = reverse('add_skills')
-
-    def test_views__add_skills__get__should_redirect_to_login_when_not_logged_in(self):
-        # Act
-        response = self.client.get(self.url_add_skills, user=self.user)
-
-        # Assert
-        self.assertRedirects(response, '/accounts/login/?next=/accounts/skills/')
-
-    def test_views__add_skills__get__should_get_403_when_profile_does_not_exist(self):
-        # Arrange
-        self.client.login(username=self.username, password=self.password)
-
-        # Act
-        response = self.client.get(self.url_add_skills, user=self.user)
-
-        # Assert
-        self.assertEquals(response.status_code, 403)
+        self.base_set_up(url=reverse('add_skills'), login_required=True, profile_required=True)
 
     def test_views__add_skills__get__should_render_with_form_html_when_profile_exists(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(self.url_add_skills, user=self.user)
+        response = self.client.get(self.url, user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -48,14 +24,14 @@ class TestAddSkillsView(TestCase):
 
     def test_views__add_skills__get__should_show_selected_skills_when_skills_exists(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.skills.add(Skill.objects.filter(group='other').first())
         profile.skills.add(Skill.objects.filter(group='lang').first())
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(self.url_add_skills, user=self.user)
+        response = self.client.get(self.url, user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -65,14 +41,14 @@ class TestAddSkillsView(TestCase):
 
     def test_views__add_skills__post__should_show_selected_skills_when_skills_exists(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.skills.add(Skill.objects.filter(group='other').first())
         profile.skills.add(Skill.objects.filter(group='lang').first())
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(self.url_add_skills, user=self.user)
+        response = self.client.get(self.url, user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -83,7 +59,7 @@ class TestAddSkillsView(TestCase):
     def test_views__add_skills__post__should_render_success_when_skills_are_set_to_zero(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         skill = Skill.objects.filter(group='other').first()
         language = Skill.objects.filter(group='lang').first()
         profile.skills.add(skill)
@@ -91,7 +67,7 @@ class TestAddSkillsView(TestCase):
         profile.save()
 
         # Act
-        response = self.client.post(self.url_add_skills,
+        response = self.client.post(self.url,
                                     {},
                                     user=self.user)
 
@@ -104,13 +80,13 @@ class TestAddSkillsView(TestCase):
     def test_views__add_skills__post__should_render_success_when_skills_are_set_to_2(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         skill = Skill.objects.filter(group='other').first()
         language = Skill.objects.filter(group='lang').first()
         profile.save()
 
         # Act
-        response = self.client.post(self.url_add_skills,
+        response = self.client.post(self.url,
                                     {'skills': skill.id,
                                      'languages': language.id},
                                     user=self.user)
