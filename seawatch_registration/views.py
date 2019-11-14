@@ -215,40 +215,5 @@ class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
                        'submit_button': self.submit_button
                        })
 
-    class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View)
-
-        def __init__(self):
-            super(AvailabilityView, self).__init__()
-            self.title = 'Availability'
-            self.success_alert = 'Available Dates successfully saved!'
-            self.submit_button = 'Next'
-
-        def get(self, request, *args, **kwargs):
-            profile = Profile.objects.get(user=request.user)
-            available_dates = Availability.objects.filter(profile=profile)
-            form = AvailablilityForm(available_dates=available_dates)
-            return render(request,
-                            'form.html',
-                            {'form': form,
-                            'title': self.title,
-                            'success_alert': self.success_alert,
-                            'submit_button': self.submit_button
-                            })
-
-        def post(self, request, *args, **kwargs):
-            profile = Profile.objects.get(user=request.user)
-            available_dates = Availability.objects.filter(profile=profile)
-            form = AvailabilityForm(request.POST)
-            if not form.is_valid():
-                return render(request,
-                                'form.html',
-                                {'form': form,
-                                'title': self.title,
-                                'success_alert': self.success_alert,
-                                'submit_button': self.submit_button
-                                })
-            
-            
-
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
