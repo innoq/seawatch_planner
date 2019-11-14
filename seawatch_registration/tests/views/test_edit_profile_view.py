@@ -1,40 +1,23 @@
 from datetime import date
-from django.contrib.auth.models import User
-from django.test import TestCase, Client
 from django.urls import reverse
 
 from seawatch_registration.models import Profile
-from seawatch_registration.tests.views import util
+from seawatch_registration.tests.views.test_base import TestBase
 
 
-class TestEditProfileView(TestCase):
+class TestEditProfileView(TestBase):
 
-    def setUp(self) -> None:
-        self.client = Client()
-        self.username = 'testuser1'
-        self.password = '1X<ISRUkw+tuK'
-        self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.user.save()
-        self.url_edit_profile = reverse('edit_profile')
-
-    def test_views__edit_profile__get__should_get_403_when_no_profile_exists(self):
-        # Arrange
-        self.client.login(username=self.username, password=self.password)
-
-        # Act
-        response = self.client.get(self.url_edit_profile)
-
-        # Assert
-        self.assertEquals(response.status_code, 403)
+    def setUp(self):
+        self.base_set_up(url=reverse('edit_profile'), login_required=True, profile_required=True)
 
     def test_views__edit_profile__get__should_get_profile_form_when_profile_for_user_exists(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(self.url_edit_profile)
+        response = self.client.get(self.url)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -42,12 +25,12 @@ class TestEditProfileView(TestCase):
 
     def test_views__edit_profile__post__should_edit_profile_when_profile_for_user_exists(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(self.url_edit_profile,
+        response = self.client.post(self.url,
                                     {'user': self.user.id,
                                      'first_name': 'Test',
                                      'last_name': 'User',
@@ -67,12 +50,12 @@ class TestEditProfileView(TestCase):
 
     def test_views__edit_profile__post__should_not_edit_profile_when_required_data_is_missing(self):
         # Arrange
-        profile: Profile = util.get_profile(self.user)
+        profile: Profile = self.profile
         profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(self.url_edit_profile,
+        response = self.client.post(self.url,
                                     {'user': self.user.id,
                                      'first_name': 'Test',
                                      'last_name': 'User',
