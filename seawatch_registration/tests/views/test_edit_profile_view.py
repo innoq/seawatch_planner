@@ -7,7 +7,7 @@ from seawatch_registration.models import Profile
 from seawatch_registration.tests.views import util
 
 
-class TestEditProfielView(TestCase):
+class TestEditProfileView(TestCase):
 
     def setUp(self) -> None:
         self.client = Client()
