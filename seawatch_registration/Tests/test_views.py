@@ -569,7 +569,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'form.html')
         self.assertEquals(Answer.objects.filter().count(), 0)
 
-    def test_views__questions__post__should_remove_mandatory_answer_when_no_answer_for_question_is_sent(self):
+    def test_views__questions__post__should_remove_optional_answer_when_no_answer_for_question_is_sent(self):
         # Arrange
         profile: Profile = self.get_profile()
         profile.save()
