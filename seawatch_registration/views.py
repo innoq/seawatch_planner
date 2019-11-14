@@ -33,7 +33,7 @@ def add_profile(request):
         form = ProfileForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/accounts/show/')
+            return redirect('add_skills')
 
     return render(request, 'profile.html', {'form': form})
 
@@ -75,9 +75,7 @@ def add_document(request):
         form = DocumentForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             form.save()
-            return render(request,
-                          'document.html',
-                          {'form': DocumentForm(user=request.user), 'success': True})
+            return redirect('add_requested_profile')
     return render(request, 'document.html', {'form': form})
 
 
@@ -113,14 +111,8 @@ class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
             profile.skills.add(skill)
         for language in languages:
             profile.skills.add(language)
-        return render(request,
-                      'form.html',
-                      {'form': SkillsForm(profile=profile),
-                       'success': True,
-                       'title': self.title,
-                       'success_alert': self.success_alert,
-                       'submit_button': self.submit_button
-                       })
+
+        return redirect('add_document')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
@@ -154,14 +146,8 @@ class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
         profile.requested_positions.clear()
         for position in requested_positions:
             profile.requested_positions.add(position)
-        return render(request,
-                      'form.html',
-                      {'form': RequestedPositionForm(user=request.user),
-                       'success': True,
-                       'title': self.title,
-                       'success_alert': self.success_alert,
-                       'submit_button': self.submit_button
-                       })
+
+        return redirect('questions')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
