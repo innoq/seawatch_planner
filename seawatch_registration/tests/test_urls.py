@@ -1,8 +1,15 @@
 from django.test import SimpleTestCase, Client
 from django.urls import resolve, reverse
 
-from seawatch_registration.views import show_profile, add_profile, edit_profile, signup, add_document, AddSkillsView, \
-    RequestedPositionView, QuestionView
+from seawatch_registration.views.add_document_view import AddDocumentView
+from seawatch_registration.views.add_profile_view import AddProfileView
+from seawatch_registration.views.add_skills_view import AddSkillsView
+from seawatch_registration.views.edit_profile_view import EditProfileView
+from seawatch_registration.views.questions_view import QuestionView
+from seawatch_registration.views.requested_positions_view import RequestedPositionView
+
+from seawatch_registration.views.show_profile_view import ShowProfileView
+from seawatch_registration.views.signup_view import SignupView
 
 
 class TestUrls(SimpleTestCase):
@@ -12,23 +19,23 @@ class TestUrls(SimpleTestCase):
 
     def test_urls_show_profile(self):
         url = reverse('show_profile')
-        self.assertEquals(resolve(url).func, show_profile)
+        self.assertEquals(resolve(url).func.__name__, ShowProfileView.as_view().__name__)
 
     def test_urls_add_profile(self):
         url = reverse('add_profile')
-        self.assertEquals(resolve(url).func, add_profile)
+        self.assertEquals(resolve(url).func.__name__, AddProfileView.as_view().__name__)
 
     def test_urls_edit_profile(self):
         url = reverse('edit_profile')
-        self.assertEquals(resolve(url).func, edit_profile)
+        self.assertEquals(resolve(url).func.__name__, EditProfileView.as_view().__name__)
 
     def test_urls_signup(self):
         url = reverse('signup')
-        self.assertEquals(resolve(url).func, signup)
+        self.assertEquals(resolve(url).func.__name__, SignupView.as_view().__name__)
 
     def test_urls_add_document(self):
         url = reverse('add_document')
-        self.assertEquals(resolve(url).func, add_document)
+        self.assertEquals(resolve(url).func.__name__, AddDocumentView.as_view().__name__)
 
     def test_urls_add_requested_positions(self):
         url = reverse('add_requested_profile')
