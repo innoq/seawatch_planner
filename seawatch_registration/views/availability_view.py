@@ -15,7 +15,8 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
-        formset = AvailabilityFormset(queryset=Availability.objects.filter(profile=profile))
+        initial = [{'profile': profile.id}]
+        formset = AvailabilityFormset(instance=profile, initial=initial)
         return render(request,
                         'availability.html',
                         {'formset': formset,
@@ -26,15 +27,10 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def post(self, request, *args, **kwargs):
 
-        print(request.POST.values)
-
         profile = Profile.objects.get(user=request.user)
-        #available_dates = Availability.objects.filter(profile=profile)
-        # form = AvailabilityForm(request.POST)
-        formset = AvailabilityFormset(request.POST)
+        formset = AvailabilityFormset(request.POST, instance=profile)
 
         if not formset.is_valid():      
-            print("Form is not valid")
             return render(request,
                             'availability.html',
                             {'formset': formset,
@@ -45,8 +41,9 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
                             })
 
 
-        print("form is valid")
         formset.save()
+        initial = [{'profile': profile.id}]
+        formset = AvailabilityFormset(instance=profile, initial=initial)
         return render(request,
                         'availability.html',
                         {'formset': formset,
