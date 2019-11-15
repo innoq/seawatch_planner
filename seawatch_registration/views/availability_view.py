@@ -3,7 +3,7 @@ from django.views.generic.base import View
 from django.shortcuts import render, redirect
 
 from seawatch_registration.models import Profile, Availability
-from seawatch_registration.forms import AvailabilityForm
+from seawatch_registration.forms.availability_form import AvailabilityFormset
 
 class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
     
@@ -15,11 +15,10 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
-        available_dates = Availability.objects.filter(profile=profile)
-        form = AvailabilityForm(available_dates=available_dates)
+        formset = AvailabilityFormset(queryset=Availability.objects.filter(profile=profile))
         return render(request,
-                        'form.html',
-                        {'form': form,
+                        'availability.html',
+                        {'formset': formset,
                         'title': self.title,
                         'success_alert': self.success_alert,
                         'submit_button': self.submit_button
@@ -27,32 +26,34 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def post(self, request, *args, **kwargs):
 
-        print(request)
+        print(request.POST.values)
 
         profile = Profile.objects.get(user=request.user)
-        available_dates = Availability.objects.filter(profile=profile)
-        form = AvailabilityForm(available_dates=available_dates)
+        #available_dates = Availability.objects.filter(profile=profile)
+        # form = AvailabilityForm(request.POST)
+        formset = AvailabilityFormset(request.POST)
+
+        if not formset.is_valid():      
+            print("Form is not valid")
+            return render(request,
+                            'availability.html',
+                            {'formset': formset,
+                            'error': request.POST,
+                            'title': self.title,
+                            'success_alert': self.success_alert,
+                            'submit_button': self.submit_button
+                            })
+
+
+        print("form is valid")
+        formset.save()
         return render(request,
-                        'form.html',
-                        {'form': form,
+                        'availability.html',
+                        {'formset': formset,
                         'title': self.title,
                         'success_alert': self.success_alert,
                         'submit_button': self.submit_button
                         })
-
-
-        # profile = Profile.objects.get(user=request.user)
-        # available_dates = Availability.objects.filter(profile=profile)
-        # form = AvailabilityForm(request.POST)
-        # if not form.is_valid():
-        #     return render(request,
-        #                     'form.html',
-        #                     {'form': form,
-        #                     'title': self.title,
-        #                     'success_alert': self.success_alert,
-        #                     'submit_button': self.submit_button
-        #                     })
-
 
 
     def test_func(self):
