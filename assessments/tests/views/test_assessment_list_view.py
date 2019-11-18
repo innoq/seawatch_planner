@@ -8,7 +8,7 @@ from seawatch_registration.models import Position
 class TestShowAssessmentsView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('assessments'), login_required=True, permission_required=True,
+        self.base_set_up(url=reverse('assessment_list'), login_required=True, permission_required=True,
                          permission_name='can_assess_profiles', permission_class=Assessment)
 
     def test_views__show_assessments__get__should_show_text_when_no_pending_assessments_are_avaiable(self):
@@ -20,7 +20,7 @@ class TestShowAssessmentsView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessments.html')
+        self.assertTemplateUsed(response, 'assessment-list.html')
         self.assertContains(response, 'There are no pending assessments!')
 
     def test_views__show_assessments__get__should_show_text_when__assessment_is_status_rejected(self):
@@ -38,7 +38,7 @@ class TestShowAssessmentsView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessments.html')
+        self.assertTemplateUsed(response, 'assessment-list.html')
         self.assertContains(response, 'There are no pending assessments!')
 
     def test_views__show_assessments__get__should_show_text_when__assessment_is_status_approved(self):
@@ -56,7 +56,7 @@ class TestShowAssessmentsView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessments.html')
+        self.assertTemplateUsed(response, 'assessment-list.html')
         self.assertContains(response, 'There are no pending assessments!')
 
     def test_views__show_assessments__get__should_show_table_when_pending_assessment_is_available(self):
@@ -74,7 +74,7 @@ class TestShowAssessmentsView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessments.html')
+        self.assertTemplateUsed(response, 'assessment-list.html')
         self.assertContains(response, self.td(profile.first_name))
         self.assertContains(response, self.td(profile.last_name))
         self.assertContains(response, self.td(profile.pk))

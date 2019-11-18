@@ -4,11 +4,9 @@ from django.urls import resolve, reverse
 from seawatch_registration.views.add_document_view import AddDocumentView
 from seawatch_registration.views.add_profile_view import AddProfileView
 from seawatch_registration.views.add_skills_view import AddSkillsView
-from assessments.views.assessment_view import AssessmentView
 from seawatch_registration.views.edit_profile_view import EditProfileView
 from seawatch_registration.views.questions_view import QuestionView
 from seawatch_registration.views.requested_positions_view import RequestedPositionView
-from assessments.views.assessments_view import AssessmentOverviewView
 
 from seawatch_registration.views.show_profile_view import ShowProfileView
 from seawatch_registration.views.signup_view import SignupView
@@ -50,11 +48,3 @@ class TestUrls(SimpleTestCase):
     def test_urls_questions(self):
         url = reverse('questions')
         self.assertEquals(resolve(url).func.__name__, QuestionView.as_view().__name__)
-
-    def test_urls_assessment_overview(self):
-        url = reverse('assessments')
-        self.assertEquals(resolve(url).func.__name__, AssessmentOverviewView.as_view().__name__)
-
-    def test_urls_assessment(self):
-        url = reverse('assessment', kwargs={'profile_id': 1})
-        self.assertEquals(resolve(url).func.__name__, AssessmentView.as_view().__name__)
