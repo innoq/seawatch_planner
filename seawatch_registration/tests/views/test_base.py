@@ -33,6 +33,7 @@ class TestBase(TestCase):
                                first_name='Test',
                                last_name='User',
                                citizenship='Deutsch',
+                               second_citizenship='American',
                                date_of_birth=date.today(),
                                place_of_birth='New York',
                                country_of_birth='United States of America',
