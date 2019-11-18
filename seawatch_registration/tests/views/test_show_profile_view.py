@@ -1,10 +1,10 @@
 from django.urls import reverse
 
 from seawatch_registration.models import Profile
-from seawatch_registration.tests.views.test_base import TestBase
+from seawatch_registration.tests.views.test_base import TestBases
 
 
-class TestShowProfileView(TestBase):
+class TestShowProfileView(TestBases.TestBase):
 
     def setUp(self) -> None:
         self.base_set_up(url=reverse('show_profile'), login_required=True, profile_required=True)

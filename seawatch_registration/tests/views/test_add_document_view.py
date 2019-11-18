@@ -5,10 +5,10 @@ from django.test import override_settings
 from django.urls import reverse
 
 from seawatch_registration.models import Profile, DocumentType, Document
-from seawatch_registration.tests.views.test_base import TestBase
+from seawatch_registration.tests.views.test_base import TestBases
 
 
-class TestAddDocumentView(TestBase):
+class TestAddDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
         self.base_set_up(url=reverse('add_document'), login_required=True, profile_required=True)

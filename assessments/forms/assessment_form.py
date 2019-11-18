@@ -1,6 +1,7 @@
 from django.forms import Form, ModelMultipleChoiceField, SelectMultiple, RadioSelect, ChoiceField, CharField, Textarea
 
-from seawatch_registration.models import Position, Profile, Assessment
+from assessments.models import Assessment
+from seawatch_registration.models import Position, Profile
 
 
 class AssessmentForm(Form):

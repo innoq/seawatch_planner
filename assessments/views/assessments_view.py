@@ -1,11 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render
 from django.views.generic.base import View
 
-from seawatch_registration.models import Assessment
+from assessments.models import Assessment
 
 
-class AssessmentOverviewView(LoginRequiredMixin, View):
+class AssessmentOverviewView(LoginRequiredMixin, PermissionRequiredMixin, View):
+
+    permission_required = 'assessments.can_assess_profiles'
 
     def get(self, request, *args, **kwargs):
         pending_assessments = Assessment.objects.filter(status='pending')

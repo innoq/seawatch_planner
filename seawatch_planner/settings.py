@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'missions.apps.MissionsConfig',
     'seawatch_registration.apps.SeawatchRegistrationConfig',
+    'assessments.apps.AssessmentsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,10 +1,10 @@
 from django.urls import reverse
 
 from seawatch_registration.models import Profile, Skill
-from seawatch_registration.tests.views.test_base import TestBase
+from seawatch_registration.tests.views.test_base import TestBases
 
 
-class TestAddSkillsView(TestBase):
+class TestAddSkillsView(TestBases.TestBase):
 
     def setUp(self) -> None:
         self.base_set_up(url=reverse('add_skills'), login_required=True, profile_required=True)

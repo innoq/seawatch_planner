@@ -1,20 +1,20 @@
 import tempfile
 from datetime import date
 
-from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 
-from seawatch_registration.models import Assessment, Position, Question, Answer, Skill, DocumentType, Document
-from seawatch_registration.tests.views.test_base import TestBase
+from assessments.models import Assessment
+from assessments.tests.test_base import TestBases
+from seawatch_registration.models import Position, Question, Answer, Skill, DocumentType, Document
 
 
-class TestAssessmentView(TestBase):
+class TestAssessmentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('assessment', kwargs={'profile_id': 1}), login_required=True)
-        self.profile.save()
+        self.base_set_up(url=reverse('assessment', kwargs={'profile_id': 1}), login_required=True,
+                         permission_required=True, permission_name='can_assess_profiles', permission_class=Assessment)
 
     def test__views__assessment__get__should_return_404_when_not_existing_profil_id_is_given(self):
         # Arrange

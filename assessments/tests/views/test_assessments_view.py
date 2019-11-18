@@ -1,13 +1,15 @@
 from django.urls import reverse
 
-from seawatch_registration.models import Assessment, Position
-from seawatch_registration.tests.views.test_base import TestBase
+from assessments.models import Assessment
+from assessments.tests.test_base import TestBases
+from seawatch_registration.models import Position
 
 
-class TestShowAssessmentsView(TestBase):
+class TestShowAssessmentsView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('assessments'), login_required=True)
+        self.base_set_up(url=reverse('assessments'), login_required=True, permission_required=True,
+                         permission_name='can_assess_profiles', permission_class=Assessment)
 
     def test_views__show_assessments__get__should_show_text_when_no_pending_assessments_are_avaiable(self):
         # Arrange
