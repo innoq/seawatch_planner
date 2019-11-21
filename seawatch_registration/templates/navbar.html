@@ -1,0 +1,54 @@
+{% load bootstrap4 %}
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'seawatch_registration/images/logo.png' %}" width="35" height="32" class="d-inline-block align-top mr-2" alt="">
+        Sea Watch
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {{ home_nav_class }}" href="{% url 'index' %}">Home</a>
+            </li>
+            {% if request.user.is_authenticated %}
+                {% if perms.assessment.can_assess_profiles%}
+                <li class="nav-item">
+                <a class="nav-link  {{ assessment_nav_class }}" href="{% url 'assessment_list' %}">Assessments</a>
+            </li>
+                {% endif %}
+            <li class="nav-item">
+                <a class="nav-link  {{ profile_nav_class }}" href="{% url 'show_profile' %}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ document_nav_class }}" href="{% url 'add_document' %}">Documents</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ questions_nav_class }}" href="{% url 'questions' %}">Questions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ positions_nav_class }}" href="{% url 'add_requested_profile' %}">Positions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ skills_nav_class }}" href="{% url 'add_skills' %}">Skills</a>
+            </li>
+            {% endif %}
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ signup_nav_class }}" href="{% url 'signup' %}">Signup</a>
+              </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
