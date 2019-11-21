@@ -1,5 +1,6 @@
 {% extends 'base-registration.html' %}
  {% load bootstrap4 %}
+ {% load crispy_forms_tags %}
 
  {% block title %}{{ title }} | Seawatch Registration{% endblock %}
 
@@ -16,13 +17,41 @@
    </div>
    {% endif %}
 
-   <form method="post" enctype="multipart/form-data">
-     {% csrf_token %}
-     {% bootstrap_formset formset %}
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-     {% buttons %}
+    {% load crispy_forms_tags %}
+    {% load staticfiles %}
 
-       <button type="submit" class="btn btn-primary">{{ submit_button }}</button>
-     {% endbuttons %}
-   </form>
- {% endblock %}
+    <style type="text/css">
+      .delete-row {
+        align-self: center;
+      }
+    </style>
+
+    {{ formset.management_form|crispy }}
+
+    {% for form in formset.forms %}
+      {% for hidden in form.hidden_fields %}
+        {{ hidden|as_crispy_field }}
+      {% endfor %}
+      {% crispy form %}
+    {% endfor %}
+
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">Next</button>
+    {% endbuttons %}
+  </form>
+    {% load static %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+    </script>
+    <script src="{% static 'seawatch_registration/js/jquery.formset.js' %}">
+    </script>
+    <script type="text/javascript">
+        $('.formset_row-{{ formset.prefix }}').formset({
+            addText: 'add another',
+            deleteText: 'remove',
+            prefix: '{{ formset.prefix }}',
+        });
+    </script>
+    {% endblock %}

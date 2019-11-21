@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.forms.availability_form import AvailabilityFormset
 
+
 class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
     
     def __init__(self):
@@ -34,7 +35,7 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
             return render(request,
                             'availability.html',
                             {'formset': formset,
-                            'error': request.POST,
+                            'error': formset.errors,
                             'title': self.title,
                             'success_alert': self.success_alert,
                             'submit_button': self.submit_button
@@ -51,7 +52,6 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
                         'success_alert': self.success_alert,
                         'submit_button': self.submit_button
                         })
-
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
