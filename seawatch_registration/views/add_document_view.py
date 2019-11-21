@@ -13,12 +13,14 @@ class AddDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
         self.title = 'Add Documents'
         self.success_alert = 'Document is successfully saved!'
         self.submit_button = 'Next'
+        self.document_nav_class = 'active'
 
     def get(self, request, *args, **kwargs):
         return render(request, 'form.html', {'form': DocumentForm(user=request.user),
                                              'title': self.title,
                                              'success_alert': self.success_alert,
-                                             'submit_button': self.submit_button})
+                                             'submit_button': self.submit_button,
+                                             'document_nav_class': self.document_nav_class})
 
     def post(self, request, *args, **kwargs):
         profile = request.user.profile
@@ -27,7 +29,8 @@ class AddDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
             return render(request, 'form.html', {'form': form,
                                                  'title': self.title,
                                                  'success_alert': self.success_alert,
-                                                 'submit_button': self.submit_button
+                                                 'submit_button': self.submit_button,
+                                                 'document_nav_class': self.profile_nav_class
                                                  })
         form.save()
         return redirect('add_requested_profile')
