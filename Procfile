@@ -1,0 +1,1 @@
+web: gunicorn seawatch_planner.wsgi --log-file -
