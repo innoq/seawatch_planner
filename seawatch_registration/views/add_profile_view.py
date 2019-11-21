@@ -15,4 +15,4 @@ class AddProfileView(LoginRequiredMixin, View):
         if not form.is_valid():
             return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}, request.POST)})
         form.save()
-        return redirect('/accounts/show/')
+        return redirect('add_skills')
