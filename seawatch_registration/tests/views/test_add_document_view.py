@@ -27,7 +27,7 @@ class TestAddDocumentView(TestBase):
         self.assertTemplateUsed(response, 'form.html')
 
     @override_settings(MEDIA_ROOT=tempfile.gettempdir())
-    def test_views__add_document__post__should_render_success_when_form_is_valid(self):
+    def test_views__add_document__post__should_redirect_to_position_when_form_is_valid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -50,9 +50,7 @@ class TestAddDocumentView(TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'form.html')
-        self.assertContains(response, 'alert-success')
+        self.assertRedirects(response, expected_url='/accounts/position/')
         self.assertEquals(Document.objects.all().count(), 1)
 
     def test_views__add_document__post__should_render_when_form_is_invalid(self):

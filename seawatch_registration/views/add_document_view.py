@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from seawatch_registration.forms.document_form import DocumentForm
@@ -30,14 +30,7 @@ class AddDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                  'submit_button': self.submit_button
                                                  })
         form.save()
-        return render(request,
-                      'form.html',
-                      {'form': DocumentForm(user=request.user),
-                       'success': True,
-                       'title': self.title,
-                       'success_alert': self.success_alert,
-                       'submit_button': self.submit_button
-                       })
+        return redirect('add_requested_profile')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()

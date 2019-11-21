@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from seawatch_registration.forms.skills_form import SkillsForm
@@ -38,14 +38,8 @@ class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
             profile.skills.add(skill)
         for language in languages:
             profile.skills.add(language)
-        return render(request,
-                      'form.html',
-                      {'form': SkillsForm(profile=profile),
-                       'success': True,
-                       'title': self.title,
-                       'success_alert': self.success_alert,
-                       'submit_button': self.submit_button
-                       })
+
+        return redirect('add_document')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
