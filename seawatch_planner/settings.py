@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+<<<<<<< HEAD
     'crispy_forms',
+=======
+    'fontawesome_5',
+>>>>>>> 6b619d2d283e1b626732e442a299f8829a9f07e8
 ]
 
 MIDDLEWARE = [

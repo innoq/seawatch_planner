@@ -2,4 +2,8 @@ Django>=2.0,<3.0
 psycopg2>=2.7,<3.0
 django-bootstrap4>=1.0.1,<1.1.0
 flake8>=3.7.8,<3.8.0
+<<<<<<< HEAD
 django-crispy-forms>=1.8.0
+=======
+django-fontawesome-5>=1.0.16,<1.1.0
+>>>>>>> 6b619d2d283e1b626732e442a299f8829a9f07e8
