@@ -13,6 +13,7 @@ class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
         self.title = 'Questions'
         self.success_alert = 'Your Answer are successfully saved!'
         self.submit_button = 'Next'
+        self.questions_nav_class = 'active'
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
@@ -23,7 +24,8 @@ class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
                       {'form': DynamicQuestionForm(questions=questions, answers=answers),
                        'title': self.title,
                        'success_alert': self.success_alert,
-                       'submit_button': self.submit_button})
+                       'submit_button': self.submit_button,
+                       'questions_nav_class': self.questions_nav_class})
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
@@ -33,7 +35,8 @@ class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                  'error': request.POST,
                                                  'title': self.title,
                                                  'success_alert': self.success_alert,
-                                                 'submit_button': self.submit_button
+                                                 'submit_button': self.submit_button,
+                                                 'questions_nav_class': self.questions_nav_class
                                                  })
 
         for question in Question.objects.all():
@@ -51,7 +54,8 @@ class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
                        'success': True,
                        'title': self.title,
                        'success_alert': self.success_alert,
-                       'submit_button': self.submit_button
+                       'submit_button': self.submit_button,
+                       'questions_nav_class': self.questions_nav_class
                        })
 
     def test_func(self):
