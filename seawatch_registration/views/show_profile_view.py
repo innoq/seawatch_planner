@@ -9,7 +9,8 @@ class ShowProfileView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         profile = request.user.profile
-        return render(request, 'show-profile.html', {'profile': profile})
+        return render(request, 'show-profile.html', {'profile': profile,
+                                                     'profile_nav_class': 'active'})
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()

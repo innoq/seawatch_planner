@@ -11,13 +11,13 @@ class EditProfileView(LoginRequiredMixin, UserPassesTestMixin, View):
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         form = ProfileForm(instance=profile)
-        return render(request, 'profile.html', {'form': form})
+        return render(request, 'profile.html', {'form': form, 'profile_nav_class': 'active'})
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         form = ProfileForm(request.POST or None, instance=profile)
         if not form.is_valid():
-            return render(request, 'profile.html', {'form': form})
+            return render(request, 'profile.html', {'form': form, 'profile_nav_class': 'active'})
         form.save()
         return redirect('show_profile')
 
