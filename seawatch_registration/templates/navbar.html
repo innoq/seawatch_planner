@@ -16,14 +16,14 @@
             {% if request.user.is_authenticated %}
                 {% if perms.assessment.can_assess_profiles%}
                 <li class="nav-item">
-                <a class="nav-link  {{ assessment_nav_class }}" href="{% url 'assessment_list' %}">Assessments</a>
+                <a class="nav-link  {{ assessment_nav_class }}" href="#">Assessments</a>
             </li>
                 {% endif %}
             <li class="nav-item">
                 <a class="nav-link  {{ profile_nav_class }}" href="{% url 'show_profile' %}">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link  {{ document_nav_class }}" href="{% url 'add_document' %}">Documents</a>
+                <a class="nav-link  {{ document_nav_class }}" href="{% url 'document_list' %}">Documents</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ questions_nav_class }}" href="{% url 'questions' %}">Questions</a>
