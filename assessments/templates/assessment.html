@@ -1,0 +1,160 @@
+{% extends 'base-registration.html' %}
+ {% load bootstrap4 %}
+
+{% block title %}Assessment | Seawatch Registration{% endblock %}
+
+{% block content %}
+    <h1>Assessment {{ profile.first_name }} {{ profile.last_name }}</h1>
+    <br>
+    <div class="row">
+        <div class="col-6">
+            <h3>Profile data</h3>
+            <dl class="row">
+                <dt class="col-sm-6">First name</dt>
+                <dd class="col-sm-6">{{ profile.first_name }}</dd>
+
+                <dt class="col-sm-6">Last name</dt>
+                <dd class="col-sm-6 ">{{ profile.last_name }}</dd>
+
+                <dt class="col-sm-6">Citizenship</dt>
+                <dd class="col-sm-6">{{ profile.citizenship }}</dd>
+
+                <dt class="col-sm-6">Second Citizenship</dt>
+                {% if profile.second_citizenship%}
+                <dd class="col-sm-6">{{ profile.second_citizenship }}</dd>
+                {% else%}
+                <dd class="col-sm-6 text-danger">Not specified</dd>
+                {% endif %}
+
+                <dt class="col-sm-6">Date of Birth</dt>
+                <dd class="col-sm-6">{{ profile.date_of_birth }}</dd>
+
+                <dt class="col-sm-6">Place of Birth</dt>
+                <dd class="col-sm-6">{{ profile.place_of_birth }}</dd>
+
+                <dt class="col-sm-6">Country of Birth</dt>
+                <dd class="col-sm-6">{{ profile.country_of_birth }}</dd>
+
+                <dt class="col-sm-6">Gender</dt>
+                <dd class="col-sm-6">{{ profile.gender }}</dd>
+
+                <dt class="col-sm-6">Address</dt>
+                {% if profile.address %}
+                <dd class="col-sm-6">{{ profile.address }}</dd>
+                {% else %}
+                <dd class="col-sm-6 text-danger">Not specified</dd>
+                {% endif %}
+
+                <dt class="col-sm-6">Needs Schengen Visa</dt>
+                <dd class="col-sm-6">{{ profile.needs_schengen_visa }}</dd>
+
+                <dt class="col-sm-6">Phone</dt>
+                <dd class="col-sm-6">{{ profile.phone }}</dd>
+
+                <dt class="col-sm-6">Emergency Contact</dt>
+                {% if profile.emergency_contact %}
+                <dd class="col-sm-6">{{ profile.emergency_contact }}</dd>
+                {% else %}
+                <dd class="col-sm-6 text-danger">Not specified</dd>
+                {% endif %}
+
+                <dt class="col-sm-6">Comments</dt>
+                {% if profile.comments %}
+                <dd class="col-sm-6">{{ profile.comments }}</dd>
+                {% else %}
+                <dd class="col-sm-6 text-danger">Not specified</dd>
+                {% endif %}
+            </dl>
+        </div>
+        <div class="col-3">
+            <h3>Skills</h3>
+            {% if skills %}
+            <ul class="list-group">
+                {% for skill in skills %}
+                <li class="list-group-item">{{ skill.name }}</li>
+                {% endfor %}
+            </ul>
+            {% else%}
+            <p class="text-danger">No skills specified.</p>
+            {% endif %}
+
+        </div>
+        <div class="col-3">
+            <h3>Requested Positions</h3>
+            {% if profile.requested_positions.all%}
+            <ul class="list-group">
+                {% for position in profile.requested_positions.all %}
+                <li class="list-group-item">{{ position.name }}</li>
+                {% endfor %}
+            </ul>
+            {% else%}
+            <p class="text-danger">No requested positions specified.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <h3>Questions</h3>
+    {% if answers %}
+    <dl class="row">
+        {% for answer in answers %}
+        <dt class="col-sm-4">{{ answer.question.text }}</dt>
+        <dd class="col-sm-8">{{ answer.text }}</dd>
+        {% endfor %}
+    </dl>
+    {% else%}
+    <p class="text-danger">No questions answered.</p>
+    {% endif %}
+
+
+    <h3>Documents</h3>
+    {% if documents %}
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Document Type</th>
+            <th>Number</th>
+            <th>Issuing Date</th>
+            <th>Expiry Date</th>
+            <th>Issuing Authority</th>
+            <th>Issuing Place</th>
+            <th>Issuing Country</th>
+            <th>File</th>
+        </tr>
+        {% for document in documents %}
+        <tr>
+            <td>{{ document.pk }}</td>
+            <td>{{ document.document_type }}</td>
+            <td>{{ document.number }}</td>
+            <td>{{ document.issuing_date }}</td>
+            <td>{{ document.expiry_date }}</td>
+            <td>{{ document.issuing_authority }}</td>
+            <td>{{ document.issuing_place }}</td>
+            <td>{{ document.issuing_country }}</td>
+            <td>{{ document.file }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="text-danger">No Documents uploaded.</p>
+    {% endif %}
+    <h3>Assessment</h3>
+    {% if success %}
+    <div class="alert alert-success" role="alert">
+    Assessment successfully saved.
+    </div>
+    {% endif %}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+    Assessment could not be saved.
+    </div>
+    {% endif %}
+    <form method="post">
+     {% csrf_token %}
+     {% bootstrap_form form %}
+
+     {% buttons %}
+       <button type="submit" class="btn btn-primary">Save</button>
+     {% endbuttons %}
+   </form>
+
+{% endblock %}
