@@ -8,11 +8,13 @@ from seawatch_registration.forms.profile_form import ProfileForm
 class AddProfileView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'profile.html', {'form': ProfileForm({'user': request.user})})
+        return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}),
+                                                'profile_nav_class': 'active'})
 
     def post(self, request, *args, **kwargs):
         form = ProfileForm(request.POST)
         if not form.is_valid():
-            return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}, request.POST)})
+            return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}, request.POST),
+                                                    'profile_nav_class': 'active'})
         form.save()
-        return redirect('/accounts/show/')
+        return redirect('add_skills')

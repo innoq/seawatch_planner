@@ -1,0 +1,14 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Logged out | Seawatch Registration{% endblock %}
+
+{% block head %}
+<meta http-equiv="refresh" content="5;url={% url 'index' %}" />
+{% endblock %}
+
+{% block content %}
+  <h1>Logged out</h1>
+    <div class="alert alert-success">You got successfully logged out!</div>
+
+{% endblock %}

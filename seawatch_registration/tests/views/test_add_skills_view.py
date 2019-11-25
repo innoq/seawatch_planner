@@ -56,7 +56,7 @@ class TestAddSkillsView(TestBases.TestBase):
         self.assertContains(response, 'checked="" class="form-check-input" id="id_languages_')
         self.assertContains(response, 'checked="" class="form-check-input" id="id_skills_')
 
-    def test_views__add_skills__post__should_render_success_when_skills_are_set_to_zero(self):
+    def test_views__add_skills__post__should_redirect_to_document_when_skills_are_set_to_zero(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -72,12 +72,10 @@ class TestAddSkillsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'form.html')
-        self.assertContains(response, 'alert-success')
+        self.assertRedirects(response, expected_url='/accounts/document/add/')
         self.assertEquals(len(profile.skills.all()), 0)
 
-    def test_views__add_skills__post__should_render_success_when_skills_are_set_to_2(self):
+    def test_views__add_skills__post__should_redirect_to_document_when_skills_are_set_to_2(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -92,7 +90,5 @@ class TestAddSkillsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'form.html')
-        self.assertContains(response, 'alert-success')
+        self.assertRedirects(response, expected_url='/accounts/document/add/')
         self.assertEquals(len(profile.skills.all()), 2)

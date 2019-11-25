@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'fontawesome_5',
 ]
 
 MIDDLEWARE = [
@@ -77,15 +80,13 @@ WSGI_APPLICATION = 'seawatch_planner.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
-    }
-}
+DATABASES = {}
+db_name = 'postgres'
+db_user = 'postgres'
+db_host = 'db'
+db_port = 5432
+DATABASES['default'] = \
+    dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -132,3 +133,7 @@ NOSE_ARGS = ['--nocapture',
              '--nologcapture']
 
 MEDIA_ROOT = 'media/'
+
+# Email Config
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")

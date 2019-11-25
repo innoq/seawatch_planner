@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from seawatch_registration.views import index_view
+
 urlpatterns = [
     path('missions/', include('missions.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('seawatch_registration.urls')),
     path('assessments/', include('assessments.urls')),
+    path('', index_view.index, name='index')
 ]
