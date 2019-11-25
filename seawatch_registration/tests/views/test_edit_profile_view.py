@@ -2,10 +2,10 @@ from datetime import date
 from django.urls import reverse
 
 from seawatch_registration.models import Profile
-from seawatch_registration.tests.views.test_base import TestBase
+from seawatch_registration.tests.views.test_base import TestBases
 
 
-class TestEditProfileView(TestBase):
+class TestEditProfileView(TestBases.TestBase):
 
     def setUp(self):
         self.base_set_up(url=reverse('edit_profile'), login_required=True, profile_required=True)

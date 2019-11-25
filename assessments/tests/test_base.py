@@ -1,5 +1,6 @@
 from datetime import date
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase, Client
 
 from seawatch_registration.models import Profile
@@ -14,11 +15,20 @@ class TestBases:
             self.__login_required = False
             self.__profile_required = False
 
-        def base_set_up(self, url, login_required=False, profile_required=False) -> None:
+        def base_set_up(self, url, login_required=False, profile_required=False, permission_required=False,
+                        permission_name='', permission_class='') -> None:
             self.client = Client()
             self.username = 'testuser1'
             self.password = '1X<ISRUkw+tuK'
             self.user = User.objects.create_user(username=self.username, password=self.password)
+
+            if permission_required:
+                content_type = ContentType.objects.get_for_model(permission_class)
+                self.__permission = Permission.objects.get(
+                    codename=permission_name,
+                    content_type=content_type,
+                )
+                self.user.user_permissions.add(self.__permission)
             self.user.save()
             self.profile = Profile(id=1,
                                    user=self.user,
@@ -32,9 +42,11 @@ class TestBases:
                                    gender='m',
                                    needs_schengen_visa=False,
                                    phone='0123456789')
+            self.profile.save()
             self.url = url
             self.__login_required = login_required
             self.__profile_required = profile_required
+            self.__permission_required = permission_required
 
         def test__base__should_redirect_to_login_when_login_required_but_user_not_logged_in(self):
             if not self.__login_required:
@@ -45,14 +57,13 @@ class TestBases:
             # Assert
             self.assertRedirects(response, '/accounts/login/?next=' + self.url)
 
-        def test__base__should_return_403_when_profile_required_but_doesnt_exist(self):
-            if not self.__profile_required:
-                self.skipTest('profile not required for ' + str(self.__class__))
-            # Arrange
-            self.client.login(username=self.username, password=self.password)
-
+        def test__base__should_get_403_when_permission_required_but_user_dont_have_permission(self):
+            if not self.__permission_required:
+                self.skipTest('permission not required for ' + str(self.__class__))
+            self.user.user_permissions.remove(self.__permission)
             # Act
             response = self.client.get(self.url, user=self.user)
+            self.user.user_permissions.add(self.__permission)
 
             # Assert
-            self.assertEquals(response.status_code, 403)
+            self.assertRedirects(response, '/accounts/login/?next=' + self.url)
