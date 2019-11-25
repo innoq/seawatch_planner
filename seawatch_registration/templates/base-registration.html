@@ -12,6 +12,7 @@
         <title>{% block title %}Seawatch Registration{% endblock %}</title>
         {% block head %}
         {% endblock %}
+        {% bootstrap_javascript jquery="slim" %}
     </head>
     <body>
         {% include 'navbar.html' %}
@@ -19,8 +20,6 @@
             {% block content %}
             {% endblock %}
         </div>
-
-        {% bootstrap_javascript jquery="slim" %}
 
         <footer>
             <div class="text-center py-3">

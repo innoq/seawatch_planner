@@ -1,6 +1,5 @@
 {% extends 'base-registration.html' %}
  {% load bootstrap4 %}
- {% load crispy_forms_tags %}
 
  {% block title %}{{ title }} | Seawatch Registration{% endblock %}
 
@@ -17,41 +16,48 @@
    </div>
    {% endif %}
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="myForm">
     {% csrf_token %}
 
-    {% load crispy_forms_tags %}
-    {% load staticfiles %}
-
-    <style type="text/css">
-      .delete-row {
-        align-self: center;
-      }
-    </style>
-
-    {{ formset.management_form|crispy }}
-
-    {% for form in formset.forms %}
-      {% for hidden in form.hidden_fields %}
-        {{ hidden|as_crispy_field }}
-      {% endfor %}
-      {% crispy form %}
+    <!--
+    {{ formset.management_form }}
+     {% for form in formset %}
+        {% bootstrap_form form %}
     {% endfor %}
+    -->
+    
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+          {% for form in formset.forms %}
+            {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+            {% endfor %}
+          <tr>
+              <td>{{ form.start_date }}</td>
+              <td>{{ form.end_date }}</td>
+              <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    {{ formset.management_form }}
 
     {% buttons %}
-      <button type="submit" class="btn btn-primary">Next</button>
+      <button type="submit" class="btn btn-primary">{{submit_button}}</button>
     {% endbuttons %}
+
   </form>
-    {% load static %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-    </script>
-    <script src="{% static 'seawatch_registration/js/jquery.formset.js' %}">
-    </script>
-    <script type="text/javascript">
-        $('.formset_row-{{ formset.prefix }}').formset({
-            addText: 'add another',
-            deleteText: 'remove',
-            prefix: '{{ formset.prefix }}',
-        });
-    </script>
-    {% endblock %}
+
+  {% load static %}
+  <script src="{% static 'seawatch_registration/js/jquery.formset.js' %}">
+  </script>
+  
+  <script type="text/javascript">
+  $(function() {
+      $('#myForm tbody tr').formset({
+          prefix: '{{ formset.prefix }}'
+      });
+  })
+  </script>
+
+{% endblock %}

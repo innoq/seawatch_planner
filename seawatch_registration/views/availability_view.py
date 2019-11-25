@@ -3,7 +3,7 @@ from django.views.generic.base import View
 from django.shortcuts import render, redirect
 
 from seawatch_registration.models import Profile, Availability
-from seawatch_registration.forms.availability_form import AvailabilityFormset
+from seawatch_registration.forms.availability_form import AvailableDatesFormset
 
 
 class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -16,8 +16,7 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
-        initial = [{'profile': profile.id}]
-        formset = AvailabilityFormset(instance=profile, initial=initial)
+        formset = AvailableDatesFormset(instance=profile)
         return render(request,
                         'availability.html',
                         {'formset': formset,
@@ -27,10 +26,8 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
                         })
 
     def post(self, request, *args, **kwargs):
-
         profile = Profile.objects.get(user=request.user)
-        formset = AvailabilityFormset(request.POST, instance=profile)
-
+        formset = AvailableDatesFormset(request.POST, instance=profile)
         if not formset.is_valid():      
             return render(request,
                             'availability.html',
@@ -41,14 +38,15 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
                             'submit_button': self.submit_button
                             })
 
-
         formset.save()
-        initial = [{'profile': profile.id}]
-        formset = AvailabilityFormset(instance=profile, initial=initial)
+        #return redirect('show_profile')
+
+        formset = AvailableDatesFormset(instance=profile)
         return render(request,
                         'availability.html',
                         {'formset': formset,
                         'title': self.title,
+                        'success': True,
                         'success_alert': self.success_alert,
                         'submit_button': self.submit_button
                         })
