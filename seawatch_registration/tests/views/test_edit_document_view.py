@@ -6,12 +6,12 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 
+from assessments.tests.test_base import TestBases
 from seawatch_registration.models import Profile, DocumentType, Document
-from seawatch_registration.tests.views.test_base import TestBase
 
 
 @override_settings(MEDIA_ROOT=tempfile.gettempdir())
-class TestEditDocumentView(TestBase):
+class TestEditDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
         self.base_set_up(url=reverse('edit_document', kwargs={'document_id': 1}), login_required=True, profile_required=True)

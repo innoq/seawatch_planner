@@ -17,7 +17,7 @@
             {% if request.user.is_authenticated %}
                 {% if perms.assessment.can_assess_profiles%}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'assessment' %}active{% endif %}" href="#">Assessments</a>
+                    <a class="nav-link  {% if view.nav_item == 'assessment' %}active{% endif %}" href="{% url 'assessment-list' %}">Assessments</a>
                 </li>
                 {% endif %}
                 {% if perms.missions.can_add_missions%}

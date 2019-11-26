@@ -5,11 +5,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 
+from assessments.tests.test_base import TestBases
 from seawatch_registration.models import Position, Document, DocumentType
-from seawatch_registration.tests.views.test_base import TestBase
 
 
-class TestDocumentListView(TestBase):
+class TestDocumentListView(TestBases.TestBase):
 
     def setUp(self) -> None:
         self.base_set_up(url=reverse('document_list'), login_required=True, profile_required=True)
