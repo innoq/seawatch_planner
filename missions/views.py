@@ -1,21 +1,20 @@
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render, get_object_or_404
-from django.http import HttpResponse
-from django.urls import reverse
-from django.template import loader
-from datetime import datetime
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.urls import reverse, reverse_lazy
 from django.views import View
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.list import ListView
 
 from seawatch_registration.models import Profile
 from .forms import AssignmentForm
-from .models import Mission, Assignment
+from .models import Mission, Assignment, Ship
 
 
 class MissionListView(ListView):
     model = Mission
     paginate_by = 100  # if pagination is desired
+    nav_item = 'missions'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,18 +24,53 @@ class MissionListView(ListView):
 class MissionCreateView(CreateView):
     model = Mission
     fields = ['name', 'start_date', 'end_date', 'ship']
+    nav_item = 'missions'
 
     def get_success_url(self):
-        return reverse('mission-detail', kwargs={'id': self.object.id})
+        return reverse('mission-detail', kwargs={'pk': self.object.id})
+
+
+class ShipCreateView(CreateView):
+    model = Ship
+    fields = ['name']
+    nav_item = 'ships'
+
+    def get_success_url(self):
+        return reverse('ship-detail', kwargs={'pk': self.object.id})
+
+
+class MissionDeleteView(DeleteView):
+    model = Mission
+    nav_item = 'missions'
+    success_url = reverse_lazy('mission-list')
+
+
+class ShipDetailView(DetailView):
+    model = Ship
+    nav_item = 'ships'
+
+
+class ShipListView(ListView):
+    model = Ship
+    paginate_by = 10
+    nav_item = 'ships'
+
+
+class ShipDeleteView(DeleteView):
+    model = Ship
+    nav_item = 'ships'
+    success_url = reverse_lazy('ship-list')
 
 
 class MissionDetailView(DetailView):
     model = Mission
+    nav_item = 'missions'
 
 
 class AssignmentCreateView(CreateView):
     model = Assignment
     fields = ['position']
+    nav_item = 'missions'
 
     def __init__(self, *args, **kwargs):
         self.mission_id = kwargs.pop('mission__id', None)
@@ -50,38 +84,46 @@ class AssignmentCreateView(CreateView):
         return reverse('mission-detail', kwargs={'id': self.mission.object.id})
 
 
-class AssignmentView(View):
-    def post(self, request, *args, **kwargs):
-        if request.POST["method"] == "DELETE":
-            return self.delete(request, args, kwargs)
-        return redirect(reverse('mission-detail', kwargs={'pk': kwargs.pop('mission__id')}))
+class AssignmentDeleteView(DeleteView):
+    model = Assignment
+    nav_item = 'missions'
 
-    def delete(self, request, *args, **kwargs):
-        print("DELETE")
-        assignment = get_object_or_404(Assignment, pk=kwargs.pop('assignment__id'),
-                                       mission_id=kwargs.pop('mission__id'))
-        assignment.delete()
-        return redirect(reverse('mission-detail', kwargs={'pk': assignment.mission_id}))
-
+    def get_success_url(self):
+        return reverse('mission-detail', kwargs={'pk': self.object.mission.id})
 
 
 class AssigneeView(View):
     initial = {'key': 'value'}
     template_name = 'missions/assignee_form.html'
+    nav_item = 'missions'
 
     def get(self, request, *args, **kwargs):
-        candidates = Profile.objects.all()
-        return render(request, self.template_name, {'candidates': candidates})
+        mission_id = kwargs.pop('mission__id')
+        assigend_users = User.objects.filter(assignments__mission__id=mission_id)
+        candidates = Profile.objects.exclude(user__in=assigend_users)
+        return render(request, self.template_name, {'candidates': candidates, 'view': self})
+
+    def post(self, request, *args, **kwargs):
+        assignment_id = kwargs.pop('assignment__id')
+        mission_id = kwargs.pop('mission__id')
+        profile_id = request.POST['assignee']
+        user = get_object_or_404(User, profile__pk=profile_id)
+        assignment = Assignment.objects.get(pk=assignment_id)
+        assignment.user = user
+        assignment.save()
+        return redirect(reverse('mission-detail', kwargs={'pk': mission_id}))
 
 
 class AssignmentNewView(View):
     form_class = AssignmentForm
     initial = {'key': 'value'}
     template_name = 'missions/assignment_form.html'
+    nav_item = 'missions'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form,
+                                                    'view': self})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -90,4 +132,5 @@ class AssignmentNewView(View):
             form.instance.mission_id = mission.id
             form.save()
             return redirect(reverse('mission-detail', kwargs={'pk': mission.id}))
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form,
+                                                    'view':self})

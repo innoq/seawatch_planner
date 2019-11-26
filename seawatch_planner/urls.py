@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from seawatch_registration.views import index_view
+from seawatch_registration.views.index_view import IndexView
 
 urlpatterns = [
     path('missions/', include('missions.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('seawatch_registration.urls')),
-    path('', index_view.index, name='index')
+    path('', IndexView.as_view(), name='index')
 ]

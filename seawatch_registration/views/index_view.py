@@ -1,5 +1,9 @@
 from django.shortcuts import render
+from django.views.generic.base import View, ContextMixin
 
 
-def index(request):
-    return render(request, 'index.html', {'home_nav_class': 'active'})
+class IndexView(View, ContextMixin):
+    nav_item = 'index'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html', context=self.get_context_data())

@@ -7,31 +7,21 @@ from seawatch_registration.models import Profile
 
 
 class RequestedPositionView(LoginRequiredMixin, UserPassesTestMixin, View):
-
-    def __init__(self):
-        super(RequestedPositionView, self).__init__()
-        self.title = 'Add Requested Position'
-        self.success_alert = 'Requested Positions are successfully saved!'
-        self.submit_button = 'Next'
-        self.positions_nav_class = 'active'
+    nav_item = 'positions'
+    title = 'Add Requested Position'
+    success_alert = 'Requested Positions are successfully saved!'
+    submit_button = 'Next'
 
     def get(self, request, *args, **kwargs):
         return render(request, 'form.html', {'form': RequestedPositionForm(user=request.user),
-                                             'title': self.title,
-                                             'success_alert': self.success_alert,
-                                             'submit_button': self.submit_button,
-                                             'positions_nav_class': self.positions_nav_class})
+                                             'view': self})
 
     def post(self, request, *args, **kwargs):
         form = RequestedPositionForm(request.POST, user=request.user)
         if not form.is_valid():
             return render(request, 'form.html', {'form': form,
                                                  'error': 'Choose at least one position.',
-                                                 'title': self.title,
-                                                 'success_alert': self.success_alert,
-                                                 'submit_button': self.submit_button,
-                                                 'positions_nav_class': self.positions_nav_class
-                                                 })
+                                                 'view': self})
         profile = Profile.objects.get(user=request.user)
         requested_positions = form.cleaned_data['requested_positions']
         profile.requested_positions.clear()

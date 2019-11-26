@@ -52,7 +52,7 @@ class TestAddSkillsView(TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'form.html')
+        self.assertTemplateUsed(response, 'mform.html')
         self.assertContains(response, 'checked="" class="form-check-input" id="id_languages_')
         self.assertContains(response, 'checked="" class="form-check-input" id="id_skills_')
 

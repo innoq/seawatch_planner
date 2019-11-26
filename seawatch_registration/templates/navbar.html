@@ -1,5 +1,6 @@
 {% load bootstrap4 %}
 {% load static %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'index' %}">
         <img src="{% static 'seawatch_registration/images/logo.png' %}" width="35" height="32" class="d-inline-block align-top mr-2" alt="">
@@ -11,29 +12,41 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="nav navbar-nav">
             <li class="nav-item">
-                <a class="nav-link {{ home_nav_class }}" href="{% url 'index' %}">Home</a>
+                <a class="nav-link {% if view.nav_item == 'index' %}active{%else%}{{view.nav_item}}{% endif %}" href="{% url 'index' %}">Home</a>
             </li>
             {% if request.user.is_authenticated %}
                 {% if perms.assessment.can_assess_profiles%}
                 <li class="nav-item">
-                <a class="nav-link  {{ assessment_nav_class }}" href="#">Assessments</a>
-            </li>
+                    <a class="nav-link  {% if view.nav_item == 'assessment' %}active{% endif %}" href="#">Assessments</a>
+                </li>
                 {% endif %}
-            <li class="nav-item">
-                <a class="nav-link  {{ profile_nav_class }}" href="{% url 'show_profile' %}">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link  {{ document_nav_class }}" href="{% url 'document_list' %}">Documents</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ questions_nav_class }}" href="{% url 'questions' %}">Questions</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ positions_nav_class }}" href="{% url 'add_requested_profile' %}">Positions</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ skills_nav_class }}" href="{% url 'add_skills' %}">Skills</a>
-            </li>
+                {% if perms.missions.can_add_missions%}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission-list' %}">Missions</a>
+                </li>
+                {% endif %}
+                {% if perms.missions.can_add_ships%}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship-list' %}">Ships</a>
+                </li>
+                {% endif %}
+                {% if request.user.profile %}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'show_profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'questions' %}">Questions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'add_requested_profile' %}">Positions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'add_skills' %}">Skills</a>
+                </li>
+                {% endif %}
             {% endif %}
         </ul>
         <ul class="nav navbar-nav ml-auto">
@@ -46,7 +59,7 @@
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ signup_nav_class }}" href="{% url 'signup' %}">Signup</a>
+                <a class="nav-link {% if view.nav_item == 'signup' %}active{% endif %}" href="{% url 'signup' %}">Signup</a>
               </li>
             {% endif %}
         </ul>

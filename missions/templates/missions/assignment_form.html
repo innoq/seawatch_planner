@@ -1,10 +1,12 @@
 {% extends "base-missions.html" %}
+{% load bootstrap4 %}
 
 {% block content %}
 
     <h1>Create new position</h1>
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
         <input class="btn btn-primary" type="submit" value="Save">
     </form>
 

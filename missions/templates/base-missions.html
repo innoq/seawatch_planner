@@ -1,25 +1,33 @@
 {% load bootstrap4 %}
-<!DOCTYPE html>
+{% load static %}
+{% load fontawesome_5 %}
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Missions Overview</title>
-    {% bootstrap_css %}
-    <style>
-        .container.main {
-            margin: 30px auto;
-        }
-    </style>
-</head>
-<body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <div class="container main">
-        {% block content %}
-        
+        {% bootstrap_css %}
+        {% fontawesome_5_static %}
+        <title>{% block title %}Missions Overview{% endblock %}</title>
+        {% block head %}
         {% endblock %}
-    </div>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
 
-    {% bootstrap_javascript jquery="slim" %}
-</body>
+        {% bootstrap_javascript jquery="slim" %}
+
+        <footer>
+            <div class="text-center py-3">
+                <a href="https://innoq.com">
+                    <img src="{% static 'seawatch_registration/images/supported-by-innoq--blue-red.svg' %}" width="113px" height="41px">
+                </a>
+            </div>
+        </footer>
+    </body>
 </html>
