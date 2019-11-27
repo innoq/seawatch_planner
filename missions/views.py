@@ -16,7 +16,7 @@ class MissionListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Mission
     paginate_by = 100  # if pagination is desired
     nav_item = 'missions'
-    permission_required = 'can_view_mission'
+    permission_required = 'can_view_missions'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -53,7 +53,7 @@ class ShipCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'can_add_ships'
 
     def get_success_url(self):
-        return reverse('ship-list', kwargs={'pk': self.object.id})
+        return reverse('ship-list')
 
 
 class ShipDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -74,25 +74,6 @@ class ShipDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     nav_item = 'ships'
     success_url = reverse_lazy('ship-list')
     permission_required = 'can_delete_ships'
-
-
-class AssignmentCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    model = Assignment
-    fields = ['position']
-    nav_item = 'missions'
-    permission_required = 'can_add_assignments'
-    mission__id = None
-
-    def __init__(self, *args, **kwargs):
-        self.mission_id = kwargs.pop('mission__id', None)
-        super().__init__(*args, **kwargs)
-
-    def form_valid(self, form, mission__id, *args, **kwargs):
-        form.instance.mission_id = mission__id
-        return super(AssignmentCreateView, self).form_valid(form)
-
-    def get_success_url(self):
-        return reverse('mission-detail', kwargs={'id': self.mission.object.id})
 
 
 class AssignmentDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
@@ -127,7 +108,7 @@ class AssigneeView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return redirect(reverse('mission-detail', kwargs={'pk': mission_id}))
 
 
-class AssignmentNewView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class AssignmentCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
     form_class = AssignmentForm
     initial = {'key': 'value'}
     template_name = 'missions/assignment_form.html'
