@@ -6,6 +6,7 @@ from seawatch_registration.models import Profile, Document
 
 
 class DeleteDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
+    nav_item = 'documents'
 
     def get(self, request, document_id, *args, **kwargs):
         profile = Profile.objects.get(user=self.request.user)
@@ -13,7 +14,7 @@ class DeleteDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
 
         return render(request, 'confirm-delete.html', {'title': 'Delete Document',
                                                        'object': document,
-                                                       'document_nav_class': 'active'})
+                                                       'view': self})
 
     def post(self, request, document_id, *args, **kwargs):
         profile = Profile.objects.get(user=self.request.user)

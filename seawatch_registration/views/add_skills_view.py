@@ -7,21 +7,15 @@ from seawatch_registration.models import Profile
 
 
 class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
-
-    def __init__(self):
-        super(AddSkillsView, self).__init__()
-        self.title = 'Add Skills'
-        self.success_alert = 'Skills are successfully saved!'
-        self.submit_button = 'Next'
-        self.skills_nav_class = 'active'
+    nav_item = 'skills'
+    title = 'Add Skills'
+    success_alert = 'Skills are successfully saved!'
+    submit_button = 'Next'
 
     def get(self, request, *args, **kwargs):
         profile = request.user.profile
         return render(request, 'form.html', {'form': SkillsForm(profile=profile),
-                                             'title': self.title,
-                                             'success_alert': self.success_alert,
-                                             'submit_button': self.submit_button,
-                                             'skills_nav_class': self.skills_nav_class})
+                                             'view': self})
 
     def post(self, request, *args, **kwargs):
         profile = request.user.profile
@@ -29,10 +23,7 @@ class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
         if not form.is_valid():
             return render(request, 'form.html', {'form': form,
                                                  'error': 'Choose at least one skill.',
-                                                 'title': self.title,
-                                                 'success_alert': self.success_alert,
-                                                 'submit_button': self.submit_button,
-                                                 'skills_nav_class': self.skills_nav_class
+                                                 'view': self
                                                  })
         languages = form.cleaned_data['languages']
         skills = form.cleaned_data['skills']

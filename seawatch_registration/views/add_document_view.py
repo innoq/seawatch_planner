@@ -7,30 +7,20 @@ from seawatch_registration.models import Profile
 
 
 class AddDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
-
-    def __init__(self):
-        super(AddDocumentView, self).__init__()
-        self.title = 'Add Documents'
-        self.success_alert = 'Document is successfully saved!'
-        self.submit_button = 'Next'
-        self.document_nav_class = 'active'
+    nav_item = 'documents'
+    title = 'Add Documents'
+    success_alert = 'Document is successfully saved!'
+    submit_button = 'Next'
 
     def get(self, request, *args, **kwargs):
         return render(request, 'form.html', {'form': DocumentForm(user=request.user),
-                                             'title': self.title,
-                                             'success_alert': self.success_alert,
-                                             'submit_button': self.submit_button,
-                                             'document_nav_class': self.document_nav_class})
+                                             'view': self})
 
     def post(self, request, *args, **kwargs):
-        profile = request.user.profile
         form = DocumentForm(request.POST, request.FILES, user=request.user)
         if not form.is_valid():
             return render(request, 'form.html', {'form': form,
-                                                 'title': self.title,
-                                                 'success_alert': self.success_alert,
-                                                 'submit_button': self.submit_button,
-                                                 'document_nav_class': self.document_nav_class
+                                                 'view': self
                                                  })
         form.save()
         return redirect('add_requested_profile')

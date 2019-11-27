@@ -1,0 +1,13 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Missions | Seawatch Missions{% endblock %}
+
+{% block content %}
+    <h1>Delete assignment "{{ object.position.name }}" for mission "{{ object.mission.name }}"</h1>
+
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete assignment "{{ object.position.name }}" for mission "{{ object.mission.name }}"?</p>
+        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="{% url 'mission-detail' object.mission.id %}" role="button">Cancel</a>
+    </form>
+{% endblock %}
