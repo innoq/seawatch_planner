@@ -33,7 +33,7 @@ class MissionCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     model = Mission
     fields = ['name', 'start_date', 'end_date', 'ship']
     nav_item = 'missions'
-    permission_required = 'missions.can_add_missions'
+    permission_required = 'missions.can_create_missions'
 
     def get_success_url(self):
         return reverse('mission-detail', kwargs={'pk': self.object.id})
@@ -50,7 +50,7 @@ class ShipCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Ship
     fields = ['name']
     nav_item = 'ships'
-    permission_required = 'missions.can_add_ships'
+    permission_required = 'missions.can_create_ships'
 
     def get_success_url(self):
         return reverse('ship-list')
@@ -113,7 +113,7 @@ class AssignmentCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
     initial = {'key': 'value'}
     template_name = 'missions/assignment_form.html'
     nav_item = 'missions'
-    permission_required = 'missions.can_add_assignments'
+    permission_required = 'missions.can_create_assignments'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
