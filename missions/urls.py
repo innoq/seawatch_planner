@@ -11,7 +11,7 @@ urlpatterns = [
     path('ships/new', views.ShipCreateView.as_view(), name='ship-create'),
     path('ship/<int:pk>/', views.ShipDetailView.as_view(), name='ship-detail'),
     path('ship/<int:pk>/delete', views.ShipDeleteView.as_view(), name='ship-delete'),
-    path('<int:mission__id>/assignments/new', views.AssignmentNewView.as_view(), name="assignment-create"),
+    path('<int:mission__id>/assignments/new', views.AssignmentCreateView.as_view(), name="assignment-create"),
     path('<int:mission__id>/assignment/<int:pk>/delete',
          views.AssignmentDeleteView.as_view(),
          name="assignment-delete"),

@@ -11,6 +11,12 @@ class Ship(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        permissions = (('can_create_ships', 'Create ships'),
+                       ('can_view_ships', 'View ships'),
+                       ('can_update_ships', 'Update ships'),
+                       ('can_delete_ships', 'Delete ships'))
+
 
 class Mission(models.Model):
     name = models.CharField(max_length=50)
@@ -20,6 +26,12 @@ class Mission(models.Model):
 
     def __str__(self):
         return self.ship.name + ": " + self.name
+
+    class Meta:
+        permissions = (('can_create_missions', 'Create missions'),
+                       ('can_view_missions', 'View missions'),
+                       ('can_update_missions', 'Update missions'),
+                       ('can_delete_missions', 'Delete missions'))
 
 
 class Assignment(models.Model):
