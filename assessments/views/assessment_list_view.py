@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView
 
-from assessments.models import Assessment
 from seawatch_registration.models import Profile
 
 

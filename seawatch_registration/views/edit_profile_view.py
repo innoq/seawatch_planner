@@ -7,17 +7,18 @@ from seawatch_registration.models import Profile
 
 
 class EditProfileView(LoginRequiredMixin, UserPassesTestMixin, View):
+    nav_item = 'profile'
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         form = ProfileForm(instance=profile)
-        return render(request, 'profile.html', {'form': form, 'profile_nav_class': 'active'})
+        return render(request, 'profile.html', {'form': form, 'view': self})
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         form = ProfileForm(request.POST or None, instance=profile)
         if not form.is_valid():
-            return render(request, 'profile.html', {'form': form, 'profile_nav_class': 'active'})
+            return render(request, 'profile.html', {'form': form, 'view': self})
         form.save()
         return redirect('show_profile')
 

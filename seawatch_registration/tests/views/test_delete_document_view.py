@@ -7,11 +7,11 @@ from django.test import override_settings
 from django.urls import reverse
 
 from seawatch_registration.models import Profile, DocumentType, Document
-from seawatch_registration.tests.views.test_base import TestBase
+from seawatch_registration.tests.views.test_base import TestBases
 
 
 @override_settings(MEDIA_ROOT=tempfile.gettempdir())
-class TestDeleteDocumentView(TestBase):
+class TestDeleteDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
         self.base_set_up(url=reverse('delete_document', kwargs={'document_id': 1}),
