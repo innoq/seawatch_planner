@@ -105,7 +105,7 @@ class AssigneeView(LoginRequiredMixin, PermissionRequiredMixin, View):
         assignment = Assignment.objects.get(pk=assignment_id)
         assignment.user = user
         assignment.save()
-        return redirect(reverse('missions.mission-detail', kwargs={'pk': mission_id}))
+        return redirect(reverse('mission-detail', kwargs={'pk': mission_id}))
 
 
 class AssignmentCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
