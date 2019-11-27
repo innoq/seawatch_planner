@@ -44,3 +44,9 @@ class Assignment(models.Model):
                              null=True,
                              related_name='assignments')
 
+    class Meta:
+        permissions = (('can_create_assignment', 'Create assignment'),
+                       ('can_view_assignment', 'View assignment'),
+                       ('can_update_assignment', 'Update assignment'),
+                       ('can_delete_assignment', 'Delete assignment'))
+
