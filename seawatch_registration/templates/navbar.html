@@ -20,12 +20,12 @@
                     <a class="nav-link  {% if view.nav_item == 'assessment' %}active{% endif %}" href="{% url 'assessment_list' %}">Assessments</a>
                 </li>
                 {% endif %}
-                {% if perms.missions.can_add_missions%}
+                {% if perms.missions.can_view_missions%}
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission-list' %}">Missions</a>
                 </li>
                 {% endif %}
-                {% if perms.missions.can_add_ships%}
+                {% if perms.missions.can_view_ships%}
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship-list' %}">Ships</a>
                 </li>
