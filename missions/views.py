@@ -52,9 +52,8 @@ class ShipCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     nav_item = 'ships'
     permission_required = 'can_add_ships'
 
-
     def get_success_url(self):
-        return reverse('ship-detail', kwargs={'pk': self.object.id})
+        return reverse('ship-list', kwargs={'pk': self.object.id})
 
 
 class ShipDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -113,8 +112,8 @@ class AssigneeView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         mission_id = kwargs.pop('mission__id')
-        assigend_users = User.objects.filter(assignments__mission__id=mission_id)
-        candidates = Profile.objects.exclude(user__in=assigend_users)
+        assigned_users = User.objects.filter(assignments__mission__id=mission_id)
+        candidates = Profile.objects.exclude(user__in=assigned_users)
         return render(request, self.template_name, {'candidates': candidates, 'view': self})
 
     def post(self, request, *args, **kwargs):
