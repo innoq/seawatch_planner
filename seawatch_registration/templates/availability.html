@@ -1,10 +1,10 @@
 {% extends 'base-registration.html' %}
- {% load bootstrap4 %}
+{% load bootstrap4 %}
 
- {% block title %}{{ title }} | Seawatch Registration{% endblock %}
+{% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
 
  {% block content %}
-   <h1>{{ title }}</h1>
+   <h1>{{ view.title }}</h1>
    {% if success %}
    <div class="alert alert-success" role="alert">
    {{ success_alert }}
@@ -18,31 +18,8 @@
 
     <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
-  <!--
-  <table id="availability_table" border="0" cellpadding="2" cellspacing="0">
-    <tbody>
-     {% for form in formset %}
-        <tr>
-        {% bootstrap_form form %}
-        </tr>
-    {% endfor %}
-    </tbody>
-    </table>
-    {{ formset.management_form }}
-    -->
-    
     
     <table id="availability_table" border="0" cellpadding="0" cellspacing="0" class="table">
-      <!--
-      <thead>
-        <tr>
-          <th scope="col">Start Date</th>
-          <th scope="col">End Date</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      -->
       <tbody>
           {% for form in formset.forms %}
             {% for hidden in form.hidden_fields %}
@@ -60,9 +37,8 @@
     </table>
     {{ formset.management_form }}
     
-
     {% buttons %}
-      <button type="submit" class="btn btn-primary">{{submit_button}}</button>
+      <button type="submit" class="btn btn-primary">{{view.submit_button}}</button>
     {% endbuttons %}
 
   </form>

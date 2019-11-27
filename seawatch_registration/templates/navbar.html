@@ -46,6 +46,9 @@
                 <li class="nav-item">
                     <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'add_skills' %}">Skills</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'availability' %}active{% endif %}" href="{% url 'availability' %}">Availability</a>
+                </li>
                 {% endif %}
             {% endif %}
         </ul>
