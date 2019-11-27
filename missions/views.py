@@ -16,7 +16,7 @@ class MissionListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Mission
     paginate_by = 100  # if pagination is desired
     nav_item = 'missions'
-    permission_required = 'can_view_mission'
+    permission_required = 'can_view_missions'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -53,7 +53,7 @@ class ShipCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'can_add_ships'
 
     def get_success_url(self):
-        return reverse('ship-list', kwargs={'pk': self.object.id})
+        return reverse('ship-list')
 
 
 class ShipDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
