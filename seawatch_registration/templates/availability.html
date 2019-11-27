@@ -16,31 +16,50 @@
    </div>
    {% endif %}
 
-    <form method="post" enctype="multipart/form-data" id="myForm">
+    <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <!--
-    {{ formset.management_form }}
+  <!--
+  <table id="availability_table" border="0" cellpadding="2" cellspacing="0">
+    <tbody>
      {% for form in formset %}
+        <tr>
         {% bootstrap_form form %}
+        </tr>
     {% endfor %}
+    </tbody>
+    </table>
+    {{ formset.management_form }}
     -->
     
-    <table border="0" cellpadding="0" cellspacing="0">
+    
+    <table id="availability_table" border="0" cellpadding="0" cellspacing="0" class="table">
+      <!--
+      <thead>
+        <tr>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      -->
       <tbody>
           {% for form in formset.forms %}
             {% for hidden in form.hidden_fields %}
             {{ hidden }}
             {% endfor %}
           <tr>
-              <td>{{ form.start_date }}</td>
-              <td>{{ form.end_date }}</td>
-              <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+            <td>
+            {% bootstrap_field form.start_date %}
+            {% bootstrap_field form.end_date %}
+            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+            </td>
           </tr>
           {% endfor %}
       </tbody>
     </table>
     {{ formset.management_form }}
+    
 
     {% buttons %}
       <button type="submit" class="btn btn-primary">{{submit_button}}</button>
@@ -54,8 +73,8 @@
   
   <script type="text/javascript">
   $(function() {
-      $('#myForm tbody tr').formset({
-          prefix: '{{ formset.prefix }}'
+      $('#availability_table tbody tr').formset({
+          prefix: '{{ formset.prefix }}',
       });
   })
   </script>
