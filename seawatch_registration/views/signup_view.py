@@ -20,4 +20,4 @@ class SignupView(View):
         raw_password = form.cleaned_data.get('password1')
         user = authenticate(username=username, password=raw_password)
         login(request, user)
-        return redirect('add_profile')
+        return redirect('profile_create')

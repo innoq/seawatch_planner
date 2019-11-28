@@ -6,7 +6,7 @@ from seawatch_registration.forms.document_form import DocumentForm
 from seawatch_registration.models import Profile
 
 
-class AddDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
+class DocumentCreateView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'documents'
     title = 'Add Documents'
     success_alert = 'Document is successfully saved!'
@@ -23,7 +23,7 @@ class AddDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                  'view': self
                                                  })
         form.save()
-        return redirect('add_requested_profile')
+        return redirect('requested_position_update')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()

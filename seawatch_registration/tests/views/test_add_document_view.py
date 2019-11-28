@@ -1,5 +1,6 @@
 import tempfile
 from datetime import date
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
@@ -11,9 +12,9 @@ from seawatch_registration.tests.views.test_base import TestBases
 class TestAddDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('add_document'), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('document_create'), login_required=True, profile_required=True)
 
-    def test_views__add_document__get__should_render_with_document_html_when_profile_exists(self):
+    def test_views__document_create__get__should_render_with_document_html_when_profile_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -27,7 +28,7 @@ class TestAddDocumentView(TestBases.TestBase):
         self.assertTemplateUsed(response, 'form.html')
 
     @override_settings(MEDIA_ROOT=tempfile.gettempdir())
-    def test_views__add_document__post__should_redirect_to_position_when_form_is_valid(self):
+    def test_views__document_create__post__should_redirect_to_position_when_form_is_valid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -53,7 +54,7 @@ class TestAddDocumentView(TestBases.TestBase):
         self.assertRedirects(response, expected_url='/accounts/position/')
         self.assertEquals(Document.objects.all().count(), 1)
 
-    def test_views__add_document__post__should_render_when_form_is_invalid(self):
+    def test_views__document_create__post__should_render_when_form_is_invalid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile

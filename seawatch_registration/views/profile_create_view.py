@@ -5,7 +5,7 @@ from django.views.generic.base import View
 from seawatch_registration.forms.profile_form import ProfileForm
 
 
-class AddProfileView(LoginRequiredMixin, View):
+class ProfileCreateView(LoginRequiredMixin, View):
     nav_item = 'profile'
 
     def get(self, request, *args, **kwargs):
@@ -17,4 +17,4 @@ class AddProfileView(LoginRequiredMixin, View):
             return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}, request.POST),
                                                     'view': self})
         form.save()
-        return redirect('add_skills')
+        return redirect('skill_update')

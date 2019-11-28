@@ -5,7 +5,7 @@ from django.views.generic.base import View
 from seawatch_registration.models import Profile, Document
 
 
-class DeleteDocumentView(LoginRequiredMixin, UserPassesTestMixin, View):
+class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'documents'
 
     def get(self, request, document_id, *args, **kwargs):

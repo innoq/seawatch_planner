@@ -1,27 +1,27 @@
 from django.urls import path
 
-from seawatch_registration.views.add_document_view import AddDocumentView
-from seawatch_registration.views.add_profile_view import AddProfileView
-from seawatch_registration.views.add_skills_view import AddSkillsView
-from seawatch_registration.views.delete_document_view import DeleteDocumentView
+from seawatch_registration.views.document_create_view import DocumentCreateView
+from seawatch_registration.views.document_delete_view import DocumentDeleteView
 from seawatch_registration.views.document_list_view import DocumentListView
-from seawatch_registration.views.edit_document_view import DocumentUpdateView
-from seawatch_registration.views.edit_profile_view import EditProfileView
-from seawatch_registration.views.questions_view import QuestionView
-from seawatch_registration.views.requested_positions_view import RequestedPositionView
-from seawatch_registration.views.show_profile_view import ShowProfileView
+from seawatch_registration.views.document_update_view import DocumentUpdateView
+from seawatch_registration.views.profile_create_view import ProfileCreateView
+from seawatch_registration.views.profile_detail_view import ProfileDetailView
+from seawatch_registration.views.profile_update_view import ProfileUpdateView
+from seawatch_registration.views.question_update_view import QuestionUpdateView
+from seawatch_registration.views.requested_position_update_view import RequestedPositionUpdateView
 from seawatch_registration.views.signup_view import SignupView
+from seawatch_registration.views.skill_update_view import SkillUpdateView
 
 urlpatterns = [
-    path('show/', ShowProfileView.as_view(), name='show_profile'),
-    path('add/', AddProfileView.as_view(), name='add_profile'),
-    path('edit/', EditProfileView.as_view(), name='edit_profile'),
+    path('show', ProfileDetailView.as_view(), name='profile_detail'),
+    path('add', ProfileCreateView.as_view(), name='profile_create'),
+    path('edit', ProfileUpdateView.as_view(), name='profile_update'),
     path('signup/', SignupView.as_view(), name='signup'),
     path('documents/', DocumentListView.as_view(), name='document_list'),
-    path('document/add/', AddDocumentView.as_view(), name='add_document'),
-    path('document/<int:document_id>/', DocumentUpdateView.as_view(), name='edit_document'),
-    path('document/<int:document_id>/delete/', DeleteDocumentView.as_view(), name='delete_document'),
-    path('questions/', QuestionView.as_view(), name='questions'),
-    path('position/', RequestedPositionView.as_view(), name='add_requested_profile'),
-    path('skills/', AddSkillsView.as_view(), name='add_skills'),
+    path('documents/add/', DocumentCreateView.as_view(), name='document_create'),
+    path('documents/<int:document_id>/edit', DocumentUpdateView.as_view(), name='document_update'),
+    path('documents/<int:document_id>/delete', DocumentDeleteView.as_view(), name='document_delete'),
+    path('questions/edit', QuestionUpdateView.as_view(), name='question_update'),
+    path('requested-positions/edit', RequestedPositionUpdateView.as_view(), name='requested_position_update'),
+    path('skills/edit', SkillUpdateView.as_view(), name='skill_update'),
 ]

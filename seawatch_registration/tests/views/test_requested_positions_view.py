@@ -7,7 +7,7 @@ from seawatch_registration.tests.views.test_base import TestBases
 class TestAddRequestedPositionsView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('add_requested_profile'), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('requested_position_update'), login_required=True, profile_required=True)
 
     def test_views__add_requested_positions__get__should_render_with_form_html_when_profile_exists(self):
         # Arrange

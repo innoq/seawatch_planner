@@ -32,7 +32,7 @@
                 {% endif %}
                 {% if request.user.profile %}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'show_profile' %}">Profile</a>
+                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'profile_detail' %}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
@@ -41,10 +41,10 @@
                     <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'questions' %}">Questions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'add_requested_profile' %}">Positions</a>
+                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'requested_position_update' %}">Positions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'add_skills' %}">Skills</a>
+                    <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'skill_update' %}">Skills</a>
                 </li>
                 {% endif %}
             {% endif %}

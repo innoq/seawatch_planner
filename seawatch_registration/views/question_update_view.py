@@ -6,7 +6,7 @@ from seawatch_registration.forms.dynamic_question_form import DynamicQuestionFor
 from seawatch_registration.models import Profile, Question, Answer
 
 
-class QuestionView(LoginRequiredMixin, UserPassesTestMixin, View):
+class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'questions'
     title = 'Questions'
     success_alert = 'Your Answer are successfully saved!'
