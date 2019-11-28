@@ -10,12 +10,12 @@ class CreateView(LoginRequiredMixin, generic.View):
     nav_item = 'profile'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}), 'view': self})
+        return render(request, './seawatch_registration/profile.html', {'form': ProfileForm({'user': request.user}), 'view': self})
 
     def post(self, request, *args, **kwargs):
         form = ProfileForm(request.POST)
         if not form.is_valid():
-            return render(request, 'profile.html', {'form': ProfileForm({'user': request.user}, request.POST),
+            return render(request, './seawatch_registration/profile.html', {'form': ProfileForm({'user': request.user}, request.POST),
                                                     'view': self})
         form.save()
         return redirect('skill_update')
@@ -26,7 +26,7 @@ class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
     def get(self, request, *args, **kwargs):
         profile = request.user.profile
-        return render(request, 'profile-detail.html', {'profile': profile, 'view': self})
+        return render(request, './seawatch_registration/profile_detail.html', {'profile': profile, 'view': self})
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
@@ -38,13 +38,13 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         form = ProfileForm(instance=profile)
-        return render(request, 'profile.html', {'form': form, 'view': self})
+        return render(request, './seawatch_registration/profile.html', {'form': form, 'view': self})
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         form = ProfileForm(request.POST or None, instance=profile)
         if not form.is_valid():
-            return render(request, 'profile.html', {'form': form, 'view': self})
+            return render(request, './seawatch_registration/profile.html', {'form': form, 'view': self})
         form.save()
         return redirect('profile_detail')
 

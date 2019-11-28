@@ -24,7 +24,7 @@ class TestDocumentListView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'document-list.html')
+        self.assertTemplateUsed(response, './seawatch_registration/document_list.html')
         self.assertContains(response, "You doesn't have any documents uploaded yet!")
 
     @override_settings(MEDIA_ROOT=tempfile.gettempdir())
@@ -54,7 +54,7 @@ class TestDocumentListView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'document-list.html')
+        self.assertTemplateUsed(response, './seawatch_registration/document_list.html')
         self.assertContains(response, self.td(document.pk))
         self.assertContains(response, self.td(document.document_type.name))
         self.assertContains(response, self.td(document.number))

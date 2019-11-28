@@ -9,7 +9,7 @@ class SignupView(View):
     nav_item = 'signup'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'signup.html', {'form': SignupForm(), 'view': self})
+        return render(request, './registration/signup.html', {'form': SignupForm(), 'view': self})
 
     def post(self, request, *args, **kwargs):
         form = SignupForm(request.POST)

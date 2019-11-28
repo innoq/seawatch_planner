@@ -22,7 +22,7 @@ class TestEditProfileView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, './seawatch_registration/profile.html')
 
     def test_views__profile_updatee__post__should_update_profile_when_profile_for_user_exists(self):
         # Arrange
