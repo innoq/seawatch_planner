@@ -51,7 +51,7 @@ class DeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
 
 class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
-    template_name = 'document-list.html'
+    template_name = './seawatch_registration/document_list.html'
     model = Document
     context_object_name = 'documents'
     paginate_by = 5
