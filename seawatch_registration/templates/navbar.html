@@ -22,29 +22,29 @@
                 {% endif %}
                 {% if perms.missions.can_view_missions%}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission-list' %}">Missions</a>
+                    <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission_list' %}">Missions</a>
                 </li>
                 {% endif %}
                 {% if perms.missions.can_view_ships%}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship-list' %}">Ships</a>
+                    <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship_list' %}">Ships</a>
                 </li>
                 {% endif %}
                 {% if request.user.profile %}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'show_profile' %}">Profile</a>
+                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'profile_detail' %}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'questions' %}">Questions</a>
+                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'question_update' %}">Questions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'add_requested_profile' %}">Positions</a>
+                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'requested_position_update' %}">Positions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'add_skills' %}">Skills</a>
+                    <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'skill_update' %}">Skills</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if view.nav_item == 'availabilities' %}active{% endif %}" href="{% url 'availability_list' %}">Availabilities</a>

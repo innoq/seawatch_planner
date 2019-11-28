@@ -6,9 +6,9 @@ from seawatch_registration.forms.skills_form import SkillsForm
 from seawatch_registration.models import Profile
 
 
-class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'skills'
-    title = 'Add Skills'
+    title = 'Your Skills'
     success_alert = 'Skills are successfully saved!'
     submit_button = 'Next'
 
@@ -33,7 +33,7 @@ class AddSkillsView(LoginRequiredMixin, UserPassesTestMixin, View):
         for language in languages:
             profile.skills.add(language)
 
-        return redirect('add_document')
+        return redirect('document_create')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()

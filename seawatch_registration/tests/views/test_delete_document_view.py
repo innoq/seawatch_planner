@@ -14,11 +14,11 @@ from seawatch_registration.tests.views.test_base import TestBases
 class TestDeleteDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('delete_document', kwargs={'document_id': 1}),
+        self.base_set_up(url=reverse('document_delete', kwargs={'document_id': 1}),
                          login_required=True,
                          profile_required=True)
 
-    def test_views__delete_document__get__should_get_404_when_document_doesnt_exist(self):
+    def test_views__document_delete__get__should_get_404_when_document_doesnt_exist(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -30,7 +30,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 404)
 
-    def test_views__delete_document__get__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_delete__get__should_get_404_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -69,7 +69,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 404)
 
-    def test_views__edit_document__get__should_render_with_document_html_when_document_exists(self):
+    def test_views__document_update__get__should_render_with_document_html_when_document_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -96,7 +96,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'confirm-delete.html')
 
-    def test_views__delete_document__post__should_delete_document_when_form_is_valid(self):
+    def test_views__document_delete__post__should_delete_document_when_form_is_valid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -123,7 +123,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
         self.assertRedirects(response, reverse('document_list'))
         self.assertEquals(Document.objects.all().count(), 0)
 
-    def test_views__delete_document__post__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_delete__post__should_get_404_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()

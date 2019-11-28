@@ -37,8 +37,8 @@
                 <td>{{ document.issuing_place }}</td>
                 <td>{{ document.issuing_country }}</td>
                 <td>{{ document.file }}</td>
-                <td><a href="{% url 'edit_document' document_id=document.pk %}">{% fa5_icon 'edit' 'far' %}</a></td>
-                <td><a href="{% url 'delete_document' document_id=document.pk %}">{% fa5_icon 'trash-alt' 'far' %}</a></td>
+                <td><a href="{% url 'document_update' document_id=document.pk %}">{% fa5_icon 'edit' 'far' %}</a></td>
+                <td><a href="{% url 'document_delete' document_id=document.pk %}">{% fa5_icon 'trash-alt' 'far' %}</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -46,6 +46,6 @@
     {% else %}
     <p>You doesn't have any documents uploaded yet!</p>
     {% endif %}
-    <a href="{% url 'add_document' %}" class="btn btn-primary">{% fa5_icon 'plus' 'fas' %}</a>
+    <a href="{% url 'document_create' %}" class="btn btn-primary">{% fa5_icon 'plus' 'fas' %}</a>
     {% include 'pagination.html' %}
 {% endblock %}

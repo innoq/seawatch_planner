@@ -14,9 +14,9 @@ from seawatch_registration.models import Profile, DocumentType, Document
 class TestEditDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('edit_document', kwargs={'document_id': 1}), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('document_update', kwargs={'document_id': 1}), login_required=True, profile_required=True)
 
-    def test_views__edit_document__get__should_get_404_when_document_doesnt_exist(self):
+    def test_views__document_update__get__should_get_404_when_document_doesnt_exist(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -28,7 +28,7 @@ class TestEditDocumentView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 404)
 
-    def test_views__edit_document__get__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_update__get__should_get_404_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -67,7 +67,7 @@ class TestEditDocumentView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 404)
 
-    def test_views__edit_document__get__should_render_with_document_html_when_document_exists(self):
+    def test_views__document_update__get__should_render_with_document_html_when_document_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -103,7 +103,7 @@ class TestEditDocumentView(TestBases.TestBase):
         self.assertContains(response, document.issuing_country)
         self.assertContains(response, document.file.name)
 
-    def test_views__edit_document__post__should_redirect_to_document_list_when_form_is_valid(self):
+    def test_views__document_update__post__should_redirect_to_document_list_when_form_is_valid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -144,7 +144,7 @@ class TestEditDocumentView(TestBases.TestBase):
         self.assertEquals(new_document.issuing_authority, 'New Jersey')
         self.assertEquals(new_document.issuing_place, 'New Jersey')
 
-    def test_views__edit_document__post__should_render_when_form_is_invalid(self):
+    def test_views__document_update__post__should_render_when_form_is_invalid(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -176,7 +176,7 @@ class TestEditDocumentView(TestBases.TestBase):
         self.assertEquals(Document.objects.all().count(), 1)
         self.assertEquals(Document.objects.all().first(), document)
 
-    def test_views__edit_document__post__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_update__post__should_get_404_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()

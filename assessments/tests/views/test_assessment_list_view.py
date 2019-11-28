@@ -87,4 +87,5 @@ class TestShowAssessmentsView(TestBases.TestBase):
 
     @staticmethod
     def tr_onclick(primary_key):
-        return '<tr onclick="window.location=\'' + str(primary_key) + '/\';">'
+        return '<tr onclick="window.location=\'' + \
+               reverse('assessment_update', kwargs={'profile_id': primary_key}) + '\';">'

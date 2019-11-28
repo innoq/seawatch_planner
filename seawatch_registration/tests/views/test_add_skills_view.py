@@ -7,9 +7,9 @@ from seawatch_registration.tests.views.test_base import TestBases
 class TestAddSkillsView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('add_skills'), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('skill_update'), login_required=True, profile_required=True)
 
-    def test_views__add_skills__get__should_render_with_form_html_when_profile_exists(self):
+    def test_views__skill_update__get__should_render_with_form_html_when_profile_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -22,24 +22,7 @@ class TestAddSkillsView(TestBases.TestBase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'form.html')
 
-    def test_views__add_skills__get__should_show_selected_skills_when_skills_exists(self):
-        # Arrange
-        profile: Profile = self.profile
-        profile.skills.add(Skill.objects.filter(group='other').first())
-        profile.skills.add(Skill.objects.filter(group='lang').first())
-        profile.save()
-        self.client.login(username=self.username, password=self.password)
-
-        # Act
-        response = self.client.get(self.url, user=self.user)
-
-        # Assert
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'form.html')
-        self.assertContains(response, 'checked="" class="form-check-input" id="id_languages_')
-        self.assertContains(response, 'checked="" class="form-check-input" id="id_skills_')
-
-    def test_views__add_skills__post__should_show_selected_skills_when_skills_exists(self):
+    def test_views__skill_update__get__should_show_selected_skills_when_skills_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.skills.add(Skill.objects.filter(group='other').first())
@@ -56,7 +39,24 @@ class TestAddSkillsView(TestBases.TestBase):
         self.assertContains(response, 'checked="" class="form-check-input" id="id_languages_')
         self.assertContains(response, 'checked="" class="form-check-input" id="id_skills_')
 
-    def test_views__add_skills__post__should_redirect_to_document_when_skills_are_set_to_zero(self):
+    def test_views__skill_update__post__should_show_selected_skills_when_skills_exists(self):
+        # Arrange
+        profile: Profile = self.profile
+        profile.skills.add(Skill.objects.filter(group='other').first())
+        profile.skills.add(Skill.objects.filter(group='lang').first())
+        profile.save()
+        self.client.login(username=self.username, password=self.password)
+
+        # Act
+        response = self.client.get(self.url, user=self.user)
+
+        # Assert
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'form.html')
+        self.assertContains(response, 'checked="" class="form-check-input" id="id_languages_')
+        self.assertContains(response, 'checked="" class="form-check-input" id="id_skills_')
+
+    def test_views__skill_update__post__should_redirect_to_document_when_skills_are_set_to_zero(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -72,10 +72,10 @@ class TestAddSkillsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/document/add/')
+        self.assertRedirects(response, expected_url='/accounts/documents/add/')
         self.assertEquals(len(profile.skills.all()), 0)
 
-    def test_views__add_skills__post__should_redirect_to_document_when_skills_are_set_to_2(self):
+    def test_views__skill_update__post__should_redirect_to_document_when_skills_are_set_to_2(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -90,5 +90,5 @@ class TestAddSkillsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/document/add/')
+        self.assertRedirects(response, expected_url='/accounts/documents/add/')
         self.assertEquals(len(profile.skills.all()), 2)

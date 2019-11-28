@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from seawatch_registration.views.index_view import IndexView
+from seawatch_registration.views.index import IndexView
 
 urlpatterns = [
     path('missions/', include('missions.urls')),

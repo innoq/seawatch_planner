@@ -24,7 +24,7 @@
             <a class="btn btn-primary btn-sm" role="button"
                href="{% url 'assignee' object.id assignment.id %}">{% fa5_icon 'user' 'fas' %}</a>
             <a class="btn btn-danger btn-sm" role="button"
-               href="{% url 'assignment-delete' object.id assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+               href="{% url 'assignment_delete' object.id assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
 
         </td>
     </tr>
@@ -32,5 +32,5 @@
     </tbody>
 </table>
 
-<a class="btn btn-primary" href="{% url 'assignment-create' object.id %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+<a class="btn btn-primary" href="{% url 'assignment_create' object.id %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
 {% endblock %}

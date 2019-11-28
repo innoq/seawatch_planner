@@ -1,4 +1,5 @@
 from datetime import date
+
 from django.urls import reverse
 
 from seawatch_registration.models import Profile
@@ -8,9 +9,9 @@ from seawatch_registration.tests.views.test_base import TestBases
 class TestEditProfileView(TestBases.TestBase):
 
     def setUp(self):
-        self.base_set_up(url=reverse('edit_profile'), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('profile_update'), login_required=True, profile_required=True)
 
-    def test_views__edit_profile__get__should_get_profile_form_when_profile_for_user_exists(self):
+    def test_views__profile_update__get__should_get_profile_form_when_profile_for_user_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -23,7 +24,7 @@ class TestEditProfileView(TestBases.TestBase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
 
-    def test_views__edit_profile__post__should_edit_profile_when_profile_for_user_exists(self):
+    def test_views__profile_updatee__post__should_update_profile_when_profile_for_user_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -44,11 +45,11 @@ class TestEditProfileView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, reverse('show_profile'))
+        self.assertRedirects(response, reverse('profile_detail'))
         self.assertEquals(Profile.objects.count(), 1)
         self.assertEquals(Profile.objects.first().phone, '0987654321')
 
-    def test_views__edit_profile__post__should_not_edit_profile_when_required_data_is_missing(self):
+    def test_views__profile_update__post__should_not_update_profile_when_required_data_is_missing(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()

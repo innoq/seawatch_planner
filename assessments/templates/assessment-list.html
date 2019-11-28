@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             {% for profile in profiles %}
-            <tr onclick="window.location='{{ profile.pk }}/';">
+            <tr onclick="window.location='{% url 'assessment_update' profile.pk %}';">
                 <td>{{ profile.pk }}</td>
                 <td>{{ profile.first_name }}</td>
                 <td>{{ profile.last_name }}</td>

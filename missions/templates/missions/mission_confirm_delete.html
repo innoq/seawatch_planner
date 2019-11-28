@@ -8,6 +8,6 @@
 
     <form method="post">{% csrf_token %}
         <p>Are you sure you want to delete mission "{{ object.name }}"?</p>
-        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="{% url 'mission-list' %}" role="button">Cancel</a>
+        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="{% url 'mission_list' %}" role="button">Cancel</a>
     </form>
 {% endblock %}

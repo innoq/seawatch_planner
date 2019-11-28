@@ -1,19 +1,23 @@
 from django.urls import path
 
-from . import views
+import missions.views.assignment as assignment
+import missions.views.mission as mission
+import missions.views.ship as ship
 
 urlpatterns = [
-    path('', views.MissionListView.as_view(), name='mission-list'),
-    path('new', views.MissionCreateView.as_view(), name='mission-create'),
-    path('<int:pk>/', views.MissionDetailView.as_view(), name='mission-detail'),
-    path('<int:pk>/delete', views.MissionDeleteView.as_view(), name='mission-delete'),
-    path('ships/', views.ShipListView.as_view(), name='ship-list'),
-    path('ships/new', views.ShipCreateView.as_view(), name='ship-create'),
-    path('ship/<int:pk>/', views.ShipDetailView.as_view(), name='ship-detail'),
-    path('ship/<int:pk>/delete', views.ShipDeleteView.as_view(), name='ship-delete'),
-    path('<int:mission__id>/assignments/new', views.AssignmentCreateView.as_view(), name="assignment-create"),
-    path('<int:mission__id>/assignment/<int:pk>/delete',
-         views.AssignmentDeleteView.as_view(),
-         name="assignment-delete"),
-    path('<int:mission__id>/assignment/<int:assignment__id>/assignee', views.AssigneeView.as_view(), name="assignee"),
+    path('', mission.ListView.as_view(), name='mission_list'),
+    path('new', mission.CreateView.as_view(), name='mission_create'),
+    path('<int:pk>/', mission.DetailView.as_view(), name='mission_detail'),
+    path('<int:pk>/delete', mission.DeleteView.as_view(), name='mission_delete'),
+    path('ships/', ship.ListView.as_view(), name='ship_list'),
+    path('ships/new', ship.CreateView.as_view(), name='ship_create'),
+    path('ships/<int:pk>/', ship.DetailView.as_view(), name='ship_detail'),
+    path('ships/<int:pk>/delete', ship.DeleteView.as_view(), name='ship_delete'),
+    path('<int:mission__id>/assignments/new', assignment.CreateView.as_view(), name="assignment_create"),
+    path('<int:mission__id>/assignments/<int:pk>/delete',
+         assignment.DeleteView.as_view(),
+         name="assignment_delete"),
+    path('<int:mission__id>/assignments/<int:assignment__id>/assignee',
+         assignment.UpdateView.as_view(),
+         name="assignee"),
 ]

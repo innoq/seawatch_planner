@@ -13,7 +13,7 @@ from seawatch_registration.models import Position, Question, Answer, Skill, Docu
 class TestAssessmentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('assessment', kwargs={'profile_id': 1}), login_required=True,
+        self.base_set_up(url=reverse('assessment_update', kwargs={'profile_id': 1}), login_required=True,
                          permission_required=True, permission_name='can_assess_profiles', permission_class=Assessment)
 
     def test__views__assessment__get__should_return_404_when_not_existing_profil_id_is_given(self):
@@ -21,7 +21,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(reverse('assessment', kwargs={'profile_id': 123}), user=self.user)
+        response = self.client.get(reverse('assessment_update', kwargs={'profile_id': 123}), user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 404)
@@ -31,7 +31,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(reverse('assessment', kwargs={'profile_id': 1}), user=self.user)
+        response = self.client.get(reverse('assessment_update', kwargs={'profile_id': 1}), user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 404)
@@ -43,11 +43,11 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(reverse('assessment', kwargs={'profile_id': 1}), user=self.user)
+        response = self.client.get(reverse('assessment_update', kwargs={'profile_id': 1}), user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.p_danger('No skills specified.'))
@@ -82,11 +82,11 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(reverse('assessment', kwargs={'profile_id': 1}), user=self.user)
+        response = self.client.get(reverse('assessment_update', kwargs={'profile_id': 1}), user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.li(skill1.name))
@@ -115,11 +115,11 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.get(reverse('assessment', kwargs={'profile_id': 1}), user=self.user)
+        response = self.client.get(reverse('assessment_update', kwargs={'profile_id': 1}), user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.p_danger('No skills specified.'))
         self.assertContains(response, self.p_danger('No Documents uploaded.'))
@@ -133,7 +133,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment',  kwargs={'profile_id': 123}),
+        response = self.client.post(reverse('assessment_update',  kwargs={'profile_id': 123}),
                                     {'approved_positions': 1,
                                      'assessment_status': 'accepted',
                                      'comment': ''},
@@ -147,7 +147,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment', kwargs={'profile_id': 1}),
+        response = self.client.post(reverse('assessment_update', kwargs={'profile_id': 1}),
                                     {'approved_positions': 1,
                                      'assessment_status': 'accepted',
                                      'comment':''},
@@ -163,7 +163,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment', kwargs={'profile_id': 1}),
+        response = self.client.post(reverse('assessment_update', kwargs={'profile_id': 1}),
                                     {'approved_positions': 1,
                                      'assessment_status': 'accepted',
                                      'comment': ''},
@@ -171,7 +171,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.p_danger('No skills specified.'))
@@ -206,7 +206,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment', kwargs={'profile_id': 1}),
+        response = self.client.post(reverse('assessment_update', kwargs={'profile_id': 1}),
                                     {'approved_positions': position1.pk,
                                      'assessment_status': 'accepted',
                                      'comment': ''},
@@ -214,7 +214,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.li(skill1.name))
@@ -244,7 +244,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment', kwargs={'profile_id': 1}),
+        response = self.client.post(reverse('assessment_update', kwargs={'profile_id': 1}),
                                     {'approved_positions': position2.pk,
                                      'assessment_status': 'accepted',
                                      'comment': 'Test Comment'},
@@ -252,7 +252,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response,
                             self.checked_required_radio_input(name='assessment_status',
                                                               value='accepted',
@@ -275,14 +275,14 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment', kwargs={'profile_id': 1}),
+        response = self.client.post(reverse('assessment_update', kwargs={'profile_id': 1}),
                                     {'assessment_status': 'accepted',
                                      'comment': ''},
                                     user=self.user)
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response,
                             self.checked_required_radio_input(name='assessment_status',
                                                               value='accepted',

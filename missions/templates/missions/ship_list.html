@@ -19,8 +19,8 @@
             <td>{{ ship.id }}</td>
             <td>{{ ship.name }}</td>
             <td>
-                <a href="{% url 'ship-detail' ship.id %}">{% fa5_icon 'ship' 'fas' %}</a>
-                <a class="text-danger" href="{% url 'ship-delete' ship.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+                <a href="{% url 'ship_detail' ship.id %}">{% fa5_icon 'ship' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'ship_delete' ship.id %}">{% fa5_icon 'trash' 'fas' %}</a>
             </td>
         </tr>
         {% endfor %}
@@ -29,5 +29,5 @@
 {% else %}
     <p>No ships yet.</p>
 {% endif %}
-<a class="btn btn-primary" href="{% url 'ship-create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+<a class="btn btn-primary" href="{% url 'ship_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
 {% endblock %}

@@ -64,8 +64,8 @@ class TestDocumentListView(TestBases.TestBase):
         self.assertContains(response, self.td(document.issuing_place))
         self.assertContains(response, self.td(document.issuing_country))
         self.assertContains(response, self.td(document.file.name))
-        self.assertContains(response, reverse('edit_document', kwargs={'document_id': document.pk}))
-        self.assertContains(response, reverse('delete_document', kwargs={'document_id': document.pk}))
+        self.assertContains(response, reverse('document_update', kwargs={'document_id': document.pk}))
+        self.assertContains(response, reverse('document_delete', kwargs={'document_id': document.pk}))
 
     @staticmethod
     def td(value):
