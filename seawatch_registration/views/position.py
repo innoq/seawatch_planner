@@ -1,7 +1,7 @@
 import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import CheckboxSelectMultiple
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from seawatch_registration.mixins.model_form_widget_mixin import ModelFormWidgetMixin
 from seawatch_registration.models import Profile
@@ -15,12 +15,10 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, 
     error_message = 'Error your selection was not saved! Select at least one position.'
     success_message = 'Your requested positions are successfully saved!'
     title = 'Requested Positions'
+    success_url = reverse_lazy('question_update')
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
     }
-
-    def get_success_url(self):
-        return reverse('requested_position_update') + '?success=true'
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
