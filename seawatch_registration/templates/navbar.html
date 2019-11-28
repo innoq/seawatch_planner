@@ -22,12 +22,12 @@
                 {% endif %}
                 {% if perms.missions.can_view_missions%}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission-list' %}">Missions</a>
+                    <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission_list' %}">Missions</a>
                 </li>
                 {% endif %}
                 {% if perms.missions.can_view_ships%}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship-list' %}">Ships</a>
+                    <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship_list' %}">Ships</a>
                 </li>
                 {% endif %}
                 {% if request.user.profile %}

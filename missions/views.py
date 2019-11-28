@@ -36,13 +36,13 @@ class MissionCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     permission_required = 'missions.can_create_missions'
 
     def get_success_url(self):
-        return reverse('mission-detail', kwargs={'pk': self.object.id})
+        return reverse('mission_detail', kwargs={'pk': self.object.id})
     
 
 class MissionDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Mission
     nav_item = 'missions'
-    success_url = reverse_lazy('mission-list')
+    success_url = reverse_lazy('mission_list')
     permission_required = 'missions.can_delete_missions'
 
 
@@ -53,7 +53,7 @@ class ShipCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'missions.can_create_ships'
 
     def get_success_url(self):
-        return reverse('ship-list')
+        return reverse('ship_list')
 
 
 class ShipDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -72,7 +72,7 @@ class ShipListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ShipDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Ship
     nav_item = 'ships'
-    success_url = reverse_lazy('ship-list')
+    success_url = reverse_lazy('ship_list')
     permission_required = 'missions.can_delete_ships'
 
 
@@ -82,7 +82,7 @@ class AssignmentDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteVi
     permission_required = 'missions.can_delete_assignments'
 
     def get_success_url(self):
-        return reverse('mission-detail', kwargs={'pk': self.object.mission.id})
+        return reverse('mission_detail', kwargs={'pk': self.object.mission.id})
 
 
 class AssigneeView(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -105,7 +105,7 @@ class AssigneeView(LoginRequiredMixin, PermissionRequiredMixin, View):
         assignment = Assignment.objects.get(pk=assignment_id)
         assignment.user = user
         assignment.save()
-        return redirect(reverse('mission-detail', kwargs={'pk': mission_id}))
+        return redirect(reverse('mission_detail', kwargs={'pk': mission_id}))
 
 
 class AssignmentCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -126,6 +126,6 @@ class AssignmentCreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
         if form.is_valid():
             form.instance.mission_id = mission.id
             form.save()
-            return redirect(reverse('mission-detail', kwargs={'pk': mission.id}))
+            return redirect(reverse('mission_detail', kwargs={'pk': mission.id}))
         return render(request, self.template_name, {'form': form,
                                                     'view': self})

@@ -25,8 +25,8 @@
             </td>
             <td>{{ mission.ship.name }}</td>
             <td>
-                <a href="{% url 'mission-detail' mission.id %}">{% fa5_icon 'users' 'fas' %}</a>
-                <a class="text-danger" href="{% url 'mission-delete' mission.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+                <a href="{% url 'mission_detail' mission.id %}">{% fa5_icon 'users' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'mission_delete' mission.id %}">{% fa5_icon 'trash' 'fas' %}</a>
             </td>
         </tr>
         {% endfor %}
@@ -35,5 +35,5 @@
 {% else %}
     <p>No missions yet.</p>
 {% endif %}
-<a class="btn btn-primary" href="{% url 'mission-create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+<a class="btn btn-primary" href="{% url 'mission_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
 {% endblock %}
