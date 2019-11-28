@@ -1,27 +1,28 @@
 {% extends 'base-registration.html' %}
- {% load bootstrap4 %}
+{% load bootstrap4 %}
 
- {% block title %}{{ title }} | Seawatch Registration{% endblock %}
+{% block title %}{{ title }} | Seawatch Registration{% endblock %}
 
- {% block content %}
-   <h1>{{ view.title }}</h1>
-   {% if success %}
-   <div class="alert alert-success" role="alert">
-   {{ view.success_alert }}
-   </div>
-   {% endif %}
-   {% if error %}
-   <div class="alert alert-danger" role="alert">
-   {{ error }}
-   </div>
-   {% endif %}
+{% block content %}
+    <h1>{{ view.title }}</h1>
+    {% if success or request.GET.success %}
+    <div class="alert alert-success" role="alert">
+        {{ view.success_message }}
+        {{ view.success_alert}}
+    </div>
+    {% endif %}
+    {% if form.errors%}
+    <div class="alert alert-danger" role="alert">
+        {{ view.error_message }}
+    </div>
+    {% endif %}
 
-   <form method="post" enctype="multipart/form-data">
-     {% csrf_token %}
-     {% bootstrap_form form %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
 
-     {% buttons %}
-       <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
-     {% endbuttons %}
-   </form>
- {% endblock %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}

@@ -1,33 +1,29 @@
+import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
-from django.views.generic.base import View
+from django.forms import CheckboxSelectMultiple
+from django.urls import reverse
 
-from seawatch_registration.forms.requested_positions_form import RequestedPositionForm
+from seawatch_registration.mixins.model_form_widget_mixin import ModelFormWidgetMixin
 from seawatch_registration.models import Profile
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
-    nav_item = 'positions'
-    title = 'Add Requested Position'
-    success_alert = 'Requested Positions are successfully saved!'
-    submit_button = 'Next'
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, generic.UpdateView):
+    model = Profile
+    fields = ['requested_positions']
+    template_name = 'form.html'
+    submit_button = 'Save'
+    error_message = 'Error your selection was not saved! Select at least one position.'
+    success_message = 'Your requested positions are successfully saved!'
+    title = 'Requested Positions'
+    widgets = {
+        'requested_positions': CheckboxSelectMultiple,
+    }
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'form.html', {'form': RequestedPositionForm(user=request.user),
-                                             'view': self})
+    def get_success_url(self):
+        return reverse('requested_position_update') + '?success=true'
 
-    def post(self, request, *args, **kwargs):
-        form = RequestedPositionForm(request.POST, user=request.user)
-        if not form.is_valid():
-            return render(request, 'form.html', {'form': form,
-                                                 'error': 'Choose at least one position.',
-                                                 'view': self})
-        profile = Profile.objects.get(user=request.user)
-        requested_positions = form.cleaned_data['requested_positions']
-        profile.requested_positions.clear()
-        for position in requested_positions:
-            profile.requested_positions.add(position)
-        return redirect('question_update')
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
