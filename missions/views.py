@@ -10,6 +10,7 @@ from django.views.generic.list import ListView
 from seawatch_registration.models import Profile
 from .forms import AssignmentForm
 from .models import Mission, Assignment, Ship
+from seawatch_registration.widgets import DateInput
 
 
 class MissionListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -34,6 +35,12 @@ class MissionCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     fields = ['name', 'start_date', 'end_date', 'ship']
     nav_item = 'missions'
     permission_required = 'missions.can_create_missions'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['start_date'].widget = DateInput()
+        form.fields['end_date'].widget = DateInput()
+        return form
 
     def get_success_url(self):
         return reverse('mission-detail', kwargs={'pk': self.object.id})
