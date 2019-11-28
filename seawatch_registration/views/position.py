@@ -6,7 +6,7 @@ from seawatch_registration.forms.requested_positions_form import RequestedPositi
 from seawatch_registration.models import Profile
 
 
-class RequestedPositionUpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'positions'
     title = 'Add Requested Position'
     success_alert = 'Requested Positions are successfully saved!'

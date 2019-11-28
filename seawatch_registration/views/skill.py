@@ -6,7 +6,7 @@ from seawatch_registration.forms.skills_form import SkillsForm
 from seawatch_registration.models import Profile
 
 
-class SkillUpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'skills'
     title = 'Your Skills'
     success_alert = 'Skills are successfully saved!'
