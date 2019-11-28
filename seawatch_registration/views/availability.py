@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from django.views.generic.base import View
+import django.views.generic as generic
 from django.shortcuts import render
 from django.forms import inlineformset_factory
 
@@ -7,13 +7,13 @@ from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
 
 
-class ListView(LoginRequiredMixin, UserPassesTestMixin, View):
+class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
     nav_item = 'availabilities'
     title = 'Availabilities'
     success_alert = 'Available Dates successfully saved!'
     submit_button = 'Save'
-    template_name = 'availability_list.html'
+    template_name = './seawatch_registration/availability_list.html'
 
     AvailableDatesFormset = inlineformset_factory(Profile,
                                                   Availability,

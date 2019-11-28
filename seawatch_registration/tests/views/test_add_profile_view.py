@@ -47,5 +47,5 @@ class TestAddProfileView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, './seawatch_registration/profile.html')
         self.assertEquals(Profile.objects.all().count(), 0)
