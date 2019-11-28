@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.urls import reverse, reverse_lazy
 
 from missions.models import Mission
+from seawatch_registration.widgets import DateInput
 
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
@@ -30,6 +31,12 @@ class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
 
     def get_success_url(self):
         return reverse('mission_detail', kwargs={'pk': self.object.id})
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['start_date'].widget = DateInput()
+        form.fields['end_date'].widget = DateInput()
+        return form
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
