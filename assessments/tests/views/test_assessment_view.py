@@ -47,7 +47,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.p_danger('No skills specified.'))
@@ -86,7 +86,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.li(skill1.name))
@@ -119,7 +119,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.p_danger('No skills specified.'))
         self.assertContains(response, self.p_danger('No Documents uploaded.'))
@@ -171,7 +171,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.p_danger('No skills specified.'))
@@ -214,7 +214,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response, '<dd class="col-sm-6 text-danger">Not specified</dd>')
         self.assertContains(response, '<dd class="col-sm-6">American</dd>')
         self.assertContains(response, self.li(skill1.name))
@@ -252,7 +252,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response,
                             self.checked_required_radio_input(name='assessment_status',
                                                               value='accepted',
@@ -282,7 +282,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'assessment.html')
+        self.assertTemplateUsed(response, 'assessment-update.html')
         self.assertContains(response,
                             self.checked_required_radio_input(name='assessment_status',
                                                               value='accepted',

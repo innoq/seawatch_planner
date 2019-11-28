@@ -2,7 +2,7 @@ from django.test import SimpleTestCase, Client
 from django.urls import resolve, reverse
 
 from assessments.views.assessment_list_view import AssessmentListView
-from assessments.views.assessment_view import AssessmentView
+from assessments.views.assessment_view import AssessmentUpdateView
 
 
 class TestUrls(SimpleTestCase):
@@ -16,4 +16,4 @@ class TestUrls(SimpleTestCase):
 
     def test_urls_assessment(self):
         url = reverse('assessment', kwargs={'profile_id': 1})
-        self.assertEquals(resolve(url).func.__name__, AssessmentView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, AssessmentUpdateView.as_view().__name__)

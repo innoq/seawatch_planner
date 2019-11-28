@@ -20,7 +20,7 @@ def get_data(profile: Profile, form: AssessmentForm):
     return data
 
 
-class AssessmentView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class AssessmentUpdateView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
     permission_required = 'assessments.can_assess_profiles'
 
@@ -28,7 +28,7 @@ class AssessmentView(LoginRequiredMixin, PermissionRequiredMixin, View):
         profile = get_object_or_404(Profile, pk=profile_id)
         get_object_or_404(Assessment, profile=profile)
         data = get_data(profile, AssessmentForm(profile_id=profile_id))
-        return render(request, 'assessment.html', data)
+        return render(request, 'assessment-update.html', data)
 
     def post(self, request, profile_id, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=profile_id)
@@ -37,11 +37,11 @@ class AssessmentView(LoginRequiredMixin, PermissionRequiredMixin, View):
         data = get_data(profile, form)
         if not form.is_valid():
             data['error'] = True
-            return render(request, 'assessment.html', data)
+            return render(request, 'assessment-update.html', data)
         assessment.status = form.cleaned_data['assessment_status']
         assessment.comment = form.cleaned_data['comment']
         assessment.save()
         profile.approved_positions.set(form.cleaned_data['approved_positions'])
 
         data['success'] = True
-        return render(request, 'assessment.html', data)
+        return render(request, 'assessment-update.html', data)
