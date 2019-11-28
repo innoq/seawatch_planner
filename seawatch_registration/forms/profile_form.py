@@ -1,6 +1,7 @@
 from django.forms import ModelForm, HiddenInput
 
 from seawatch_registration.models import Profile
+from seawatch_registration.widgets import DateInput
 
 
 class ProfileForm(ModelForm):
@@ -22,4 +23,5 @@ class ProfileForm(ModelForm):
             'emergency_contact',
             'comments',
         )
-        widgets = {'user': HiddenInput()}
+        widgets = {'user': HiddenInput(),
+                    'date_of_birth': DateInput()}

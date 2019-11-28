@@ -1,0 +1,58 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
+
+ {% block content %}
+   <h1>{{ view.title }}</h1>
+   {% if success %}
+   <div class="alert alert-success" role="alert">
+   {{ view.success_alert }}
+   </div>
+   {% endif %}
+   {% if error %}
+   <div class="alert alert-danger" role="alert">
+   {{ error }}
+   </div>
+   {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <table id="availability_table" border="0" cellpadding="0" cellspacing="0" class="table">
+      <tbody>
+          {% for form in formset.forms %}
+            {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+            {% endfor %}
+          <tr>
+            <td>
+            {% bootstrap_field form.start_date %}
+            {% bootstrap_field form.end_date %}
+            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    {{ formset.management_form }}
+    
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">{{view.submit_button}}</button>
+    {% endbuttons %}
+
+  </form>
+
+  {% load static %}
+  <script src="{% static 'seawatch_registration/js/jquery.formset.js' %}">
+  </script>
+  
+  <script type="text/javascript">
+  $(function() {
+      $('#availability_table tbody tr').formset({
+          prefix: '{{ formset.prefix }}',
+      });
+  })
+  </script>
+
+{% endblock %}

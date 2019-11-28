@@ -11,6 +11,7 @@ from seawatch_registration.views.questions_view import QuestionView
 from seawatch_registration.views.requested_positions_view import RequestedPositionView
 from seawatch_registration.views.show_profile_view import ShowProfileView
 from seawatch_registration.views.signup_view import SignupView
+from seawatch_registration.views.availability_view import AvailabilityView
 
 urlpatterns = [
     path('show/', ShowProfileView.as_view(), name='show_profile'),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('questions/', QuestionView.as_view(), name='questions'),
     path('position/', RequestedPositionView.as_view(), name='add_requested_profile'),
     path('skills/', AddSkillsView.as_view(), name='add_skills'),
+    path('availabilities/', AvailabilityView.as_view(), name='availability_list')
 ]
