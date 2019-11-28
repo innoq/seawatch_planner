@@ -15,5 +15,5 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.__name__, AssessmentListView.as_view().__name__)
 
     def test_urls_assessment(self):
-        url = reverse('assessment', kwargs={'profile_id': 1})
+        url = reverse('assessment_update', kwargs={'profile_id': 1})
         self.assertEquals(resolve(url).func.__name__, AssessmentUpdateView.as_view().__name__)

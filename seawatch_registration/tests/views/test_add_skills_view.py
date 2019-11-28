@@ -72,7 +72,7 @@ class TestAddSkillsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/document/add/')
+        self.assertRedirects(response, expected_url='/accounts/documents/add/')
         self.assertEquals(len(profile.skills.all()), 0)
 
     def test_views__skill_update__post__should_redirect_to_document_when_skills_are_set_to_2(self):
@@ -90,5 +90,5 @@ class TestAddSkillsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/document/add/')
+        self.assertRedirects(response, expected_url='/accounts/documents/add/')
         self.assertEquals(len(profile.skills.all()), 2)

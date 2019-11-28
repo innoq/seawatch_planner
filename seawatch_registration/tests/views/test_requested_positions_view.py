@@ -69,5 +69,5 @@ class TestAddRequestedPositionsView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/questions/')
+        self.assertRedirects(response, expected_url='/accounts/questions/edit')
         self.assertEquals(len(profile.requested_positions.all()), 1)

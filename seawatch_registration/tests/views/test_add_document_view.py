@@ -51,7 +51,7 @@ class TestAddDocumentView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/position/')
+        self.assertRedirects(response, expected_url='/accounts/requested-positions/edit')
         self.assertEquals(Document.objects.all().count(), 1)
 
     def test_views__document_create__post__should_render_when_form_is_invalid(self):

@@ -38,7 +38,7 @@
                     <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'questions' %}">Questions</a>
+                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'question_update' %}">Questions</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'requested_position_update' %}">Positions</a>
