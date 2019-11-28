@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
-    'crispy_forms',
     'fontawesome_5',
 ]
 
@@ -134,10 +133,6 @@ NOSE_ARGS = ['--nocapture',
              '--nologcapture']
 
 MEDIA_ROOT = 'media/'
-
-# Crispy Form Template Pack
-# https://django-crispy-forms.readthedocs.io/en/latest/install.html
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Email Config
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

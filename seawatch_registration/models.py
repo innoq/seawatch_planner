@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 
 class Skill(models.Model):
@@ -106,3 +108,10 @@ class Availability(models.Model):
 
     def __str__(self):
         return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")} ({self.profile})'
+
+    def clean(self):
+        if self.start_date > self.end_date:
+            raise ValidationError({
+                'start_date': ValidationError(_('Start Date has to be before End Date.')),
+                'end_date': ValidationError(_('End Date has to be after Start Date.')),
+            })

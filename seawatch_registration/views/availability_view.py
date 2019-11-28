@@ -5,16 +5,15 @@ from django.forms import inlineformset_factory
 
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
-#from seawatch_registration.forms.availability_form import AvailableDatesFormset
 
 
 class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
 
-    nav_item = 'availability'
-    title = 'Add Availability'
+    nav_item = 'availabilities'
+    title = 'Availabilities'
     success_alert = 'Available Dates successfully saved!'
-    submit_button = 'Next'
-    template_name = 'availability.html'
+    submit_button = 'Save'
+    template_name = 'availability_list.html'
 
     AvailableDatesFormset = inlineformset_factory(Profile,
                                                 Availability, 
@@ -44,7 +43,6 @@ class AvailabilityView(LoginRequiredMixin, UserPassesTestMixin, View):
                             })
 
         formset.save()
-        #return redirect('show_profile')
 
         formset = self.AvailableDatesFormset(instance=profile)
         return render(request, self.template_name,

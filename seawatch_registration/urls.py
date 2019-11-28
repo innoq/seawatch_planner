@@ -25,5 +25,5 @@ urlpatterns = [
     path('questions/', QuestionView.as_view(), name='questions'),
     path('position/', RequestedPositionView.as_view(), name='add_requested_profile'),
     path('skills/', AddSkillsView.as_view(), name='add_skills'),
-    path('availability/', AvailabilityView.as_view(), name='availability')
+    path('availabilities/', AvailabilityView.as_view(), name='availability_list')
 ]
