@@ -1,5 +1,6 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load fontawesome_5 %}
 
 {% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
 
@@ -29,7 +30,7 @@
             <td>
             {% bootstrap_field form.start_date %}
             {% bootstrap_field form.end_date %}
-            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+            {% if form.instance.pk %}{% bootstrap_field form.DELETE %}{% endif %}
             </td>
           </tr>
           {% endfor %}
@@ -39,6 +40,11 @@
     
     {% buttons %}
       <button type="submit" class="btn btn-primary">{{view.submit_button}}</button>
+      {% if formset.total_form_count < formset.max_num %}
+        <noscript>
+        <a class="btn btn-primary" href="{% url 'availability_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+        </noscript>
+      {% endif %}
     {% endbuttons %}
 
   </form>

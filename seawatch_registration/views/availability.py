@@ -2,10 +2,30 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import django.views.generic as generic
 from django.shortcuts import render
 from django.forms import inlineformset_factory
+from django.urls import reverse, reverse_lazy
 
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
 
+
+class CreateView(LoginRequiredMixin, generic.CreateView):
+    model = Availability
+    fields = ['start_date', 'end_date']
+    nav_item = 'availabilities'
+
+    def form_valid(self, form):
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.profile = profile
+        return super(CreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('availability_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['start_date'].widget = DateInput()
+        form.fields['end_date'].widget = DateInput()
+        return form
 
 class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 

@@ -22,4 +22,5 @@ urlpatterns = [
     path('positions/edit/', position.UpdateView.as_view(), name='requested_position_update'),
     path('skills/edit/', skill.UpdateView.as_view(), name='skill_update'),
     path('availabilities/', availability.ListView.as_view(), name='availability_list'),
+    path('availabilities/add/', availability.CreateView.as_view(), name='availability_create'),
 ]
