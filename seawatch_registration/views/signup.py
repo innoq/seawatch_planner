@@ -14,7 +14,7 @@ class SignupView(View):
     def post(self, request, *args, **kwargs):
         form = SignupForm(request.POST)
         if not form.is_valid():
-            return render(request, 'signup.html', {'form': SignupForm(request.POST), 'view': self})
+            return render(request, './registration/signup.html', {'form': SignupForm(request.POST), 'view': self})
         form.save()
         username = form.cleaned_data.get('username')
         raw_password = form.cleaned_data.get('password1')
