@@ -10,8 +10,9 @@ from seawatch_registration.widgets import DateInput
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
     model = Availability
-    fields = ['start_date', 'end_date']
+    fields = ['start_date', 'end_date', 'comment']
     nav_item = 'availabilities'
+    submit_button = 'Add'
 
     def form_valid(self, form):
         profile = Profile.objects.get(user=self.request.user)
@@ -37,7 +38,7 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
     AvailableDatesFormset = inlineformset_factory(Profile,
                                                   Availability,
-                                                  fields=('start_date', 'end_date'),
+                                                  fields=('start_date', 'end_date', 'comment'),
                                                   widgets={
                                                     'start_date': DateInput,
                                                     'end_date': DateInput},
