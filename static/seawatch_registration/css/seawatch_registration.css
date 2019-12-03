@@ -1,9 +1,3 @@
-/* .field-required {
-    font-weight: bold;
-}
-.field-required:before{
-    content: " *";
-} */
 .required > label:after {
     content:" *";
     color:red;
