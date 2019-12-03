@@ -51,3 +51,8 @@ class TestUrls(SimpleTestCase):
         url = reverse('availability_list')
         self.assertEquals(resolve(url).func.__name__, availability.ListView.as_view().__name__)
 
+    def test_urls_availabilities_create(self):
+        url = reverse('availability_create')
+        self.assertEquals(resolve(url).func.__name__, availability.CreateView.as_view().__name__)
+
+
