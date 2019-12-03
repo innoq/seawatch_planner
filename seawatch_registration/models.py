@@ -105,13 +105,15 @@ class Availability(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+    comment = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")} ({self.profile})'
 
     def clean(self):
-        if self.start_date > self.end_date:
-            raise ValidationError({
-                'start_date': ValidationError(_('Start Date has to be before End Date.')),
-                'end_date': ValidationError(_('End Date has to be after Start Date.')),
-            })
+        if self.start_date and self.end_date:
+            if self.start_date > self.end_date:
+                raise ValidationError({
+                    'start_date': ValidationError(_('Start Date has to be before End Date.')),
+                    'end_date': ValidationError(_('End Date has to be after Start Date.')),
+                })
