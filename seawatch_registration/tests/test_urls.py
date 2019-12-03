@@ -6,6 +6,7 @@ import seawatch_registration.views.position as position
 import seawatch_registration.views.profile as profile
 import seawatch_registration.views.question as question
 import seawatch_registration.views.skill as skill
+import seawatch_registration.views.availability as availability
 from seawatch_registration.views.signup import SignupView
 
 
@@ -45,3 +46,8 @@ class TestUrls(SimpleTestCase):
     def test_urls_question_update(self):
         url = reverse('question_update')
         self.assertEquals(resolve(url).func.__name__, question.UpdateView.as_view().__name__)
+
+    def test_urls_availabilities(self):
+        url = reverse('availability_list')
+        self.assertEquals(resolve(url).func.__name__, availability.ListView.as_view().__name__)
+
