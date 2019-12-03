@@ -56,11 +56,12 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         formset = self.AvailableDatesFormset(request.POST, instance=profile)
+        error_msg = 'Input could not be saved. Please correct missing or invalid data!'
         if not formset.is_valid():      
             return render(request, self.template_name,
                           {'formset': formset,
                            'view': self,
-                           'error': formset.errors,
+                           'error': error_msg,
                            })
 
         formset.save()
