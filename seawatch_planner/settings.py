@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import django_heroku
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
+import django_heroku
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -87,7 +88,7 @@ db_user = 'postgres'
 db_host = 'db'
 db_port = 5432
 DATABASES['default'] = \
-    dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name)
+    dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name, ssl_require=False)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -139,7 +140,7 @@ NOSE_ARGS = ['--nocapture',
 MEDIA_ROOT = 'media/'
 
 # Heroku Deploy
-django_heroku.settings(locals())
+django_heroku.settings(locals(), databases=not DEBUG)
 
 # Email Config
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
