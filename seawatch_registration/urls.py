@@ -6,6 +6,7 @@ import seawatch_registration.views.profile as profile
 import seawatch_registration.views.question as question
 import seawatch_registration.views.skill as skill
 import seawatch_registration.views.availability as availability
+import seawatch_registration.views.registration_process as registration_process
 
 from seawatch_registration.views.signup import SignupView
 
@@ -23,4 +24,5 @@ urlpatterns = [
     path('skills/edit/', skill.UpdateView.as_view(), name='skill_update'),
     path('availabilities/', availability.ListView.as_view(), name='availability_list'),
     path('availabilities/add/', availability.CreateView.as_view(), name='availability_create'),
+    path('registration/', registration_process.View.as_view(), name='registration_process'),
 ]
