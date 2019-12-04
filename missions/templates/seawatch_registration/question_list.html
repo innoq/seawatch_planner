@@ -1,0 +1,37 @@
+{% extends "base-missions.html" %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
+{% block title %}Questions | Seawatch Missions{% endblock %}
+
+{% block content %}
+<h1>Questions</h1>
+{% if object_list %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Text</th>
+            <th>Mandatory</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in object_list %}
+        <tr>
+            <td>{{ question.id }}</td>
+            <td>{{ question.text }}</td>
+            <td>{{ question.mandatory }}</td>
+            <td>
+                <a href="{% url 'question_update' question.id %}">{% fa5_icon 'edit' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'question_delete' question.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No questions yet.</p>
+{% endif %}
+<a class="btn btn-primary" href="{% url 'question_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+{% endblock %}

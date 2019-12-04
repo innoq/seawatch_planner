@@ -30,6 +30,11 @@
                     <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship_list' %}">Ships</a>
                 </li>
                 {% endif %}
+                {% if perms.seawatch_registration.view_question%}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'question_list' %}">Questions</a>
+                </li>
+                {% endif %}
                 {% if request.user.profile %}
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'profile_detail' %}">Profile</a>
