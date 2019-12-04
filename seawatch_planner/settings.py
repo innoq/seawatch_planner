@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
+import django_heroku
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,7 +88,7 @@ db_user = 'postgres'
 db_host = 'db'
 db_port = 5432
 DATABASES['default'] = \
-    dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name)
+    dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name, ssl_require=False)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -127,12 +129,18 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
+#  Add configuration for static files storage using whitenoise
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 LOGIN_REDIRECT_URL = '/accounts/edit'
 
 NOSE_ARGS = ['--nocapture',
              '--nologcapture']
 
 MEDIA_ROOT = 'media/'
+
+# Heroku Deploy
+django_heroku.settings(locals(), databases=not DEBUG)
 
 # Email Config
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

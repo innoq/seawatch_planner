@@ -11,7 +11,7 @@ class Ship(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta:  # TODO: remove when django default permissions are used
         permissions = (('can_create_ships', 'Create ships'),
                        ('can_view_ships', 'View ships'),
                        ('can_update_ships', 'Update ships'),
@@ -27,7 +27,7 @@ class Mission(models.Model):
     def __str__(self):
         return self.ship.name + ": " + self.name
 
-    class Meta:
+    class Meta:  # TODO: remove when django default permissions are used
         permissions = (('can_create_missions', 'Create missions'),
                        ('can_view_missions', 'View missions'),
                        ('can_update_missions', 'Update missions'),
@@ -44,7 +44,7 @@ class Assignment(models.Model):
                              null=True,
                              related_name='assignments')
 
-    class Meta:
+    class Meta:  # TODO: remove when django default permissions are used
         permissions = (('can_create_assignments', 'Create assignments'),
                        ('can_view_assignments', 'View assignments'),
                        ('can_update_assignments', 'Update assignments'),

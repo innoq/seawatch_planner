@@ -1,0 +1,13 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Questions | Seawatch Missions{% endblock %}
+
+{% block content %}
+    <h1>Delete Question "{{ object.text }}"</h1>
+
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete question "{{ object.text }}"?</p>
+        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="{% url 'question_list' %}" role="button">Cancel</a>
+    </form>
+{% endblock %}
