@@ -1,28 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Missions Overview</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
+{% extends "base-missions.html" %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
 
-    <div class="container">
-        <h1>Missions</h1>
-        <ul>
+{% block content %}
+<h1>Missions</h1>
+{% if object_list %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Period</th>
+            <th>Ship</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for mission in object_list %}
-            <li><a href="{% url 'mission-detail' mission.id %}">{{ mission.name }}</a></li>
-        {% empty %}
-            <li>No missions yet.</li>
+        <tr>
+            <td>{{ mission.id }}</td>
+            <td>{{ mission.name }}</td>
+            <td>
+                <p>{{ mission.start_date }} — {{ mission.end_date }}</p>
+            </td>
+            <td>{{ mission.ship.name }}</td>
+            <td>
+                <a href="{% url 'mission_detail' mission.id %}">{% fa5_icon 'users' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'mission_delete' mission.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+            </td>
+        </tr>
         {% endfor %}
-        </ul>
-
-    </div>
-
-    <a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'mission-create' %}">Add</a>
-
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
-</html>
+    </tbody>
+</table>
+{% else %}
+    <p>No missions yet.</p>
+{% endif %}
+<a class="btn btn-primary" href="{% url 'mission_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+{% endblock %}

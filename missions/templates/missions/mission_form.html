@@ -1,4 +1,14 @@
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Mission | Seawatch Missions{% endblock %}
+
+{% block content %}
+<h1>Mission</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
+{% endblock %}

@@ -30,3 +30,20 @@ For testing the application, start the app as described before. Then run the fol
 
 `docker exec -it seawatch_planner_web_1 python manage.py test`
 
+# Coding conventions
+We decided to use the the following coding conventions.
+
+- Use PEP 8 coding style.
+- If possible use Djangos generic class based views, for example ListView, CreateView, DetailView, UpdateView and DeleteView.
+- ListViews are often represented with tables. For each dataset you have actions like delete this dataset of go to detail view. These actions are represented by links with fontawesome icon in the table and not by buttons.
+- General actions like add a new dataset are represented by buttons with fontawesome icons outside of the table.
+- Use the following table as an example for the url paths, the naming of the class of the views and the view name itself:
+
+| url path              | class name of view | view name   |
+| --------------------- | ------------------ | ----------- |
+| ships/                | ShipListView       | ship_list   |
+| ships/add             | ShipCreateView     | ship_create |
+| ships/<int:pk>/       | ShipDetailView     | ship_detail |
+| ships/<int:pk>/edit   | ShipUpdateView     | ship_update |
+| ships/<int:pk>/delete | ShipDeleteView     | ship_delete |
+

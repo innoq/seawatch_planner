@@ -1,21 +1,26 @@
 from django.urls import path
 
-from seawatch_registration.views.add_document_view import AddDocumentView
-from seawatch_registration.views.add_profile_view import AddProfileView
-from seawatch_registration.views.add_skills_view import AddSkillsView
-from seawatch_registration.views.edit_profile_view import EditProfileView
-from seawatch_registration.views.questions_view import QuestionView
-from seawatch_registration.views.requested_positions_view import RequestedPositionView
-from seawatch_registration.views.show_profile_view import ShowProfileView
-from seawatch_registration.views.signup_view import SignupView
+import seawatch_registration.views.document as document
+import seawatch_registration.views.position as position
+import seawatch_registration.views.profile as profile
+import seawatch_registration.views.question as question
+import seawatch_registration.views.skill as skill
+import seawatch_registration.views.availability as availability
+
+from seawatch_registration.views.signup import SignupView
 
 urlpatterns = [
-    path('show/', ShowProfileView.as_view(), name='show_profile'),
-    path('add/', AddProfileView.as_view(), name='add_profile'),
-    path('edit/', EditProfileView.as_view(), name='edit_profile'),
+    path('show/', profile.DetailView.as_view(), name='profile_detail'),
+    path('add/', profile.CreateView.as_view(), name='profile_create'),
+    path('edit/', profile.UpdateView.as_view(), name='profile_update'),
     path('signup/', SignupView.as_view(), name='signup'),
-    path('document/add/', AddDocumentView.as_view(), name='add_document'),
-    path('questions/', QuestionView.as_view(), name='questions'),
-    path('position/', RequestedPositionView.as_view(), name='add_requested_profile'),
-    path('skills/', AddSkillsView.as_view(), name='add_skills'),
+    path('documents/', document.ListView.as_view(), name='document_list'),
+    path('documents/add/', document.CreateView.as_view(), name='document_create'),
+    path('documents/<int:document_id>/edit', document.UpdateView.as_view(), name='document_update'),
+    path('documents/<int:document_id>/delete', document.DeleteView.as_view(), name='document_delete'),
+    path('questions/edit/', question.UpdateView.as_view(), name='question_update'),
+    path('positions/edit/', position.UpdateView.as_view(), name='requested_position_update'),
+    path('skills/edit/', skill.UpdateView.as_view(), name='skill_update'),
+    path('availabilities/', availability.ListView.as_view(), name='availability_list'),
+    path('availabilities/add/', availability.CreateView.as_view(), name='availability_create'),
 ]

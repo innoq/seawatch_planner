@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 
 class Skill(models.Model):
@@ -103,17 +105,15 @@ class Availability(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+    comment = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")} ({self.profile})'
 
-
-class Assessment(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    ASSESSMENT_STATUS = [
-        ('pending', 'pending'),
-        ('accepted', 'accepted'),
-        ('rejected', 'rejected')
-    ]
-    status = models.CharField(max_length=10, choices=ASSESSMENT_STATUS)
-    comment = models.TextField(blank=True)
+    def clean(self):
+        if self.start_date and self.end_date:
+            if self.start_date > self.end_date:
+                raise ValidationError({
+                    'start_date': ValidationError(_('Start Date has to be before End Date.')),
+                    'end_date': ValidationError(_('End Date has to be after Start Date.')),
+                })

@@ -1,0 +1,33 @@
+{% extends "base-missions.html" %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
+{% block content %}
+<h1>Ships</h1>
+{% if object_list %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ship in object_list %}
+        <tr>
+            <td>{{ ship.id }}</td>
+            <td>{{ ship.name }}</td>
+            <td>
+                <a href="{% url 'ship_detail' ship.id %}">{% fa5_icon 'ship' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'ship_delete' ship.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No ships yet.</p>
+{% endif %}
+<a class="btn btn-primary" href="{% url 'ship_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+{% endblock %}

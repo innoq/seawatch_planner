@@ -4,11 +4,13 @@
 {% block title %}Account Login | Seawatch Registration{% endblock %}
 
 {% block content %}
-  <h1>Account Login</h1>
+    <h1>Account Login</h1>
 
-  <form method="post">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
 {% endblock %}

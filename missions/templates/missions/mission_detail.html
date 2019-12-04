@@ -1,8 +1,11 @@
 {% extends "base-missions.html" %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
 
 {% block content %}
 <h1>{{ object.ship.name }}: Mission ”{{ object.name }}”</h1>
-
+<p>From {{ object.start_date }} to {{ object.end_date }}</p>
 <h2>Assignments</h2>
 <table class="table">
     <thead>
@@ -16,23 +19,18 @@
     {% for assignment in object.assignment_set.all %}
     <tr>
         <td>{{ assignment.position.name }}</td>
-        <td>{{ assignment.user.id }}</td>
+        <td>{{ assignment.user.profile.first_name }} {{ assignment.user.profile.last_name }}</td>
         <td>
-            <a type="button" class="btn btn-outline-primary btn-sm" role="button" aria-pressed="true"
-               href="{% url 'assignee' object.id assignment.id %}">Assign</a>
+            <a class="btn btn-primary btn-sm" role="button"
+               href="{% url 'assignee' object.id assignment.id %}">{% fa5_icon 'user' 'fas' %}</a>
+            <a class="btn btn-danger btn-sm" role="button"
+               href="{% url 'assignment_delete' object.id assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
 
-            <form method="POST" action="{% url 'assignment' object.id assignment.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="method" value="DELETE" />
-                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-            </form>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
 
-<a type="button" class="btn btn-outline-primary btn-sm" href="{% url 'assignment-create' object.id %}">Add</a>
-
-
+<a class="btn btn-primary" href="{% url 'assignment_create' object.id %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
 {% endblock %}

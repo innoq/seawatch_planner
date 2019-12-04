@@ -1,13 +1,13 @@
 from django.urls import reverse
 
 from seawatch_registration.models import Profile, Position
-from seawatch_registration.tests.views.test_base import TestBase
+from seawatch_registration.tests.views.test_base import TestBases
 
 
-class TestAddRequestedPositionsView(TestBase):
+class TestAddRequestedPositionsView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('add_requested_profile'), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('requested_position_update'), login_required=True, profile_required=True)
 
     def test_views__add_requested_positions__get__should_render_with_form_html_when_profile_exists(self):
         # Arrange
@@ -56,7 +56,7 @@ class TestAddRequestedPositionsView(TestBase):
         self.assertContains(response, 'alert-danger')
         self.assertEquals(len(profile.skills.all()), 0)
 
-    def test_views__add_requested_position__post__should_render_success_when_2_positions_are_set(self):
+    def test_views__add_requested_position__post__should_redirect_to_questions(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
@@ -69,7 +69,5 @@ class TestAddRequestedPositionsView(TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'form.html')
-        self.assertContains(response, 'alert-success')
+        self.assertRedirects(response, expected_url='/accounts/questions/edit/')
         self.assertEquals(len(profile.requested_positions.all()), 1)

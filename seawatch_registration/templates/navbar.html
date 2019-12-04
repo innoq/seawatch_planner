@@ -1,0 +1,70 @@
+{% load bootstrap4 %}
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'seawatch_registration/images/logo.png' %}" width="35" height="32" class="d-inline-block align-top mr-2" alt="">
+        Sea Watch
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {% if view.nav_item == 'index' %}active{%else%}{{view.nav_item}}{% endif %}" href="{% url 'index' %}">Home</a>
+            </li>
+            {% if request.user.is_authenticated %}
+                {% if perms.assessment.can_assess_profiles%}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'assessment' %}active{% endif %}" href="{% url 'assessment_list' %}">Assessments</a>
+                </li>
+                {% endif %}
+                {% if perms.missions.can_view_missions%}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission_list' %}">Missions</a>
+                </li>
+                {% endif %}
+                {% if perms.missions.can_view_ships%}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship_list' %}">Ships</a>
+                </li>
+                {% endif %}
+                {% if request.user.profile %}
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'profile_detail' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'question_update' %}">Questions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'requested_position_update' %}">Positions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'skill_update' %}">Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'availabilities' %}active{% endif %}" href="{% url 'availability_list' %}">Availabilities</a>
+                </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if view.nav_item == 'signup' %}active{% endif %}" href="{% url 'signup' %}">Signup</a>
+              </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

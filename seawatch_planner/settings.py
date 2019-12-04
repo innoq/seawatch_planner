@@ -11,11 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
-import dj_database_url
 import django_heroku
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -36,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'missions.apps.MissionsConfig',
     'seawatch_registration.apps.SeawatchRegistrationConfig',
+    'assessments.apps.AssessmentsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'fontawesome_5',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,12 @@ MEDIA_ROOT = 'media/'
 
 # Heroku Deploy
 django_heroku.settings(locals())
+
+# Email Config
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+# Bootstrap Config
+BOOTSTRAP4 = {
+        'required_css_class': 'required'
+}
