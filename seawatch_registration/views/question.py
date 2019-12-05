@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
 from seawatch_registration.forms.dynamic_question_form import DynamicQuestionForm
@@ -37,6 +37,11 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
             if answer_text:
                 answer = Answer(profile=profile, question=question, text=answer_text)
                 answer.save()
+
+        redirect_to = self.request.GET.get('next')
+        if redirect_to:
+            return redirect(redirect_to)
+
         return render(request,
                       'form.html',
                       {'form': DynamicQuestionForm(questions=list(Question.objects.all()),

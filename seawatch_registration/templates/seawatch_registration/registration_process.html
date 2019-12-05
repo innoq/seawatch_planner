@@ -84,15 +84,14 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-check required">
-            <label class="form-check-label" for="id_languages_4">
-                <input class="form-check-input" id="confirmation" name="confirmation" title="" type="checkbox" value=""/>
+            <label class="form-check-label" for="confirmation">
+                <input class="form-check-input" id="confirmation" name="confirmation" title="" type="checkbox" value="check"/>
                 By clicking <q>Submit</q>, I agree that Seawatch can save and process my data.
             </label>
         </div>
+        <br>
+        {% buttons %}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
     </form>
-    <br>
-    {% buttons %}
-      <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
-
 {% endblock %}

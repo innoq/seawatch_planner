@@ -15,10 +15,16 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, 
     error_message = 'Error your selection was not saved! Select at least one position.'
     success_message = 'Your requested positions are successfully saved!'
     title = 'Requested Positions'
-    success_url = reverse_lazy('question_update')
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
     }
+
+    def get_success_url(self):
+        redirect_to = self.request.GET.get('next')
+        if redirect_to:
+            return reverse_lazy(redirect_to)
+
+        return reverse_lazy('question_update')
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
