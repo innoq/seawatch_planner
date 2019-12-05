@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'fontawesome_5',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [
@@ -148,5 +149,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 # Bootstrap Config
 BOOTSTRAP4 = {
-        'required_css_class': 'required'
+        'required_css_class': 'required',
+        'include_jquery': True,
 }

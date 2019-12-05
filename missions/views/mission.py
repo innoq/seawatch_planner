@@ -8,6 +8,7 @@ from seawatch_registration.widgets import DateInput
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Mission
+    ordering = 'id'
     paginate_by = 100  # if pagination is desired
     nav_item = 'missions'
     permission_required = 'missions.can_view_missions'  # TODO: use djangos default permissions
@@ -44,3 +45,17 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
     nav_item = 'missions'
     success_url = reverse_lazy('mission_list')
     permission_required = 'missions.can_delete_missions'  # TODO: use djangos default permissions
+
+
+class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Mission
+    nav_item = 'missions'
+    fields = ['name', 'start_date', 'end_date', 'ship']
+    success_url = reverse_lazy('mission_list')
+    permission_required = 'missions.can_update_missions'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['start_date'].widget = DateInput()
+        form.fields['end_date'].widget = DateInput()
+        return form
