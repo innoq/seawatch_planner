@@ -13,7 +13,7 @@ from seawatch_registration.models import Profile
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
     model = Assignment
     nav_item = 'missions'
-    permission_required = 'missions.can_delete_assignments'  # TODO: use djangos default permissions
+    permission_required = 'missions.delete_assignment'
 
     def get_success_url(self):
         return reverse('mission_detail', kwargs={'pk': self.object.mission.id})
@@ -23,7 +23,7 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, View):
     initial = {'key': 'value'}
     template_name = 'missions/assignee_form.html'
     nav_item = 'missions'
-    permission_required = 'missions.can_update_assignments'  # TODO: use djangos default permissions
+    permission_required = 'missions.change_assignment'
 
     def get(self, request, *args, **kwargs):
         mission_id = kwargs.pop('mission__id')
@@ -47,7 +47,7 @@ class CreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
     initial = {'key': 'value'}
     template_name = 'missions/assignment_form.html'
     nav_item = 'missions'
-    permission_required = 'missions.can_create_assignments'  # TODO: use djangos default permissions
+    permission_required = 'missions.add_assignment'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)

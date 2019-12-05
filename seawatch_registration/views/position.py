@@ -8,6 +8,7 @@ from seawatch_registration.models import Profile
 
 
 class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, generic.UpdateView):
+    nav_item = 'positions'
     model = Profile
     fields = ['requested_positions']
     template_name = 'form.html'
