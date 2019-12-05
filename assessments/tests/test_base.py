@@ -1,12 +1,14 @@
 from datetime import date
+
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 
 from seawatch_registration.models import Profile
 
 
 class TestBases:
+    @override_settings(STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage')
     class TestBase(TestCase):
 
         def __init__(self, *args, **kwargs):
