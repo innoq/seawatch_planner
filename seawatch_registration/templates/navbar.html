@@ -15,17 +15,17 @@
                 <a class="nav-link {% if view.nav_item == 'index' %}active{%else%}{{view.nav_item}}{% endif %}" href="{% url 'index' %}">Home</a>
             </li>
             {% if request.user.is_authenticated %}
-                {% if perms.assessment.can_assess_profiles%}
+                {% if perms.assessments.can_assess_profiles%}
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'assessment' %}active{% endif %}" href="{% url 'assessment_list' %}">Assessments</a>
                 </li>
                 {% endif %}
-                {% if perms.missions.can_view_missions%}
+                {% if perms.missions.view_mission%}
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'missions' %}active{% endif %}" href="{% url 'mission_list' %}">Missions</a>
                 </li>
                 {% endif %}
-                {% if perms.missions.can_view_ships%}
+                {% if perms.missions.view_ship%}
                 <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'ships' %}active{% endif %}" href="{% url 'ship_list' %}">Ships</a>
                 </li>
