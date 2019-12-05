@@ -10,6 +10,7 @@ urlpatterns = [
     path('new', mission.CreateView.as_view(), name='mission_create'),
     path('<int:pk>/', mission.DetailView.as_view(), name='mission_detail'),
     path('<int:pk>/delete', mission.DeleteView.as_view(), name='mission_delete'),
+    path('<int:pk>/edit', mission.UpdateView.as_view(), name='mission_update'),
     path('ships/', ship.ListView.as_view(), name='ship_list'),
     path('ships/new', ship.CreateView.as_view(), name='ship_create'),  # TODO: Replace 'new' with 'add'
     path('ships/<int:pk>/', ship.DetailView.as_view(), name='ship_detail'),
