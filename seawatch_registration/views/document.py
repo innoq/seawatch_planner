@@ -11,6 +11,7 @@ class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
     title = 'Add Documents'
     success_alert = 'Document is successfully saved!'
     submit_button = 'Next'
+    remove_input_type_date = True
 
     def get(self, request, *args, **kwargs):
         return render(request, 'form.html', {'form': DocumentForm(user=request.user),
@@ -70,6 +71,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
     title = 'Edit Document'
     success_alert = 'Document is successfully updated!'
     submit_button = 'Save'
+    remove_input_type_date = True
 
     def get(self, request, document_id, *args, **kwargs):
         profile = request.user.profile

@@ -1,7 +1,7 @@
 from django.forms import ModelForm, HiddenInput
 
 from seawatch_registration.models import Profile
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import DatePickerInput
 
 
 class ProfileForm(ModelForm):
@@ -24,4 +24,4 @@ class ProfileForm(ModelForm):
             'comments',
         )
         widgets = {'user': HiddenInput(),
-                    'date_of_birth': DateInput()}
+                   'date_of_birth': DatePickerInput()}
