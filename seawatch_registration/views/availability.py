@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import django.views.generic as generic
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.urls import reverse, reverse_lazy
 
@@ -65,6 +65,10 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
                            })
 
         formset.save()
+
+        redirect_to = request.GET.get('next')
+        if redirect_to:
+            return redirect(redirect_to)
 
         formset = self.AvailableDatesFormset(instance=profile)
         return render(request, self.template_name,

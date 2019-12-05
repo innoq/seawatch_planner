@@ -11,6 +11,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
     title = 'Your Skills'
     success_alert = 'Skills are successfully saved!'
     submit_button = 'Next'
+    error_message = 'Choose at least one Language and Skill'
 
     def get(self, request, *args, **kwargs):
         profile = request.user.profile
@@ -22,7 +23,6 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
         form = SkillsForm(request.POST, profile=profile)
         if not form.is_valid():
             return render(request, 'form.html', {'form': form,
-                                                 'error': 'Choose at least one skill.',
                                                  'view': self
                                                  })
         languages = form.cleaned_data['languages']

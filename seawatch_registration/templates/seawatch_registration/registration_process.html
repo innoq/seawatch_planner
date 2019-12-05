@@ -1,0 +1,98 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
+{% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
+
+{% block content %}
+
+    <h1>{{ view.title }}</h1>
+   {% if success %}
+   <div class="alert alert-success" role="alert">
+   {{ view.success_alert }}
+   </div>
+   {% endif %}
+   {% if error %}
+   <div class="alert alert-danger" role="alert">
+   {{ error }}
+   </div>
+   {% endif %}
+
+    <div class="row">
+        <div class="col-sm-3">Profile</div>
+        <div class="col-sm-2">
+            {% if profile %}
+                <a class="btn text-primary" role="button"
+                href="{% url 'profile_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+                {% fa5_icon 'check' 'fas text-success' %}
+            {% else %}
+                <a class="btn text-primary" role="button"
+                href="{% url 'profile_create' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+                {% fa5_icon 'times-circle' 'fas text-danger' %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">Additional questions</div>
+        <div class="col-sm-2">
+            <a class="btn text-primary" role="button"
+               href="{% url 'question_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+            {% if answers %}
+                {% fa5_icon 'check' 'fas text-success' %}
+            {% else %}
+                {% fa5_icon 'times-circle' 'fas text-danger' %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">Requested Positions</div>
+        <div class="col-sm-2">
+            <a class="btn text-primary" role="button"
+               href="{% url 'requested_position_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+            {% if positions %}
+                {% fa5_icon 'check' 'fas text-success' %}
+            {% else %}
+                {% fa5_icon 'times-circle' 'fas text-danger' %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">Skills</div>
+        <div class="col-sm-2">
+            <a class="btn text-primary" role="button"
+               href="{% url 'skill_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+            {% if skills %}
+                {% fa5_icon 'check' 'fas text-success' %}
+            {% else %}
+                {% fa5_icon 'times-circle' 'fas text-danger' %}
+            {% endif %}
+        </div>
+    </div>
+        <div class="row">
+        <div class="col-sm-3">Availability</div>
+        <div class="col-sm-2">
+            <a class="btn text-primary" role="button"
+               href="{% url 'availability_list' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+            {% if availabilities %}
+                {% fa5_icon 'check' 'fas text-success' %}
+            {% else %}
+                {% fa5_icon 'times-circle' 'fas text-danger' %}
+            {% endif %}
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-check required">
+            <label class="form-check-label" for="id_languages_4">
+                <input class="form-check-input" id="confirmation" name="confirmation" title="" type="checkbox" value=""/>
+                By clicking <q>Submit</q>, I agree that Seawatch can save and process my data.
+            </label>
+        </div>
+    </form>
+    <br>
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+
+{% endblock %}

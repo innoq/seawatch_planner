@@ -132,7 +132,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 #  Add configuration for static files storage using whitenoise
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/accounts/edit'
+LOGIN_REDIRECT_URL = '/accounts/registration'
 
 NOSE_ARGS = ['--nocapture',
              '--nologcapture']

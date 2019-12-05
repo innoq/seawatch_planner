@@ -9,10 +9,10 @@ class SkillsForm(Form):
 
     languages = ModelMultipleChoiceField(widget=CheckboxSelectMultiple,
                                          queryset=Skill.objects.filter(group='lang'),
-                                         required=False)
+                                         required=True)
     skills = ModelMultipleChoiceField(widget=CheckboxSelectMultiple,
                                       queryset=Skill.objects.filter(group='other'),
-                                      required=False)
+                                      required=True)
 
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile', '')

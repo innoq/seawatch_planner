@@ -46,6 +46,10 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
         if not form.is_valid():
             return render(request, './seawatch_registration/profile.html', {'form': form, 'view': self})
         form.save()
+        redirect_to = request.GET.get('next')
+        if redirect_to:
+            return redirect(redirect_to)
+
         return redirect('profile_detail')
 
     def test_func(self):
