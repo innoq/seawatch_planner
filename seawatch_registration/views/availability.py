@@ -1,11 +1,11 @@
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import django.views.generic as generic
-from django.shortcuts import render
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.forms import inlineformset_factory
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import render
+from django.urls import reverse
 
 from seawatch_registration.models import Profile, Availability
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import DateInput, DatePickerInput
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
@@ -28,6 +28,7 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         form.fields['end_date'].widget = DateInput()
         return form
 
+
 class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
     nav_item = 'availabilities'
@@ -40,8 +41,8 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
                                                   Availability,
                                                   fields=('start_date', 'end_date', 'comment'),
                                                   widgets={
-                                                    'start_date': DateInput,
-                                                    'end_date': DateInput},
+                                                    'start_date': DatePickerInput(),
+                                                    'end_date': DatePickerInput()},
                                                   extra=0, max_num=4, min_num=1,
                                                   can_delete=True)
 

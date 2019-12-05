@@ -25,4 +25,9 @@
         <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
         {% endbuttons %}
     </form>
+    {% if view.remove_input_type_date%}
+        {% load static %}
+        <script src="{% static 'seawatch_registration/js/remove_input_type_date.js' %}"></script>
+    {% endif %}
+
 {% endblock %}
