@@ -1,52 +1,72 @@
 import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 
-from seawatch_registration.forms.profile_form import ProfileForm
+from seawatch_registration.mixins.model_form_widget_mixin import ModelFormWidgetMixin
 from seawatch_registration.models import Profile
+from seawatch_registration.widgets import DateInput
 
 
-class CreateView(LoginRequiredMixin, generic.View):
+class CreateView(LoginRequiredMixin, ModelFormWidgetMixin, generic.CreateView):
+    model = Profile
+    fields = ['first_name',
+              'last_name',
+              'citizenship',
+              'second_citizenship',
+              'date_of_birth',
+              'place_of_birth',
+              'country_of_birth',
+              'gender',
+              'address',
+              'needs_schengen_visa',
+              'phone',
+              'emergency_contact',
+              'comments']
+    nav_item = 'profile'
+    widgets = {'date_of_birth': DateInput()}
+    template_name = './seawatch_registration/profile.html'
+
+    def get_success_url(self):
+        return reverse('skill_update')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(CreateView, self).form_valid(form)
+
+
+class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+    model = Profile
     nav_item = 'profile'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, './seawatch_registration/profile.html', {'form': ProfileForm({'user': request.user}), 'view': self})
-
-    def post(self, request, *args, **kwargs):
-        form = ProfileForm(request.POST)
-        if not form.is_valid():
-            return render(request, './seawatch_registration/profile.html', {'form': ProfileForm({'user': request.user}, request.POST),
-                                                    'view': self})
-        form.save()
-        return redirect('skill_update')
-
-
-class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
-    nav_item = 'profile'
-
-    def get(self, request, *args, **kwargs):
-        profile = request.user.profile
-        return render(request, './seawatch_registration/profile_detail.html', {'profile': profile, 'view': self})
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
-    nav_item = 'profile'
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, generic.UpdateView):
+    navitem = 'profile'
+    model = Profile
+    fields = ['first_name',
+              'last_name',
+              'citizenship',
+              'second_citizenship',
+              'date_of_birth',
+              'place_of_birth',
+              'country_of_birth',
+              'gender',
+              'address',
+              'needs_schengen_visa',
+              'phone',
+              'emergency_contact',
+              'comments']
+    template_name = './seawatch_registration/profile.html'
+    success_url = reverse_lazy('profile_detail')
+    widgets = {'date_of_birth': DateInput()}
 
-    def get(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
-        form = ProfileForm(instance=profile)
-        return render(request, './seawatch_registration/profile.html', {'form': form, 'view': self})
-
-    def post(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
-        form = ProfileForm(request.POST or None, instance=profile)
-        if not form.is_valid():
-            return render(request, './seawatch_registration/profile.html', {'form': form, 'view': self})
-        form.save()
-        return redirect('profile_detail')
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
