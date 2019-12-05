@@ -10,7 +10,7 @@ class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
     fields = ['text', 'mandatory']
     nav_item = 'questions'
     success_url = reverse_lazy('question_list')
-    permission_required = 'seawatch_registration.create_question'
+    permission_required = 'seawatch_registration.add_question'
 
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
@@ -31,6 +31,6 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
     model = Question
     fields = ['text', 'mandatory']
     success_url = reverse_lazy('question_list')
-    permission_required = 'seawatch_registration.update_question'
+    permission_required = 'seawatch_registration.change_question'
 
 
