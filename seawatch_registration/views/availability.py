@@ -2,10 +2,31 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import django.views.generic as generic
 from django.shortcuts import render
 from django.forms import inlineformset_factory
+from django.urls import reverse, reverse_lazy
 
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
 
+
+class CreateView(LoginRequiredMixin, generic.CreateView):
+    model = Availability
+    fields = ['start_date', 'end_date', 'comment']
+    nav_item = 'availabilities'
+    submit_button = 'Add'
+
+    def form_valid(self, form):
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.profile = profile
+        return super(CreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('availability_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['start_date'].widget = DateInput()
+        form.fields['end_date'].widget = DateInput()
+        return form
 
 class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
@@ -17,7 +38,7 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
     AvailableDatesFormset = inlineformset_factory(Profile,
                                                   Availability,
-                                                  fields=('start_date', 'end_date'),
+                                                  fields=('start_date', 'end_date', 'comment'),
                                                   widgets={
                                                     'start_date': DateInput,
                                                     'end_date': DateInput},
@@ -35,11 +56,12 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
         formset = self.AvailableDatesFormset(request.POST, instance=profile)
+        error_msg = 'Input could not be saved. Please correct missing or invalid data!'
         if not formset.is_valid():      
             return render(request, self.template_name,
                           {'formset': formset,
                            'view': self,
-                           'error': formset.errors,
+                           'error': error_msg,
                            })
 
         formset.save()

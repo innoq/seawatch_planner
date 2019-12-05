@@ -1,5 +1,6 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load fontawesome_5 %}
 
 {% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
 
@@ -18,8 +19,7 @@
 
     <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    
-    <table id="availability_table" border="0" cellpadding="0" cellspacing="0" class="table">
+    <table id="availability_table" border="0" cellpadding="0" cellspacing="0" class="table" style="max-width:500px;">
       <tbody>
           {% for form in formset.forms %}
             {% for hidden in form.hidden_fields %}
@@ -27,9 +27,16 @@
             {% endfor %}
           <tr>
             <td>
-            {% bootstrap_field form.start_date %}
-            {% bootstrap_field form.end_date %}
-            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+              <div class="row">
+                <div class="col">
+                  {% bootstrap_field form.start_date %}
+                </div>
+                <div class="col">
+                  {% bootstrap_field form.end_date %}
+                </div>
+              </div>
+              {% bootstrap_field form.comment %}
+              {% if form.instance.pk %}{% bootstrap_field form.DELETE %}{% endif %}
             </td>
           </tr>
           {% endfor %}
@@ -39,6 +46,11 @@
     
     {% buttons %}
       <button type="submit" class="btn btn-primary">{{view.submit_button}}</button>
+      {% if formset.total_form_count < formset.max_num %}
+        <noscript>
+        <a class="btn btn-primary" href="{% url 'availability_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+        </noscript>
+      {% endif %}
     {% endbuttons %}
 
   </form>
