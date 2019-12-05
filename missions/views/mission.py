@@ -11,7 +11,7 @@ class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     ordering = 'id'
     paginate_by = 100  # if pagination is desired
     nav_item = 'missions'
-    permission_required = 'missions.can_view_missions'
+    permission_required = 'missions.can_view_missions'  # TODO: use djangos default permissions
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -21,14 +21,14 @@ class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
 class DetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
     model = Mission
     nav_item = 'missions'
-    permission_required = 'missions.can_view_missions'
+    permission_required = 'missions.can_view_missions'  # TODO: use djangos default permissions
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Mission
     fields = ['name', 'start_date', 'end_date', 'ship']
     nav_item = 'missions'
-    permission_required = 'missions.can_create_missions'
+    permission_required = 'missions.can_create_missions'  # TODO: use djangos default permissions
 
     def get_success_url(self):
         return reverse('mission_detail', kwargs={'pk': self.object.id})
@@ -44,7 +44,7 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
     model = Mission
     nav_item = 'missions'
     success_url = reverse_lazy('mission_list')
-    permission_required = 'missions.can_delete_missions'
+    permission_required = 'missions.can_delete_missions'  # TODO: use djangos default permissions
 
 
 class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
