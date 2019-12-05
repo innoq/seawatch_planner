@@ -1,7 +1,6 @@
 from django.forms import ModelForm, FileField, ModelChoiceField, HiddenInput
 
 from seawatch_registration.models import DocumentType, Document, Profile
-from seawatch_registration.widgets import DatePickerInput
 
 
 class DocumentForm(ModelForm):
@@ -12,9 +11,7 @@ class DocumentForm(ModelForm):
         model = Document
         fields = ('document_type', 'number', 'issuing_date', 'expiry_date', 'issuing_authority', 'issuing_place',
                   'issuing_country', 'file', 'profile')
-        widgets = {'profile': HiddenInput(),  # Todo: sollte kein Hidden Field sein, sondern sollte erst nach absenden des Requests gesetzt werden
-                   'issuing_date': DatePickerInput(),
-                   'expiry_date': DatePickerInput()}
+        widgets = {'profile': HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', '')

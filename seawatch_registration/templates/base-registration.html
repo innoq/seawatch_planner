@@ -12,8 +12,7 @@
         <title>{% block title %}Seawatch Registration{% endblock %}</title>
         {% block head %}
         {% endblock %}
-        {% bootstrap_javascript jquery="full" %}
-        {{ form.media }}            {# Adds date-picker required JS and CSS #}
+        {% bootstrap_javascript jquery="slim" %}
     </head>
     <body>
         {% include 'navbar.html' %}
