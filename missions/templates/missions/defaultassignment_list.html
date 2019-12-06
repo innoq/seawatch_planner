@@ -1,0 +1,35 @@
+{% extends "base-missions.html" %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
+{% block content %}
+<h1>Default Assignments</h1>
+{% if object_list %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Position</th>
+            <th>Quantity</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for default_assignment in object_list %}
+        <tr>
+            <td>{{ default_assignment.id }}</td>
+            <td>{{ default_assignment.position }}</td>
+            <td>{{ default_assignment.quantity }}</td>
+            <td>
+                <a href="{% url 'default_assignment_update' ship.id default_assignment.id %}">{% fa5_icon 'edit' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'default_assignment_delete' ship.id default_assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No default assignments yet.</p>
+{% endif %}
+<a class="btn btn-primary" href="{% url 'default_assignment_create' ship.id%}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+{% endblock %}
