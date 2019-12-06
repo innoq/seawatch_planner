@@ -2,7 +2,7 @@ import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
 
-from seawatch_registration.mixins.model_form_widget_mixin import ModelFormWidgetMixin
+from seawatch_registration.mixins import ModelFormWidgetMixin, GetSuccessUrlFromUrlMixin
 from seawatch_registration.models import Profile
 from seawatch_registration.widgets import DateInput
 
@@ -25,9 +25,7 @@ class CreateView(LoginRequiredMixin, ModelFormWidgetMixin, generic.CreateView):
     nav_item = 'profile'
     widgets = {'date_of_birth': DateInput()}
     template_name = './seawatch_registration/profile.html'
-
-    def get_success_url(self):
-        return reverse('skill_update')
+    success_url = reverse_lazy('skill_update')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -45,7 +43,8 @@ class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
         return Profile.objects.filter(user=self.request.user).exists()
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, generic.UpdateView):
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin,
+                 GetSuccessUrlFromUrlMixin, generic.UpdateView):
     navitem = 'profile'
     model = Profile
     fields = ['first_name',
@@ -64,13 +63,6 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin, 
     template_name = './seawatch_registration/profile.html'
     success_url = reverse_lazy('profile_detail')
     widgets = {'date_of_birth': DateInput()}
-
-    def get_success_url(self):
-        redirect_to = self.request.GET.get('next')
-        if redirect_to:
-            return reverse_lazy(redirect_to)
-
-        return reverse_lazy('profile_detail')
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)

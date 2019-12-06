@@ -3,31 +3,32 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import django.views.generic as generic
 from django.shortcuts import render
 from django.forms import inlineformset_factory
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
 
 
-class CreateView(LoginRequiredMixin, generic.CreateView):
+class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Availability
     fields = ['start_date', 'end_date', 'comment']
     nav_item = 'availabilities'
     submit_button = 'Add'
+    success_url = reverse_lazy('availability_list')
 
     def form_valid(self, form):
         profile = Profile.objects.get(user=self.request.user)
         form.instance.profile = profile
         return super(CreateView, self).form_valid(form)
 
-    def get_success_url(self):
-        return reverse('availability_list')
-
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields['start_date'].widget = DateInput()
         form.fields['end_date'].widget = DateInput()
         return form
+
+    def test_func(self):
+        return Profile.objects.filter(user=self.request.user).exists()
 
 class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
 
