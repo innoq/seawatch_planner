@@ -8,7 +8,6 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>#</th>
             <th>Position</th>
             <th>Quantity</th>
             <th></th>
@@ -17,12 +16,11 @@
     <tbody>
         {% for default_assignment in object_list %}
         <tr>
-            <td>{{ default_assignment.id }}</td>
             <td>{{ default_assignment.position }}</td>
             <td>{{ default_assignment.quantity }}</td>
             <td>
-                <a href="{% url 'default_assignment_update' ship.id default_assignment.id %}">{% fa5_icon 'edit' 'fas' %}</a>
-                <a class="text-danger" href="{% url 'default_assignment_delete' ship.id default_assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+                <a href="{% url 'default_assignment_update' ship.id default_assignment.id %}" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+                <a class="text-danger" href="{% url 'default_assignment_delete' ship.id default_assignment.id %}" data-toggle="tooltip" title="delete">{% fa5_icon 'trash' 'fas' %}</a>
             </td>
         </tr>
         {% endfor %}

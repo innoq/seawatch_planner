@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.views import generic
 
 from missions.models import DefaultAssignment, Ship
@@ -45,6 +45,7 @@ class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = DefaultAssignment
     paginate_by = 10
     nav_item = 'ships'
+    ordering = 'id'
     permission_required = 'missions.view_defaultassignment'
 
     def get_context_data(self, **kwargs):
@@ -61,8 +62,11 @@ class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
     model = DefaultAssignment
     nav_item = 'ships'
-    success_url = reverse_lazy('ship_list')
     permission_required = 'missions.delete_defaultassignment'
+
+    def get_success_url(self):
+        ship_id = self.kwargs.get('ship_id')
+        return reverse('default_assignment_list', kwargs={'ship_id': ship_id})
 
     def get_context_data(self, **kwargs):
         context = super(DeleteView, self).get_context_data(**kwargs)
