@@ -1,6 +1,7 @@
 import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
+from django.core import mail
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
 from django.views import View
@@ -63,3 +64,28 @@ class CreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
             return redirect(reverse('mission_detail', kwargs={'pk': mission.id}))
         return render(request, self.template_name, {'form': form,
                                                     'view': self})
+
+
+class EmailView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    nav_item = 'missions'
+    permission_required = 'missions.add_assignment'
+    template_name = './missions/assignment_confirm_mail.html'
+
+    def get(self, request, *args, **kwargs):
+        assignment = get_object_or_404(Assignment, pk=kwargs.pop('pk'), mission__id=kwargs.pop('mission__id'))
+        return render(request, self.template_name, {'assignment': assignment})
+
+    def post(self, request, *args, **kwargs):
+        assignment = get_object_or_404(Assignment, pk=kwargs.pop('pk'), mission__id=kwargs.pop('mission__id'))
+        name = assignment.user.profile.first_name + " " + assignment.user.profile.last_name
+
+        subject = 'Sea-Watch.org: You have been assigned to a mission'
+        message = 'Hey '+name+',\nyou have been assigned to mission "'+assignment.mission.name+'" from '\
+                  +str(assignment.mission.start_date)+' to '+str(assignment.mission.end_date)+'. ' \
+                  'Your position is '+assignment.position.name+'.\nPlease confirm ' \
+                  'that you can participate at the mission.\n\nSincerely yours the Sea-Watch Team'
+        from_email = 'team@sea-watch.org'
+        recipient_list = [assignment.user.email]
+
+        mail.send_mail(subject, message, from_email, recipient_list)
+        return redirect('index')

@@ -12,6 +12,7 @@
     <tr>
         <th scope="col">Position</th>
         <th scope="col">Assignment</th>
+        <th scope="col">Confirmation</th>
         <th scope="col">Actions</th>
     </tr>
     </thead>
@@ -20,11 +21,15 @@
     <tr>
         <td>{{ assignment.position.name }}</td>
         <td>{{ assignment.user.profile.first_name }} {{ assignment.user.profile.last_name }}</td>
+        <td>{{ assignment.confirmed }}</td>
         <td>
             <a class="btn btn-primary btn-sm" role="button"
                href="{% url 'assignee' object.id assignment.id %}">{% fa5_icon 'user' 'fas' %}</a>
+            <a class="btn btn-primary btn-sm" role="button"
+               href="{% url 'assignment_mail' object.id assignment.id %}">{% fa5_icon 'envelope' 'fas' %}</a>
             <a class="btn btn-danger btn-sm" role="button"
                href="{% url 'assignment_delete' object.id assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+
 
         </td>
     </tr>
