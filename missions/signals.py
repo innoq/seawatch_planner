@@ -5,8 +5,8 @@ from missions.models import Mission, DefaultAssignment, Assignment
 
 
 @receiver(post_save, sender=Mission)
-def createAssignmentsFromDefaultAssignments(sender, instance, **kwargs):
-    if not Assignment.objects.filter(mission=instance).exists():
+def createAssignmentsFromDefaultAssignments(sender, instance, created, **kwargs):
+    if created:
         default_assignments = DefaultAssignment.objects.filter(ship=instance.ship)
         for default_assignment in default_assignments:
             for i in range(0, default_assignment.quantity):
