@@ -88,4 +88,6 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, View):
         recipient_list = [assignment.user.email]
 
         mail.send_mail(subject, message, from_email, recipient_list)
+        assignment.email_sent = True
+        assignment.save()
         return redirect('index')

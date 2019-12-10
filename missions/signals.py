@@ -9,4 +9,5 @@ def createAssignmentsFromDefaultAssignments(sender, instance, created, **kwargs)
     if not created:
         if instance.tracker.has_changed('user'):
             Assignment.objects.filter(pk=instance.pk).update(confirmed=False)
+            Assignment.objects.filter(pk=instance.pk).update(email_sent=False)
 

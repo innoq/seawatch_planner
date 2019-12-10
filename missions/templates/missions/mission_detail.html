@@ -25,8 +25,8 @@
         <td>
             <a class="btn btn-primary btn-sm" role="button"
                href="{% url 'assignee' object.id assignment.id %}">{% fa5_icon 'user' 'fas' %}</a>
-            <a class="btn btn-primary btn-sm" role="button"
-               href="{% url 'assignment_mail' object.id assignment.id %}">{% fa5_icon 'envelope' 'fas' %}</a>
+            <a class="btn btn-primary btn-sm {% if assignment.email_sent %}disabled{% endif %}" role="button"
+               href="{% url 'assignment_mail' object.id assignment.id %}" >{% fa5_icon 'envelope' 'fas' %}</a>
             <a class="btn btn-danger btn-sm" role="button"
                href="{% url 'assignment_delete' object.id assignment.id %}">{% fa5_icon 'trash' 'fas' %}</a>
 

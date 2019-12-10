@@ -33,5 +33,6 @@ class Assignment(models.Model):
                              null=True,
                              related_name='assignments')
     confirmed = models.BooleanField(default=False)
+    email_sent = models.BooleanField(default=False)
 
     tracker = FieldTracker(fields=['user'])
