@@ -44,7 +44,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=100)
     emergency_contact = models.TextField(blank=True)
     comments = models.TextField(blank=True)
-    skills = models.ManyToManyField(Skill, blank=True)
+    skills = models.ManyToManyField(Skill)
     custom_skills = models.CharField(max_length=500, blank=True)
     requested_positions = models.ManyToManyField(Position, related_name='requested_profiles')
     approved_positions = models.ManyToManyField(Position, related_name='approved_profiles', blank=True)
