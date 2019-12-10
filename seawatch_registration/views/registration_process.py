@@ -1,7 +1,7 @@
 import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from seawatch_registration.models import Profile, Answer, Availability, Document
+from seawatch_registration.models import Profile
 
 
 class View(LoginRequiredMixin, generic.View):
@@ -19,11 +19,11 @@ class View(LoginRequiredMixin, generic.View):
         profile = Profile.objects.filter(user=request.user).first()
 
         if profile:
-            self.answers = Answer.objects.filter(profile=profile).first()
+            self.answers = profile.answer_set.first()
             self.positions = profile.requested_positions.first()
             self.skills = profile.skills.first()
-            self.availabilities = Availability.objects.filter(profile=profile).first()
-            self.documents = Document.objects.filter(profile=profile).first()
+            self.availabilities = profile.availability_set.first()
+            self.documents = profile.document_set.first()
 
         return render(request, 'seawatch_registration/registration_process.html',
                       {'view': self,
@@ -39,11 +39,11 @@ class View(LoginRequiredMixin, generic.View):
         error_msg = 'Registration Process not complete. Please provide all required data.'
 
         if profile:
-            self.answers = Answer.objects.filter(profile=profile).first()
+            self.answers = profile.answer_set.first()
             self.positions = profile.requested_positions.first()
             self.skills = profile.skills.first()
-            self.availabilities = Availability.objects.filter(profile=profile).first()
-            self.documents = Document.objects.filter(profile=profile).first()
+            self.availabilities = profile.availability_set.first()
+            self.documents = profile.document_set.first()
 
             print(request.POST)
 
