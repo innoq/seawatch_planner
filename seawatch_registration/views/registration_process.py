@@ -1,6 +1,8 @@
 import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+
+from assessments.models import Assessment
 from seawatch_registration.models import Profile
 
 
@@ -50,6 +52,8 @@ class View(LoginRequiredMixin, generic.View):
             if self.answers and self.positions and self.skills and self.availabilities and self.documents:
 
                 if request.POST.get('confirmation'):
+                    new_assessment = Assessment(profile=profile, status='pending')
+                    new_assessment.save()
                     return render(request, 'seawatch_registration/registration_complete.html', {'view': self})
 
                 # TODO: write matching error message
