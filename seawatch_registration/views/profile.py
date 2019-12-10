@@ -2,7 +2,7 @@ import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
 
-from seawatch_registration.mixins import ModelFormWidgetMixin, GetSuccessUrlFromUrlMixin
+from seawatch_registration.mixins import ModelFormWidgetMixin, RedirectNextMixin
 from seawatch_registration.models import Profile
 from seawatch_registration.widgets import DateInput
 
@@ -45,7 +45,7 @@ class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
 
 
 class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin,
-                 GetSuccessUrlFromUrlMixin, generic.UpdateView):
+                 RedirectNextMixin, generic.UpdateView):
     navitem = 'profile'
     model = Profile
     fields = ['first_name',

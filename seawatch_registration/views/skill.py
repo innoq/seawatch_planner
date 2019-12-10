@@ -4,11 +4,11 @@ from django.urls import reverse_lazy
 from django.views.generic.base import View
 
 from seawatch_registration.forms.skills_form import SkillsForm
-from seawatch_registration.mixins import GetSuccessUrlFromUrlMixin
+from seawatch_registration.mixins import RedirectNextMixin
 from seawatch_registration.models import Profile
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, GetSuccessUrlFromUrlMixin, View):
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, View):
     nav_item = 'skills'
     title = 'Your Skills'
     success_alert = 'Skills are successfully saved!'

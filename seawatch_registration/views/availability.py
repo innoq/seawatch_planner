@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
-from seawatch_registration.mixins import GetSuccessUrlFromUrlMixin
+from seawatch_registration.mixins import RedirectNextMixin
 
 
 class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -32,7 +32,7 @@ class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
         return Profile.objects.filter(user=self.request.user).exists()
 
 
-class ListView(LoginRequiredMixin, UserPassesTestMixin, GetSuccessUrlFromUrlMixin, generic.View):
+class ListView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, generic.View):
 
     nav_item = 'availabilities'
     title = 'Availabilities'

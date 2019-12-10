@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.forms.models import modelform_factory
 
 
-class GetSuccessUrlFromUrlMixin(object):
+class RedirectNextMixin(object):
     def get_success_url(self):
         redirect_to = self.request.GET.get('next')
         if redirect_to:
