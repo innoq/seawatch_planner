@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.widgets import DateInput
+from seawatch_registration.mixins import GetSuccessUrlFromUrlMixin
 
 
 class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -30,13 +31,15 @@ class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
 
-class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
+
+class ListView(LoginRequiredMixin, UserPassesTestMixin, GetSuccessUrlFromUrlMixin, generic.View):
 
     nav_item = 'availabilities'
     title = 'Availabilities'
     success_alert = 'Available Dates successfully saved!'
     submit_button = 'Save'
     template_name = './seawatch_registration/availability_list.html'
+    success_url = reverse_lazy('availability_list')
 
     AvailableDatesFormset = inlineformset_factory(Profile,
                                                   Availability,
@@ -67,16 +70,7 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
                            })
 
         formset.save()
-
-        redirect_to = request.GET.get('next')
-        if redirect_to:
-            return redirect(redirect_to)
-
-        formset = self.AvailableDatesFormset(instance=profile)
-        return render(request, self.template_name,
-                      {'formset': formset,
-                       'view': self
-                       })
+        return redirect(self.get_success_url())
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()

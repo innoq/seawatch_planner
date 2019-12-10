@@ -12,7 +12,7 @@ class SkillsForm(Form):
                                          required=True)
     skills = ModelMultipleChoiceField(widget=CheckboxSelectMultiple,
                                       queryset=Skill.objects.filter(group='other'),
-                                      required=True)
+                                      required=False)
 
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile', '')

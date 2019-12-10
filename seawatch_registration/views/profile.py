@@ -26,6 +26,7 @@ class CreateView(LoginRequiredMixin, ModelFormWidgetMixin, generic.CreateView):
     widgets = {'date_of_birth': DateInput()}
     template_name = './seawatch_registration/profile.html'
     success_url = reverse_lazy('skill_update')
+    submit_button = 'Next'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -62,6 +63,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin,
               'comments']
     template_name = './seawatch_registration/profile.html'
     success_url = reverse_lazy('profile_detail')
+    submit_button = 'Save'
     widgets = {'date_of_birth': DateInput()}
 
     def get_object(self):

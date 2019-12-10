@@ -24,11 +24,11 @@
             {% if profile %}
                 <a class="btn text-primary" role="button"
                 href="{% url 'profile_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-                {% fa5_icon 'check' 'fas text-success' %}
+                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
             {% else %}
                 <a class="btn text-primary" role="button"
                 href="{% url 'profile_create' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-                {% fa5_icon 'times-circle' 'fas text-danger' %}
+                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
             {% endif %}
         </div>
     </div>
@@ -38,9 +38,9 @@
             <a class="btn text-primary" role="button"
                href="{% url 'question_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
             {% if answers %}
-                {% fa5_icon 'check' 'fas text-success' %}
+                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
             {% else %}
-                {% fa5_icon 'times-circle' 'fas text-danger' %}
+                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
             {% endif %}
         </div>
     </div>
@@ -50,9 +50,9 @@
             <a class="btn text-primary" role="button"
                href="{% url 'requested_position_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
             {% if positions %}
-                {% fa5_icon 'check' 'fas text-success' %}
+                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
             {% else %}
-                {% fa5_icon 'times-circle' 'fas text-danger' %}
+                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
             {% endif %}
         </div>
     </div>
@@ -62,21 +62,33 @@
             <a class="btn text-primary" role="button"
                href="{% url 'skill_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
             {% if skills %}
-                {% fa5_icon 'check' 'fas text-success' %}
+                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
             {% else %}
-                {% fa5_icon 'times-circle' 'fas text-danger' %}
+                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
             {% endif %}
         </div>
     </div>
-        <div class="row">
+    <div class="row">
         <div class="col-sm-3">Availability</div>
         <div class="col-sm-2">
             <a class="btn text-primary" role="button"
                href="{% url 'availability_list' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
             {% if availabilities %}
-                {% fa5_icon 'check' 'fas text-success' %}
+                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
             {% else %}
-                {% fa5_icon 'times-circle' 'fas text-danger' %}
+                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">Documents</div>
+        <div class="col-sm-2">
+            <a class="btn text-primary" role="button"
+               href="{% url 'document_list' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+            {% if documents %}
+                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
+            {% else %}
+                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
             {% endif %}
         </div>
     </div>
