@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from seawatch_registration.models import Position
@@ -31,3 +32,16 @@ class Assignment(models.Model):
                              blank=True,
                              null=True,
                              related_name='assignments')
+
+
+class DefaultAssignment(models.Model):
+    position = models.ForeignKey(Position, on_delete=models.PROTECT)
+    quantity = models.IntegerField()
+    ship = models.ForeignKey(Ship, on_delete=models.CASCADE, related_name='default_assignments')
+
+    def clean(self):
+        if self.quantity:
+            if self.quantity < 1:
+                raise ValidationError({
+                    'quantity': ValidationError('Quantity must be at least one.')
+                })

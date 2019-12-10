@@ -1,6 +1,7 @@
 from django.urls import path
 
 import missions.views.assignment as assignment
+import missions.views.default_assigments as default_assignments
 import missions.views.mission as mission
 import missions.views.ship as ship
 from missions.views import question
@@ -14,7 +15,19 @@ urlpatterns = [
     path('ships/', ship.ListView.as_view(), name='ship_list'),
     path('ships/new', ship.CreateView.as_view(), name='ship_create'),  # TODO: Replace 'new' with 'add'
     path('ships/<int:pk>/', ship.DetailView.as_view(), name='ship_detail'),
-    path('ships/<int:pk>/delete', ship.DeleteView.as_view(), name='ship_delete'),
+    path('ships/<int:pk>/delete/', ship.DeleteView.as_view(), name='ship_delete'),
+    path('ships/<int:ship_id>/default-assignments/',
+         default_assignments.ListView.as_view(),
+         name='default_assignment_list'),
+    path('ships/<int:ship_id>/default-assignments/add/',
+         default_assignments.CreateView.as_view(),
+         name='default_assignment_create'),
+    path('ships/<int:ship_id>/default-assignments/<int:pk>/edit/',
+         default_assignments.UpdateView.as_view(),
+         name='default_assignment_update'),
+    path('ships/<int:ship_id>/default-assignments/<int:pk>/delete',
+         default_assignments.DeleteView.as_view(),
+         name='default_assignment_delete'),
     path('<int:mission__id>/assignments/new', assignment.CreateView.as_view(), name="assignment_create"),
     path('<int:mission__id>/assignments/<int:pk>/delete',
          assignment.DeleteView.as_view(),
