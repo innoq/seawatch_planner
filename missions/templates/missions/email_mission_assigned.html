@@ -1,0 +1,38 @@
+{% extends "missions/email_base.html" %}
+
+{% block preview %}
+You got assigned to a mission!
+{% endblock %}
+
+{% block content %}
+<p>Hi {{ name }},</p>
+<p>You have been assigned to a Sea-Watch rescue mission.</p>
+<p>The mission starts at the {{ start_date }} and ends at the {{ end_date }}.</p>
+<p>You will be {{ position }} at the {{ ship_name }}</p>
+<p>Please confirm that you participate at this mission, such that the mission can be prepare with all regulatory stuff.</p>
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+    <tbody>
+        <tr>
+            <td align="left">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td> <a href="http://htmlemail.io" target="_blank">Confirm you participation!</a> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>Thank you really much for your voluntary work at Sea-Watch!</p>
+<p>We will inform you soon with further information.</p>
+<br>
+<p>Sincerely yours,</p>
+<p>{{ stuff_name }}</p>
+{% endblock %}
+
+
+{% block footer %}
+<span class="apple-link">Verein Sea-Watch e.V., c/o dka-Anwälte, Immanuelkirchstraße 3-4, 10405 Berlin, Germany</span>
+{% endblock %}

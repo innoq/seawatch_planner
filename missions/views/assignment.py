@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.models import User
 from django.core import mail
 from django.shortcuts import redirect, get_object_or_404, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 
@@ -80,14 +81,17 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, View):
         name = assignment.user.profile.first_name + " " + assignment.user.profile.last_name
 
         subject = 'Sea-Watch.org: You have been assigned to a mission'
-        message = 'Hey '+name+',\nyou have been assigned to mission "'+assignment.mission.name+'" from '\
-                  +str(assignment.mission.start_date)+' to '+str(assignment.mission.end_date)+'. ' \
-                  'Your position is '+assignment.position.name+'.\nPlease confirm ' \
-                  'that you can participate at the mission.\n\nSincerely yours the Sea-Watch Team'
+        message2 = render_to_string('missions/email_mission_assigned.html', {'name': assignment.user.profile.first_name + " " + assignment.user.profile.last_name,
+                                                                    'start_date': str(assignment.mission.start_date),
+                                                                    'end_date': str(assignment.mission.end_date),
+                                                                    'position': assignment.position.name,
+                                                                    'ship_name': assignment.mission.ship.name,
+                                                                    'stuff_name': 'Sea-Watch e.V.'
+                                                                    })
         from_email = 'team@sea-watch.org'
         recipient_list = [assignment.user.email]
 
-        mail.send_mail(subject, message, from_email, recipient_list)
+        mail.send_mail(subject, message2, from_email, recipient_list)
         assignment.email_sent = True
         assignment.save()
         return redirect('index')
