@@ -22,7 +22,10 @@ class TestBases:
             self.client = Client()
             self.username = 'testuser1'
             self.password = '1X<ISRUkw+tuK'
-            self.user = User.objects.create_user(username=self.username, password=self.password)
+            self.user = User.objects.create_user(username=self.username,
+                                                 password=self.password,
+                                                 first_name='Test',
+                                                 last_name='User',)
 
             if permission_required:
                 content_type = ContentType.objects.get_for_model(permission_class)
@@ -34,8 +37,6 @@ class TestBases:
             self.user.save()
             self.profile = Profile(id=1,
                                    user=self.user,
-                                   first_name='Test',
-                                   last_name='User',
                                    citizenship='Deutsch',
                                    second_citizenship='American',
                                    date_of_birth=date.today(),

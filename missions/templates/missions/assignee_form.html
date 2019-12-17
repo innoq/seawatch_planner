@@ -19,7 +19,7 @@
             {% for candidate in candidates %}
             <tr>
                 <th scope="row"><input type="radio" name="assignee" value="{{candidate.id}}" /></th>
-                <td>{{candidate.first_name}} {{candidate.last_name}}</td>
+                <td>{{candidate.user.first_name}} {{candidate.user.last_name}}</td>
                 <td>
                     {% for position in candidate.requested_positions.all %}
                     {{ position.name }}

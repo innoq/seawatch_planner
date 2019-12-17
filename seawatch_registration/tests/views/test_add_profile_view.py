@@ -18,8 +18,6 @@ class TestAddProfileView(TestBases.TestBase):
         # Act
         response = self.client.post(self.url,
                                     {'user': self.user.id,
-                                     'first_name': 'Test',
-                                     'last_name': 'User',
                                      'citizenship': 'Deutsch',
                                      'date_of_birth': date.today(),
                                      'place_of_birth': 'New York',
@@ -40,8 +38,6 @@ class TestAddProfileView(TestBases.TestBase):
         # Act
         response = self.client.post(self.url,
                                     {'user': self.user.id,
-                                     'first_name': 'Test',
-                                     'last_name': 'User',
                                      'citizenship': 'Deutsch'},
                                     user=self.user)
 

@@ -4,17 +4,17 @@
 {% block title %}Assessment | Seawatch Registration{% endblock %}
 
 {% block content %}
-    <h1>Assessment {{ profile.first_name }} {{ profile.last_name }}</h1>
+    <h1>Assessment {{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
     <br>
     <div class="row">
         <div class="col-6">
             <h3>Profile data</h3>
             <dl class="row">
                 <dt class="col-sm-6">First name</dt>
-                <dd class="col-sm-6">{{ profile.first_name }}</dd>
+                <dd class="col-sm-6">{{ profile.user.first_name }}</dd>
 
                 <dt class="col-sm-6">Last name</dt>
-                <dd class="col-sm-6 ">{{ profile.last_name }}</dd>
+                <dd class="col-sm-6 ">{{ profile.user.last_name }}</dd>
 
                 <dt class="col-sm-6">Citizenship</dt>
                 <dd class="col-sm-6">{{ profile.citizenship }}</dd>

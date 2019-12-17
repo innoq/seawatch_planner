@@ -28,7 +28,7 @@ class TestQuestionsView(TestBases.TestBase):
         profile.save()
         question = Question.objects.filter().first()
         question.save()
-        answer = Answer(text='Answer', profile=profile, question=question)
+        answer = Answer(text='topSecretAnswer', profile=profile, question=question)
         answer.save()
 
         self.client.login(username=self.username, password=self.password)
@@ -38,7 +38,7 @@ class TestQuestionsView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'form.html')
-        self.assertContains(response, 'value="Answer')
+        self.assertContains(response, 'topSecretAnswer')
 
     def test_views__question_update__post__should_update_answer_when_answer_exists(self):
         # Arrange
