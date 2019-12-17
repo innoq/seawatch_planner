@@ -78,20 +78,20 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         assignment = get_object_or_404(Assignment, pk=kwargs.pop('pk'), mission__id=kwargs.pop('mission__id'))
-        name = assignment.user.profile.first_name + " " + assignment.user.profile.last_name
+        name = assignment.user.first_name + " " + assignment.user.last_name
 
         subject = 'Sea-Watch.org: You have been assigned to a mission'
-        message2 = render_to_string('missions/email_mission_assigned.html', {'name': assignment.user.profile.first_name + " " + assignment.user.profile.last_name,
-                                                                    'start_date': str(assignment.mission.start_date),
-                                                                    'end_date': str(assignment.mission.end_date),
-                                                                    'position': assignment.position.name,
-                                                                    'ship_name': assignment.mission.ship.name,
-                                                                    'stuff_name': 'Sea-Watch e.V.'
-                                                                    })
+        message2 = render_to_string('missions/email_mission_assigned.html', {'name': name,
+                                                                             'start_date': str(assignment.mission.start_date),
+                                                                             'end_date': str(assignment.mission.end_date),
+                                                                             'position': assignment.position.name,
+                                                                             'ship_name': assignment.mission.ship.name,
+                                                                             'stuff_name': 'Sea-Watch e.V.'
+                                                                             })
         from_email = 'team@sea-watch.org'
         recipient_list = [assignment.user.email]
 
         mail.send_mail(subject, message2, from_email, recipient_list)
         assignment.email_sent = True
         assignment.save()
-        return redirect('index')
+        return redirect(reverse('mission_detail', kwargs={'pk': assignment.mission.id}))

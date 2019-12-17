@@ -7,7 +7,7 @@
     <h1>Send assignment email to {{ assignment.user.profile.first_name }} {{ assignment.user.profile.last_name }}</h1>
 
     <form method="post">{% csrf_token %}
-        <p>Are you sure you want to send a assignment email to {{ assignment.user.profile.first_name }} {{ assignment.user.profile.last_name }}?</p>
-        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="url 'mission_detail' object.mission.id" role="button">Cancel</a>
+        <p>Are you sure you want to send a assignment email to {{ assignment.user.first_name }} {{ assignment.user.last_name }}?</p>
+        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="{% url 'mission_detail' assignment.mission.id %}" role="button">Cancel</a>
     </form>
 {% endblock %}
