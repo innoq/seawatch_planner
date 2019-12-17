@@ -18,7 +18,7 @@ class View(LoginRequiredMixin, generic.View):
     documents = None
 
     def get(self, request, *args, **kwargs):
-        profile = Profile.objects.filter(user=request.user).first()
+        profile = Profile.objects.get(user=request.user)
 
         if profile:
             self.answers = profile.answer_set.first()
@@ -46,8 +46,6 @@ class View(LoginRequiredMixin, generic.View):
             self.skills = profile.skills.first()
             self.availabilities = profile.availability_set.first()
             self.documents = profile.document_set.first()
-
-            print(request.POST)
 
             if self.answers and self.positions and self.skills and self.availabilities and self.documents:
 

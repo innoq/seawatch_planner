@@ -9,10 +9,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col"></th>
                 <th scope="col">Name</th>
                 <th scope="col">Approved Positions</th>
-                <th scope="col">Availablities</th>
+                <th scope="col">Availabilities</th>
             </tr>
         </thead>
         <tbody>
@@ -22,12 +22,12 @@
                 <td>{{candidate.first_name}} {{candidate.last_name}}</td>
                 <td>
                     {% for position in candidate.requested_positions.all %}
-                    {{ position.name }}
+                    {{ position.name }}<br>
                     {% endfor %}
                 </td>
                 <td>
                     {% for availability in candidate.availability_set.all %}
-                    <p>{{availability.start_date}} — {{availability.end_date}}</p>
+                    {{availability.start_date}} — {{availability.end_date}}<br>
                     {% endfor %}
                 </td>
             </tr>
