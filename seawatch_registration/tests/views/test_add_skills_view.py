@@ -68,12 +68,12 @@ class TestAddSkillsView(TestBases.TestBase):
 
         # Act
         response = self.client.post(self.url,
-                                    {},
+                                    {'languages': language.id},
                                     user=self.user)
 
         # Assert
+        self.assertEquals(len(profile.skills.all()), 1)
         self.assertRedirects(response, expected_url='/accounts/documents/add/')
-        self.assertEquals(len(profile.skills.all()), 0)
 
     def test_views__skill_update__post__should_redirect_to_document_when_skills_are_set_to_2(self):
         # Arrange

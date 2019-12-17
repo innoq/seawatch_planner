@@ -75,8 +75,8 @@ class TestShowAssessmentsView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'assessment-list.html')
-        self.assertContains(response, self.td(profile.first_name))
-        self.assertContains(response, self.td(profile.last_name))
+        self.assertContains(response, self.td(profile.user.first_name))
+        self.assertContains(response, self.td(profile.user.last_name))
         self.assertContains(response, self.td(profile.pk))
         self.assertContains(response, position)
         self.assertContains(response, self.tr_onclick(profile.pk))

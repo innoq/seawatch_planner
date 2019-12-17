@@ -37,9 +37,6 @@
                 {% endif %}
                 {% if request.user.profile %}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'profile_detail' %}">Profile</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
                 </li>
                 <li class="nav-item">
@@ -59,9 +56,19 @@
         </ul>
         <ul class="nav navbar-nav ml-auto">
             {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                   <a class="nav-link" href="{% url 'registration_process' %}">Registration Status</a>
-                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ request.user.first_name }} {{ request.user.last_name }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if request.user.profile %}
+                        <a class="dropdown-item" href="{% url 'profile_detail' %}">Show profile</a>
+                        <a class="dropdown-item" href="{% url 'registration_process' %}">Registration Status</a>
+                        <div class="dropdown-divider"></div>
+                        {% endif %}
+                        <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+                    </div>
+      </li>
                 <li class="nav-item">
                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>

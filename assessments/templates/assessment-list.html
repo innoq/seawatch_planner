@@ -21,8 +21,8 @@
             {% for profile in profiles %}
             <tr onclick="window.location='{% url 'assessment_update' profile.pk %}';">
                 <td>{{ profile.pk }}</td>
-                <td>{{ profile.first_name }}</td>
-                <td>{{ profile.last_name }}</td>
+                <td>{{ profile.user.first_name }}</td>
+                <td>{{ profile.user.last_name }}</td>
                 <td>
                     {% for position in profile.requested_positions.all %}
                     {{ position.name }}
