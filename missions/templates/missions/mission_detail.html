@@ -20,7 +20,7 @@
     {% for assignment in object.assignment_set.all %}
     <tr>
         <td>{{ assignment.position.name }}</td>
-        <td>{{ assignment.user.profile.first_name }} {{ assignment.user.profile.last_name }}</td>
+        <td>{{ assignment.user.first_name }} {{ assignment.user.last_name }}</td>
         <td>{{ assignment.confirmed }}</td>
         <td>
             <a href="{% url 'assignee' object.id assignment.id %}"  data-toggle="tooltip" title="assign volunteer">
