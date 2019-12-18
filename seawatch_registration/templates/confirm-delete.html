@@ -6,7 +6,8 @@
 {% block content %}
     <h1>{{ title }}</h1>
 
-    <form method="post">{% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
         <input class="btn btn-primary" type="submit" value="Confirm">
     </form>
