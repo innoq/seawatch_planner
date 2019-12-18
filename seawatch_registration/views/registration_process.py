@@ -1,67 +1,39 @@
-import django.views.generic as generic
+from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from seawatch_registration.models import Profile
+from assessments.models import Assessment
 
 
-class View(LoginRequiredMixin, generic.View):
+class View(LoginRequiredMixin, generic.TemplateView):
     nav_item = 'registration_process'
-    title = 'Your Registration Status'
+    title = 'Your registration status'
     success_alert = 'Your registration is completed!'
-    submit_button = 'Confirm Registration'
-    answers = None
-    positions = None
-    skills = None
-    availabilities = None
-    documents = None
+    submit_button = 'Confirm registration'
+    template_name = 'seawatch_registration/registration_process.html'
 
-    def get(self, request, *args, **kwargs):
-        profile = Profile.objects.filter(user=request.user).first()
-
-        if profile:
-            self.answers = profile.answer_set.first()
-            self.positions = profile.requested_positions.first()
-            self.skills = profile.skills.first()
-            self.availabilities = profile.availability_set.first()
-            self.documents = profile.document_set.first()
-
-        return render(request, 'seawatch_registration/registration_process.html',
-                      {'view': self,
-                       'profile': profile,
-                       'answers': self.answers,
-                       'positions': self.positions,
-                       'skills': self.skills,
-                       'availabilities': self.availabilities,
-                       'documents': self.documents})
+    def get_context_data(self, **kwargs):
+        profile = self.request.user.profile
+        return {**super().get_context_data(**kwargs),
+                'profile': profile,
+                'answers': profile.answer_set.first(),
+                'positions': profile.requested_positions.first(),
+                'skills': profile.skills.first(),
+                'availabilities': profile.availability_set.first(),
+                'documents': profile.document_set.first()}
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
-        error_msg = 'Registration Process not complete. Please provide all required data.'
+        error_msg = 'Registration process not complete. Please provide all required data.'
+        context = self.get_context_data(**kwargs)
 
-        if profile:
-            self.answers = profile.answer_set.first()
-            self.positions = profile.requested_positions.first()
-            self.skills = profile.skills.first()
-            self.availabilities = profile.availability_set.first()
-            self.documents = profile.document_set.first()
+        if 'confirmation' in request.POST:
+            if all(context[required_data_name] for required_data_name in (
+                    'answers', 'positions', 'skills', 'availabilities', 'documents')):
+                Assessment.objects.create(profile=profile, status='pending')
+                return render(request, self.template_name)
+        else:
+            # TODO: write matching error message
+            error_msg = 'You have to agree to our terms and conditions.'
 
-            print(request.POST)
-
-            if self.answers and self.positions and self.skills and self.availabilities and self.documents:
-
-                if request.POST.get('confirmation'):
-                    return render(request, 'seawatch_registration/registration_complete.html', {'view': self})
-
-                # TODO: write matching error message
-                error_msg = 'You have to agree to our terms and conditions.'
-
-        return render(request, 'seawatch_registration/registration_process.html',
-                      {'view': self,
-                       'error': error_msg,
-                       'profile': profile,
-                       'answers': self.answers,
-                       'positions': self.positions,
-                       'skills': self.skills,
-                       'availabilities': self.availabilities,
-                       'documents': self.documents})
-
+        return render(request, self.template_name, {**context, 'error': error_msg})
