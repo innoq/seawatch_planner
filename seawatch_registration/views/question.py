@@ -9,7 +9,7 @@ from seawatch_registration.models import Profile, Question, Answer
 class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
     nav_item = 'questions'
     title = 'Questions'
-    success_alert = 'Your Answer are successfully saved!'
+    success_alert = 'Your answer has been saved.'
     submit_button = 'Next'
 
     def get(self, request, *args, **kwargs):
