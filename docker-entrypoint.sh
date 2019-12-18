@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "Installing missing dependencies"
+pip install -Ur requirements.txt
+
 # Collect static files
 echo "Collect static files"
 python manage.py collectstatic --noinput

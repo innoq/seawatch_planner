@@ -8,6 +8,8 @@ services:
   web:
     build: .
     command: sh docker-entrypoint.sh
+    environment:
+      SEAWATCH_PLANNER: "dev"
     volumes:
       - .:/app
     ports:

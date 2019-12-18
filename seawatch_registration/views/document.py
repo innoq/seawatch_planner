@@ -54,15 +54,10 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
 class DeleteView(LoginRequiredMixin, UserOwnsDocuments, generic.DeleteView):
     model = Document
     nav_item = 'documents'
+    title = 'Delete Document'
     template_name = 'confirm-delete.html'
     success_url = reverse_lazy('document_list')
     pk_url_kwarg = 'document_id'
-
-    def get_context_data(self, **kwargs):
-        return {
-            'title': 'Delete Document',
-            **super().get_context_data(**kwargs)
-        }
 
 
 class UpdateView(LoginRequiredMixin, UserOwnsDocuments, generic.UpdateView):
