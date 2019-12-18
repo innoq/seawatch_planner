@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from model_utils import FieldTracker
 
 from seawatch_registration.models import Position
 
@@ -32,6 +33,10 @@ class Assignment(models.Model):
                              blank=True,
                              null=True,
                              related_name='assignments')
+    confirmed = models.BooleanField(default=False)
+    email_sent = models.BooleanField(default=False)
+
+    tracker = FieldTracker(fields=['user'])
 
 
 class DefaultAssignment(models.Model):

@@ -11,3 +11,12 @@ def createAssignmentsFromDefaultAssignments(sender, instance, created, **kwargs)
         for default_assignment in default_assignments:
             for i in range(0, default_assignment.quantity):
                 Assignment(mission=instance, position=default_assignment.position).save()
+
+
+@receiver(post_save, sender=Assignment)
+def createAssignmentsFromDefaultAssignments(sender, instance, created, **kwargs):
+    if not created:
+        if instance.tracker.has_changed('user'):
+            Assignment.objects.filter(pk=instance.pk).update(confirmed=False)
+            Assignment.objects.filter(pk=instance.pk).update(email_sent=False)
+

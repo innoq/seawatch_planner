@@ -8,3 +8,4 @@ __pycache__/
 venv/
 media
 staticfiles/
+sent_emails/
