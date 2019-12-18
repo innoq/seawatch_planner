@@ -18,9 +18,6 @@ EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 ## Heroku Deploy
 django_heroku.settings(locals())
 
-#  Add configuration for static files storage using whitenoise
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
 ALLOWED_HOSTS = ['.seawatch-planner.herokuapp.com/']
 
 
