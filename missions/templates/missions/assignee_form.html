@@ -1,44 +1,19 @@
 {% extends "base-missions.html" %}
-
-
+{% load render_table from django_tables2 %}
+{% load bootstrap4 %}
 
 {% block content %}
-<h1>Assign volunteers</h1>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Name</th>
-                <th scope="col">Approved Positions</th>
-                <th scope="col">Availabilities</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for candidate in candidates %}
-            <tr>
-                <th scope="row"><input type="radio" name="assignee" value="{{candidate.id}}" /></th>
-                <td>{{candidate.user.first_name}} {{candidate.user.last_name}}</td>
-                <td>
-                    {% for position in candidate.requested_positions.all %}
-                    {{ position.name }}<br>
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for availability in candidate.availability_set.all %}
-                    {{availability.start_date}} — {{availability.end_date}}<br>
-                    {% endfor %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <input class="btn btn-primary" type="submit" value="Save">
-</form>
-
-
-
-
+    <h1>Assign volunteers</h1>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        {% if filter %}
+            {% bootstrap_form filter.form layout='inline' %}
+            {% bootstrap_button 'filter' %}
+            <br>
+            <br>
+        {% endif %}
+        {% render_table table %}
+        <input class="btn btn-primary" type="submit" value="Save" name="save">
+    </form>
 {% endblock %}
 

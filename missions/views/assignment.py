@@ -6,10 +6,20 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
+from django_filters.views import FilterView
+from django_filters import FilterSet
+from django_tables2 import SingleTableMixin, RequestConfig, SingleTableView
 
 from missions.forms import AssignmentForm
 from missions.models import Assignment, Mission
+from missions.tables.candidates import CandidatesTable
 from seawatch_registration.models import Profile
+
+
+class ProfileFilter(FilterSet):
+    class Meta:
+        model = Profile
+        fields = ['user__first_name', 'user__last_name', 'requested_positions']
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
@@ -21,27 +31,34 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
         return reverse('mission_detail', kwargs={'pk': self.object.mission.id})
 
 
-class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    initial = {'key': 'value'}
+class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, FilterView):
     template_name = 'missions/assignee_form.html'
     nav_item = 'missions'
     permission_required = 'missions.change_assignment'
+    #table = CandidatesTable(Profile.objects.all())
+    #filterset_class = ProfileFilter
 
     def get(self, request, *args, **kwargs):
         mission_id = kwargs.pop('mission__id')
         assigned_users = User.objects.filter(assignments__mission__id=mission_id)
         candidates = Profile.objects.exclude(user__in=assigned_users)
-        return render(request, self.template_name, {'candidates': candidates, 'view': self})
+        table = CandidatesTable(candidates)
+        RequestConfig(request).configure(table)
+        return render(request, self.template_name, {'table': table, 'filter': ProfileFilter})
 
     def post(self, request, *args, **kwargs):
-        assignment_id = kwargs.pop('assignment__id')
-        mission_id = kwargs.pop('mission__id')
-        profile_id = request.POST['assignee']
-        user = get_object_or_404(User, profile__pk=profile_id)
-        assignment = Assignment.objects.get(pk=assignment_id)
-        assignment.user = user
-        assignment.save()
-        return redirect(reverse('mission_detail', kwargs={'pk': mission_id}))
+
+        print(request.POST)
+
+        if request.POST['save']:
+            assignment_id = kwargs.pop('assignment__id')
+            mission_id = kwargs.pop('mission__id')
+            profile_id = request.POST['assignee']
+            user = get_object_or_404(User, profile__pk=profile_id)
+            assignment = Assignment.objects.get(pk=assignment_id)
+            assignment.user = user
+            assignment.save()
+            return redirect(reverse('mission_detail', kwargs={'pk': mission_id}))
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
