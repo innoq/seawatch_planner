@@ -20,4 +20,4 @@ class TestShowProfileView(TestBases.TestBase):
 
         # Assert
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, './seawatch_registration/profile_detail.html')
+        self.assertTemplateUsed(response, 'seawatch_registration/profile_detail.html')

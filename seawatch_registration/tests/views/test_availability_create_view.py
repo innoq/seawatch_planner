@@ -3,13 +3,16 @@ from django.urls import reverse
 from seawatch_registration.models import Profile, Availability
 from seawatch_registration.tests.views.test_base import TestBases
 
+
 class TestAvailabilityCreateView(TestBases.TestBase):
     
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('availability_create'), login_required=True, profile_required=False)
+        self.base_set_up(url=reverse('availability_create'), login_required=True, profile_required=True)
 
     def test_views__availabilities_create__get__should_render_with_availability_form_html(self):
         # Arrange
+        profile: Profile = self.profile
+        profile.save()
         self.client.login(username=self.username, password=self.password)
 
         # Act

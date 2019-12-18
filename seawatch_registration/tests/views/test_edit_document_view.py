@@ -35,8 +35,6 @@ class TestEditDocumentView(TestBases.TestBase):
         user = User.objects.create_user(username='testuser', password='testuser')
         other_profile = Profile(pk=2,
                                 user=user,
-                                first_name='Hans',
-                                last_name='Peter',
                                 citizenship='Deutsch',
                                 date_of_birth=date.today(),
                                 place_of_birth='Hansestadt Hamburg',
@@ -183,8 +181,6 @@ class TestEditDocumentView(TestBases.TestBase):
         user = User.objects.create_user(username='testuser', password='testuser')
         other_profile = Profile(pk=2,
                                 user=user,
-                                first_name='Hans',
-                                last_name='Peter',
                                 citizenship='Deutsch',
                                 date_of_birth=date.today(),
                                 place_of_birth='Hansestadt Hamburg',

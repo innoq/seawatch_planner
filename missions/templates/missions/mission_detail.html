@@ -12,6 +12,7 @@
     <tr>
         <th scope="col">Position</th>
         <th scope="col">Assignment</th>
+        <th scope="col">Confirmation</th>
         <th scope="col">Actions</th>
     </tr>
     </thead>
@@ -19,15 +20,24 @@
     {% for assignment in object.assignment_set.all %}
     <tr>
         <td>{{ assignment.position.name }}</td>
-        <td>{{ assignment.user.profile.first_name }} {{ assignment.user.profile.last_name }}</td>
+        <td>{{ assignment.user.first_name }} {{ assignment.user.last_name }}</td>
+        <td>{{ assignment.confirmed }}</td>
         <td>
             <a href="{% url 'assignee' object.id assignment.id %}"  data-toggle="tooltip" title="assign volunteer">
                 {% fa5_icon 'user' 'fas' %}
             </a>
+            {% if not assignment.email_sent and assignment.user %}
+            <a href="{% url 'assignment_mail' object.id assignment.id %}"  data-toggle="tooltip" title="send mission information email">
+                {% fa5_icon 'envelope' 'fas' %}
+            </a>
+            {% else %}
+            <a class="text-black-50" data-toggle="tooltip" title="send mission information email">
+                {% fa5_icon 'envelope' 'fas' %}
+            </a>
+            {% endif %}
             <a class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"  data-toggle="tooltip" title="delete">
                 {% fa5_icon 'trash' 'fas' %}
             </a>
-
         </td>
     </tr>
     {% endfor %}
