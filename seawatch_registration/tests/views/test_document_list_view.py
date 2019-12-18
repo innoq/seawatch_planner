@@ -25,7 +25,7 @@ class TestDocumentListView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, './seawatch_registration/document_list.html')
-        self.assertContains(response, "You doesn't have any documents uploaded yet!")
+        self.assertContains(response, "You didn't upload any documents, yet!")
 
     @override_settings(MEDIA_ROOT=tempfile.gettempdir())
     def test_views__document_list__get__should_show_table_when_document_is_uploaded(self):

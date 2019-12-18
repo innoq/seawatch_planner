@@ -1,7 +1,10 @@
 .idea
+.vscode
 
 .ENV
+.venv
 __PYCACHE__/
 __pycache__/
 venv/
 media
+staticfiles/
