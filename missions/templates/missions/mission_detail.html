@@ -26,12 +26,12 @@
             <a href="{% url 'assignee' object.id assignment.id %}"  data-toggle="tooltip" title="assign volunteer">
                 {% fa5_icon 'user' 'fas' %}
             </a>
-            {% if assignment.email_sent %}
-            <a class="text-black-50" data-toggle="tooltip" title="send mission information email">
+            {% if not assignment.email_sent and assignment.user %}
+            <a href="{% url 'assignment_mail' object.id assignment.id %}"  data-toggle="tooltip" title="send mission information email">
                 {% fa5_icon 'envelope' 'fas' %}
             </a>
             {% else %}
-             <a href="{% url 'assignment_mail' object.id assignment.id %}"  data-toggle="tooltip" title="send mission information email">
+            <a class="text-black-50" data-toggle="tooltip" title="send mission information email">
                 {% fa5_icon 'envelope' 'fas' %}
             </a>
             {% endif %}
