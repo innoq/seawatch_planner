@@ -19,13 +19,13 @@
             <td>{{ ship.id }}</td>
             <td>{{ ship.name }}</td>
             <td>
-                <a href="{% url 'ship_detail' ship.id %}" data-toggle="tooltip" title="details">
-                    {% fa5_icon 'ship' 'fas' %}
+                <a name='edit' href="{% url 'ship_update' ship.id %}" data-toggle="tooltip" title="edit">
+                    {% fa5_icon 'edit' 'fas' %}
                 </a>
-                <a href="{% url 'default_assignment_list' ship.id %}" data-toggle="tooltip" title="default assignments">
+                <a name='default_assignment' href="{% url 'default_assignment_list' ship.id %}" data-toggle="tooltip" title="default assignments">
                     {% fa5_icon 'users' 'fas' %}
                 </a>
-                <a class="text-danger" href="{% url 'ship_delete' ship.id %}" data-toggle="tooltip" title="delete">
+                <a name='delete' class="text-danger" href="{% url 'ship_delete' ship.id %}" data-toggle="tooltip" title="delete">
                     {% fa5_icon 'trash' 'fas' %}
                 </a>
             </td>
