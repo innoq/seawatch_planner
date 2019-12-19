@@ -19,6 +19,7 @@ urlpatterns = [
     path('documents/add/', document.CreateView.as_view(), name='document_create'),
     path('documents/<int:document_id>/edit', document.UpdateView.as_view(), name='document_update'),
     path('documents/<int:document_id>/delete', document.DeleteView.as_view(), name='document_delete'),
+    path('documents/<int:document_id>/<str:file_name>', document.GetDocumentAttachment.as_view(), name='document_attachment_get'),
     path('questions/edit/', question.UpdateView.as_view(), name='question_update'),
     path('positions/edit/', position.UpdateView.as_view(), name='requested_position_update'),
     path('skills/edit/', skill.UpdateView.as_view(), name='skill_update'),
