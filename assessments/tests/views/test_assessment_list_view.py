@@ -75,9 +75,8 @@ class TestShowAssessmentsView(TestBases.TestBase):
         # Assert
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'assessment-list.html')
-        self.assertContains(response, self.td(profile.user.first_name))
-        self.assertContains(response, self.td(profile.user.last_name))
-        self.assertContains(response, self.td(profile.pk))
+        self.assertContains(response, self.td(profile.user.first_name + ' ' + profile.user.last_name))
+        self.assertContains(response, self.td(assessment.status))
         self.assertContains(response, position)
         self.assertContains(response, self.tr_onclick(profile.pk))
 
@@ -88,4 +87,4 @@ class TestShowAssessmentsView(TestBases.TestBase):
     @staticmethod
     def tr_onclick(primary_key):
         return '<tr onclick="window.location=\'' + \
-               reverse('assessment_update', kwargs={'profile_id': primary_key}) + '\';">'
+               reverse('assessment_update', kwargs={'pk': primary_key}) + '\';">'
