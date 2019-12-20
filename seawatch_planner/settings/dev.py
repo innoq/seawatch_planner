@@ -3,7 +3,7 @@ import django_heroku
 
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(iyk95rqxz$r(dzj2=8g7d1e3ert=#730^i4*h7+m76s!o%9#6'
@@ -31,5 +31,3 @@ DATABASES['default'] = \
 
 NOSE_ARGS = ['--nocapture',
              '--nologcapture']
-
-DEBUG_PROPAGATE_EXCEPTIONS = True

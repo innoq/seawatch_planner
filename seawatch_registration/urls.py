@@ -1,13 +1,12 @@
 from django.urls import path
 
+import seawatch_registration.views.availability as availability
 import seawatch_registration.views.document as document
 import seawatch_registration.views.position as position
 import seawatch_registration.views.profile as profile
 import seawatch_registration.views.question as question
-import seawatch_registration.views.skill as skill
-import seawatch_registration.views.availability as availability
 import seawatch_registration.views.registration_process as registration_process
-
+import seawatch_registration.views.skill as skill
 from seawatch_registration.views.signup import SignupView
 
 urlpatterns = [
@@ -19,7 +18,8 @@ urlpatterns = [
     path('documents/add/', document.CreateView.as_view(), name='document_create'),
     path('documents/<int:document_id>/edit', document.UpdateView.as_view(), name='document_update'),
     path('documents/<int:document_id>/delete', document.DeleteView.as_view(), name='document_delete'),
-    path('questions/edit/', question.UpdateView.as_view(), name='question_update'),
+    path('documents/<int:document_id>/<str:file_name>', document.GetDocumentAttachment.as_view(), name='document_attachment_get'),
+    path('questions/edit/', question.UpdateView.as_view(), name='question_answer'),
     path('positions/edit/', position.UpdateView.as_view(), name='requested_position_update'),
     path('skills/edit/', skill.UpdateView.as_view(), name='skill_update'),
     path('availabilities/', availability.ListView.as_view(), name='availability_list'),
