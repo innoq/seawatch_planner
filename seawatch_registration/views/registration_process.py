@@ -1,39 +1,93 @@
 from django.views import generic
+from django.urls import reverse_lazy
+from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from seawatch_registration.models import Profile
 from assessments.models import Assessment
 
+from collections import namedtuple
 
-class View(LoginRequiredMixin, generic.TemplateView):
+RegistrationStep = namedtuple('RegistrationStep',
+                              'name view_url_edit optional completed')
+
+
+class RegistrationForm(forms.Form):
+    confirmation = forms.BooleanField(
+        required=True,
+        error_messages={'required': 'You have to agree to our terms and conditions.'},
+        label='I agree that Seawatch can save and process my data.')
+
+    def clean(self):
+        if not all(step.completed or step.optional for step in self.steps):
+            raise forms.ValidationError('Registration process not complete. Please provide all required data.')
+        if self.user.profile.assessment_set.exists():
+            raise forms.ValidationError('Already registered.')
+
+    def __init__(self, user=None, steps=None, **kwargs):
+        self.steps = steps
+        self.user = user
+        super().__init__(**kwargs)
+
+
+class View(LoginRequiredMixin, generic.FormView):
     nav_item = 'registration_process'
     title = 'Your registration status'
     success_alert = 'Your registration is completed!'
+    success_url = reverse_lazy('registration_process')
     submit_button = 'Confirm registration'
     template_name = 'seawatch_registration/registration_process.html'
+    form_class = RegistrationForm
 
     def get_context_data(self, **kwargs):
-        profile = self.request.user.profile
         return {**super().get_context_data(**kwargs),
-                'profile': profile,
-                'answers': profile.answer_set.first(),
-                'positions': profile.requested_positions.first(),
-                'skills': profile.skills.first(),
-                'availabilities': profile.availability_set.first(),
-                'documents': profile.document_set.first()}
+                'steps': self._get_ordered_registration_steps()}
 
-    def post(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
-        error_msg = 'Registration process not complete. Please provide all required data.'
-        context = self.get_context_data(**kwargs)
+    def get_form_kwargs(self):
+        return {**super().get_form_kwargs(),
+                'user': self.request.user,
+                'steps': self._get_ordered_registration_steps()}
 
-        if 'confirmation' in request.POST:
-            if all(context[required_data_name] for required_data_name in (
-                    'answers', 'positions', 'skills', 'availabilities', 'documents')):
-                Assessment.objects.create(profile=profile, status='pending')
-                return render(request, self.template_name)
-        else:
-            # TODO: write matching error message
-            error_msg = 'You have to agree to our terms and conditions.'
+    def form_valid(self, form):
+        Assessment.objects.create(profile=self.request.user.profile, status='pending')
+        return super().form_valid(form)
 
-        return render(request, self.template_name, {**context, 'error': error_msg})
+    def _get_ordered_registration_steps(self):
+        profile = self.request.user.profile
+        return [
+            RegistrationStep(
+                'Profile',
+                'profile_update',
+                optional=False,
+                completed=profile is not None
+            ),
+            RegistrationStep(
+                'Skills',
+                'skill_update',
+                optional=False,
+                completed=profile.requested_positions.exists()
+            ),
+            RegistrationStep(
+                'Documents',
+                'document_list',
+                optional=True,
+                completed=profile.document_set.exists()
+            ),
+            RegistrationStep(
+                'Requested Positions',
+                'requested_position_update',
+                optional=False,
+                completed=profile.requested_positions.exists()
+            ),
+            RegistrationStep(
+                'Availabilities',
+                'availability_list',
+                optional=False,
+                completed=profile.availability_set.exists()
+            ),
+            RegistrationStep(
+                'Questions',
+                'question_update',
+                optional=False,
+                completed=profile.answer_set.exists()
+            )]
