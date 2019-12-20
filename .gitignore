@@ -9,3 +9,4 @@ venv/
 media
 staticfiles/
 sent_emails/
+e2e_tests/chromedriver
