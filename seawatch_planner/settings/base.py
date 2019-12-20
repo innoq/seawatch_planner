@@ -126,5 +126,5 @@ MEDIA_ROOT = 'media/'
 
 # Bootstrap Config
 BOOTSTRAP4 = {
-        'required_css_class': 'required'
+    'required_css_class': 'required'
 }

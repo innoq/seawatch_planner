@@ -1,13 +1,12 @@
-from django.shortcuts import redirect
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 import django.views.generic as generic
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import inlineformset_factory
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from seawatch_registration.models import Profile, Availability
-from seawatch_registration.widgets import DateInput
 from seawatch_registration.mixins import RedirectNextMixin
+from seawatch_registration.models import Availability, Profile
+from seawatch_registration.widgets import DateInput
 
 
 class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -45,8 +44,8 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, gener
                                                   Availability,
                                                   fields=('start_date', 'end_date', 'comment'),
                                                   widgets={
-                                                    'start_date': DateInput,
-                                                    'end_date': DateInput},
+                                                      'start_date': DateInput,
+                                                      'end_date': DateInput},
                                                   extra=0, max_num=4, min_num=1,
                                                   can_delete=True)
 
@@ -62,7 +61,7 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, gener
         profile = Profile.objects.get(user=request.user)
         formset = self.AvailableDatesFormset(request.POST, instance=profile)
         error_msg = 'Input could not be saved. Please correct missing or invalid data!'
-        if not formset.is_valid():      
+        if not formset.is_valid():
             return render(request, self.template_name,
                           {'formset': formset,
                            'view': self,

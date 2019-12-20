@@ -1,4 +1,4 @@
-from django.forms import Form, ModelMultipleChoiceField, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple, Form, ModelMultipleChoiceField
 
 from seawatch_registration.models import Profile, Skill
 

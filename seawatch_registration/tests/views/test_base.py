@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.contrib.auth.models import User
-from django.test import TestCase, Client, override_settings
+from django.test import Client, TestCase, override_settings
 
 from seawatch_registration.models import Profile
 

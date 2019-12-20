@@ -1,4 +1,5 @@
 from django.forms import Form, HiddenInput
+
 from seawatch_registration.models import Profile
 
 

@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase, Client
+from django.test import Client, SimpleTestCase
 from django.urls import resolve, reverse
 
 import assessments.views.assessment as assessment

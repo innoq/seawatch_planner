@@ -1,5 +1,5 @@
-from django.urls import reverse
 from django.forms.models import modelform_factory
+from django.urls import reverse
 
 
 class RedirectNextMixin(object):
