@@ -137,17 +137,9 @@
     {% else %}
     <p class="text-danger">No Documents uploaded.</p>
     {% endif %}
+
     <h3>Assessment</h3>
-    {% if success %}
-    <div class="alert alert-success" role="alert">
-    Assessment successfully saved.
-    </div>
-    {% endif %}
-    {% if error %}
-    <div class="alert alert-danger" role="alert">
-    Assessment could not be saved.
-    </div>
-    {% endif %}
+    {% include 'partials/form-errors.html' %}
     <form method="post">
      {% csrf_token %}
      {% bootstrap_form form %}

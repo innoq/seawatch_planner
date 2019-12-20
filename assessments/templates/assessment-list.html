@@ -7,28 +7,28 @@
 
 
 
-    {% if profiles %}
+    {% if pending_assessments %}
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Requested Positions</th>
+                <th>Name</th>
+                <th>Requested positions</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            {% for profile in profiles %}
-            <tr onclick="window.location='{% url 'assessment_update' profile.pk %}';">
-                <td>{{ profile.pk }}</td>
-                <td>{{ profile.user.first_name }}</td>
-                <td>{{ profile.user.last_name }}</td>
+            {% for assessment in pending_assessments %}
+            {% with profile=assessment.profile %}
+            <tr onclick="window.location='{% url 'assessment_update' assessment.pk %}';">
+                <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
                 <td>
                     {% for position in profile.requested_positions.all %}
                     {{ position.name }}
                     {% endfor %}
                 </td>
+                <td>{{ assessment.status }}</td>
             </tr>
+            {% endwith %}
             {% endfor %}
         </tbody>
     </table>
