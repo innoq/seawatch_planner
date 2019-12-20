@@ -1,6 +1,6 @@
 from django import forms
 
-from seawatch_registration.models import Document, DocumentType, Profile
+from seawatch_registration.models import Document, DocumentType
 from seawatch_registration.widgets import DateInput
 
 

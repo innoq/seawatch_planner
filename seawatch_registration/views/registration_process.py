@@ -2,12 +2,10 @@ from collections import namedtuple
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
 from assessments.models import Assessment
-from seawatch_registration.models import Profile
 
 RegistrationStep = namedtuple('RegistrationStep',
                               'name view_url_edit optional completed')

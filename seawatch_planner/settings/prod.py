@@ -1,3 +1,5 @@
+import os
+
 import django_heroku
 
 from .base import *

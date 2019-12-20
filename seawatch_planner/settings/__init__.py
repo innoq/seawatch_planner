@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 
 # you need to set "myproject = 'prod'" as an environment variable
