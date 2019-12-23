@@ -1,0 +1,29 @@
+{% extends "missions/email_base.html" %}
+
+{% block preview %}
+Confirm your registration at Sea-Watch
+{% endblock %}
+
+{% block content %}
+<p>Hi {{ name }},</p>
+<p>thank you for your interest in Sea-Watch.</p>
+<p>Please click on the following link to confirm your registration.</p>
+<p>
+    {% autoescape off %}
+    <a href="https://{{ domain }}{% url 'user_activation' user_id=uid token=token %}" target="_blank">
+        https://{{ domain }}{% url 'user_activation' user_id=uid token=token %}
+    </a>
+    {% endautoescape %}
+</p>
+<p>Afterwards you can add your personal information, so we are able to plan you for your first voluntary work at
+    Sea-Watch.</p>
+<p>Thank you really much for your engagement!</p>
+<br>
+<p>Sincerely yours,</p>
+<p>Sea-Watch e.V. Team</p>
+{% endblock %}
+
+
+{% block footer %}
+<span class="apple-link">Verein Sea-Watch e.V., c/o dka-Anwälte, Immanuelkirchstraße 3-4, 10405 Berlin, Germany</span>
+{% endblock %}

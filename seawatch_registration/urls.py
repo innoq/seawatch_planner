@@ -7,13 +7,14 @@ import seawatch_registration.views.profile as profile
 import seawatch_registration.views.question as question
 import seawatch_registration.views.registration_process as registration_process
 import seawatch_registration.views.skill as skill
-from seawatch_registration.views.signup import SignupView
+from seawatch_registration.views import signup
 
 urlpatterns = [
+    path('signup/', signup.SignupView.as_view(), name='signup'),
+    path('activate/<str:user_id>/<str:token>', signup.ActivationView.as_view(), name='user_activation'),
     path('show/', profile.DetailView.as_view(), name='profile_detail'),
     path('add/', profile.CreateView.as_view(), name='profile_create'),
     path('edit/', profile.UpdateView.as_view(), name='profile_update'),
-    path('signup/', SignupView.as_view(), name='signup'),
     path('documents/', document.ListView.as_view(), name='document_list'),
     path('documents/add/', document.CreateView.as_view(), name='document_create'),
     path('documents/<int:document_id>/edit', document.UpdateView.as_view(), name='document_update'),
