@@ -1,12 +1,12 @@
 from django.test import SimpleTestCase, Client
 from django.urls import resolve, reverse
 
+import seawatch_registration.views.availability as availability
 import seawatch_registration.views.document as document
 import seawatch_registration.views.position as position
 import seawatch_registration.views.profile as profile
 import seawatch_registration.views.question as question
 import seawatch_registration.views.skill as skill
-import seawatch_registration.views.availability as availability
 from seawatch_registration.views.signup import SignupView
 
 
@@ -43,8 +43,8 @@ class TestUrls(SimpleTestCase):
         url = reverse('skill_update')
         self.assertEquals(resolve(url).func.__name__, skill.UpdateView.as_view().__name__)
 
-    def test_urls_question_update(self):
-        url = reverse('question_update')
+    def test_urls_question_answer(self):
+        url = reverse('question_answer')
         self.assertEquals(resolve(url).func.__name__, question.UpdateView.as_view().__name__)
 
     def test_urls_availabilities(self):

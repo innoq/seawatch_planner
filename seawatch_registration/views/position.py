@@ -21,7 +21,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin,
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
     }
-    success_url = reverse_lazy('question_update')
+    success_url = reverse_lazy('question_answer')
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)

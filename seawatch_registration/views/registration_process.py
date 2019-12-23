@@ -1,12 +1,11 @@
-from django.views import generic
-from django.urls import reverse_lazy
+from collections import namedtuple
+
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from seawatch_registration.models import Profile
-from assessments.models import Assessment
+from django.urls import reverse_lazy
+from django.views import generic
 
-from collections import namedtuple
+from assessments.models import Assessment
 
 RegistrationStep = namedtuple('RegistrationStep',
                               'name view_url_edit optional completed')
@@ -87,7 +86,7 @@ class View(LoginRequiredMixin, generic.FormView):
             ),
             RegistrationStep(
                 'Questions',
-                'question_update',
+                'question_answer',
                 optional=False,
                 completed=profile.answer_set.exists()
             )]

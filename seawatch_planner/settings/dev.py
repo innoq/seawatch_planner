@@ -1,4 +1,5 @@
 import dj_database_url
+import django_heroku
 
 from .base import *
 
@@ -16,6 +17,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# Heroku Deploy
+django_heroku.settings(locals(), databases=not DEBUG)
+
 DATABASES = {}
 db_name = 'postgres'
 db_user = 'postgres'
@@ -25,7 +29,5 @@ DATABASES['default'] = \
     dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name,
                            ssl_require=False)
 
-
 NOSE_ARGS = ['--nocapture',
              '--nologcapture']
-
