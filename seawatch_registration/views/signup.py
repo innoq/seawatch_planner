@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import CharField, EmailField
 from django.urls import reverse_lazy
-
 from django.views import generic
 
 

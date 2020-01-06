@@ -1,44 +1,46 @@
 {% extends "base-missions.html" %}
 
-
-
 {% block content %}
 <h1>Assign volunteers</h1>
 <form method="post">{% csrf_token %}
-    {{ form.as_p }}
+    {% include "partials/form-errors.html" %}
     <table class="table">
         <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Approved Positions</th>
-                <th scope="col">Availablities</th>
-            </tr>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Approved Positions</th>
+            <th scope="col">Availablities</th>
+        </tr>
         </thead>
         <tbody>
-            {% for candidate in candidates %}
+        {% for candidate in candidates %}
             <tr>
-                <th scope="row"><input type="radio" name="assignee" value="{{candidate.id}}" /></th>
-                <td>{{candidate.user.first_name}} {{candidate.user.last_name}}</td>
+                <th scope="row">
+                    <label for="assignee"></label>
+                    <input type="radio"
+                           id="assignee"
+                           name="assignee"
+                           value="{{ candidate.id }}"
+                            {% if candidate == currently_selected %} checked {% endif %}
+                    />
+                </th>
+                <td>{{ candidate.user.first_name }} {{ candidate.user.last_name }}</td>
                 <td>
                     {% for position in candidate.requested_positions.all %}
-                    {{ position.name }}
+                        {{ position.name }}
                     {% endfor %}
                 </td>
                 <td>
                     {% for availability in candidate.availability_set.all %}
-                    <p>{{availability.start_date}} — {{availability.end_date}}</p>
+                        <p>{{ availability.start_date }} — {{ availability.end_date }}</p>
                     {% endfor %}
                 </td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
     <input class="btn btn-primary" type="submit" value="Save">
 </form>
-
-
-
-
 {% endblock %}
 
