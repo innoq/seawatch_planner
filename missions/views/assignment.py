@@ -19,7 +19,7 @@ from seawatch_registration.models import Profile
 class ProfileFilter(FilterSet):
     class Meta:
         model = Profile
-        fields = ['user__first_name', 'user__last_name', 'requested_positions']
+        fields = ['id', 'user__first_name', 'user__last_name', 'requested_positions']
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
@@ -35,30 +35,24 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
     template_name = 'missions/assignee_form.html'
     nav_item = 'missions'
     permission_required = 'missions.change_assignment'
-    #table = CandidatesTable(Profile.objects.all())
-    #filterset_class = ProfileFilter
-
-    def get(self, request, *args, **kwargs):
-        mission_id = kwargs.pop('mission__id')
-        assigned_users = User.objects.filter(assignments__mission__id=mission_id)
-        candidates = Profile.objects.exclude(user__in=assigned_users)
-        table = CandidatesTable(candidates)
-        RequestConfig(request).configure(table)
-        return render(request, self.template_name, {'table': table, 'filter': ProfileFilter})
+    table_class = CandidatesTable
+    table_data = Profile.objects.all()
+    model = Profile
+    filterset_class = ProfileFilter
 
     def post(self, request, *args, **kwargs):
 
-        print(request.POST)
+        mission_id = kwargs.pop('mission__id')
 
-        if request.POST['save']:
-            assignment_id = kwargs.pop('assignment__id')
-            mission_id = kwargs.pop('mission__id')
-            profile_id = request.POST['assignee']
+        assignment_id = kwargs.pop('assignment__id')
+        profile_id = request.POST['assignee']
+        if profile_id:
             user = get_object_or_404(User, profile__pk=profile_id)
             assignment = Assignment.objects.get(pk=assignment_id)
             assignment.user = user
             assignment.save()
             return redirect(reverse('mission_detail', kwargs={'pk': mission_id}))
+
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, View):

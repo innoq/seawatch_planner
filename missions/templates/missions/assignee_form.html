@@ -4,14 +4,17 @@
 
 {% block content %}
     <h1>Assign volunteers</h1>
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        {% if filter %}
+    {% if filter %}
+        <form action="" method="get" class="form form-inline">
             {% bootstrap_form filter.form layout='inline' %}
             {% bootstrap_button 'filter' %}
             <br>
             <br>
-        {% endif %}
+        </form>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
         {% render_table table %}
         <input class="btn btn-primary" type="submit" value="Save" name="save">
     </form>
