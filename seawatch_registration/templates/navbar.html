@@ -36,20 +36,26 @@
                 </li>
                 {% endif %}
                 {% if request.user.profile %}
+                {% comment %}
+                FIXME: This should not be hardcoded but take the order from somewhere else.
+                {% endcomment %}
                 <li class="nav-item">
-                    <a class="nav-link  {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'question_answer' %}">Questions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'requested_position_update' %}">Positions</a>
+                    <a class="nav-link {% if view.nav_item == 'profile' %}active{% endif %}" href="{% url 'profile_update' %}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}" href="{% url 'skill_update' %}">Skills</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'documents' %}active{% endif %}" href="{% url 'document_list' %}">Documents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}" href="{% url 'requested_position_update' %}">Requested Positions</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {% if view.nav_item == 'availabilities' %}active{% endif %}" href="{% url 'availability_list' %}">Availabilities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}" href="{% url 'question_answer' %}">Questions</a>
                 </li>
                 {% endif %}
             {% endif %}
