@@ -6,7 +6,7 @@ from django.test import override_settings
 from django.urls import reverse
 
 from assessments.tests.test_base import TestBases
-from seawatch_registration.models import Position, Document, DocumentType
+from seawatch_registration.models import Document, DocumentType, Position
 
 
 class TestDocumentListView(TestBases.TestBase):

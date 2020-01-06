@@ -14,7 +14,7 @@ urlpatterns = [
     path('<int:pk>/edit', mission.UpdateView.as_view(), name='mission_update'),
     path('ships/', ship.ListView.as_view(), name='ship_list'),
     path('ships/new', ship.CreateView.as_view(), name='ship_create'),  # TODO: Replace 'new' with 'add'
-    path('ships/<int:pk>/', ship.DetailView.as_view(), name='ship_detail'),
+    path('ships/<int:pk>/edit/', ship.UpdateView.as_view(), name='ship_update'),
     path('ships/<int:pk>/delete/', ship.DeleteView.as_view(), name='ship_delete'),
     path('ships/<int:ship_id>/default-assignments/',
          default_assignments.ListView.as_view(),

@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -15,6 +16,7 @@ class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Question
+    ordering = 'text'
     paginate_by = 10
     nav_item = 'questions'
     permission_required = 'seawatch_registration.view_question'
@@ -30,7 +32,6 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
 class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     model = Question
     fields = ['text', 'mandatory']
+    nav_item = 'questions'
     success_url = reverse_lazy('question_list')
     permission_required = 'seawatch_registration.change_question'
-
-

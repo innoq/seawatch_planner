@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 
-from seawatch_registration.mixins import ModelFormWidgetMixin, RedirectNextMixin
+from seawatch_registration.mixins import RedirectNextMixin
 from seawatch_registration.models import Profile
 from seawatch_registration.widgets import DateInput, TextInput
 

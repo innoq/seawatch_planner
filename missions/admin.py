@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Ship, Mission, Assignment, DefaultAssignment
+from .models import Assignment, DefaultAssignment, Mission, Ship
 
 
 class AssignmentInline(admin.TabularInline):

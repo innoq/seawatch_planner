@@ -1,27 +1,34 @@
-from django.forms import Form, ModelMultipleChoiceField, SelectMultiple, RadioSelect, ChoiceField, CharField, Textarea
+from django import forms
 
 from assessments.models import Assessment
-from seawatch_registration.models import Position, Profile
+from seawatch_registration.models import Position
 
 
-class AssessmentForm(Form):
-    approved_positions = ModelMultipleChoiceField(widget=SelectMultiple,
-                                                  queryset=Position.objects.all(),
-                                                  required=False)
-    assessment_status = ChoiceField(widget=RadioSelect, choices=Assessment.ASSESSMENT_STATUS)
-    comment = CharField(widget=Textarea, max_length=2000, required=False)
+class AssessmentForm(forms.ModelForm):
+    approved_positions = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple,
+                                                        queryset=Position.objects.all(),
+                                                        required=False)
+    status = forms.ChoiceField(widget=forms.RadioSelect,
+                               choices=Assessment.ASSESSMENT_STATUS)
+    comment = forms.CharField(widget=forms.Textarea,
+                              max_length=2000,
+                              required=False)
+
+    def save(self):
+        assessment = self.instance
+
+        assessment.status = self.cleaned_data['status']
+        assessment.comment = self.cleaned_data['comment']
+        assessment.profile.approved_positions.set(self.cleaned_data['approved_positions'])
+
+        assessment.save()
+        assessment.profile.save()
+        return assessment
+
+    def __init__(self, instance=None, **kwargs):
+        super().__init__(instance=instance, **kwargs)
+        self.fields['approved_positions'].queryset = instance.profile.requested_positions
 
     class Meta:
-        model = Position
-
-    def __init__(self, *args, **kwargs):
-        profile_id = kwargs.pop('profile_id', '')
-
-        super(AssessmentForm, self).__init__(*args, **kwargs)
-        if Profile.objects.filter(pk=profile_id).exists():
-            profile = Profile.objects.get(pk=profile_id)
-            self.fields['approved_positions'].queryset = \
-                profile.requested_positions
-            self.fields['approved_positions'].initial = profile.approved_positions.all()
-            self.fields['assessment_status'].initial = Assessment.objects.get(profile=profile).status
-            self.fields['comment'].initial = Assessment.objects.get(profile=profile).comment
+        model = Assessment
+        fields = ('approved_positions', 'status', 'comment')

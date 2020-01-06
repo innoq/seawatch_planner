@@ -7,16 +7,22 @@ from django.test import override_settings
 from django.urls import reverse
 
 from assessments.tests.test_base import TestBases
-from seawatch_registration.models import Profile, DocumentType, Document
+from seawatch_registration.models import Document, DocumentType, Profile
 
 
 @override_settings(MEDIA_ROOT=tempfile.gettempdir())
 class TestEditDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('document_update', kwargs={'document_id': 1}), login_required=True, profile_required=True)
+        self.base_set_up(
+            url=reverse(
+                'document_update',
+                kwargs={
+                    'document_id': 1}),
+            login_required=True,
+            profile_required=True)
 
-    def test_views__document_update__get__should_get_404_when_document_doesnt_exist(self):
+    def test_views__document_update__get__should_get_403_when_document_doesnt_exist(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -26,9 +32,9 @@ class TestEditDocumentView(TestBases.TestBase):
         response = self.client.get(self.url, user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 403)
 
-    def test_views__document_update__get__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_update__get__should_get_403_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -63,7 +69,7 @@ class TestEditDocumentView(TestBases.TestBase):
         response = self.client.get(self.url, user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 403)
 
     def test_views__document_update__get__should_render_with_document_html_when_document_exists(self):
         # Arrange
@@ -164,7 +170,8 @@ class TestEditDocumentView(TestBases.TestBase):
 
         # Act
         response = self.client.post(self.url,
-                                    {'document_type': document_type.id},
+                                    {'document_type': document_type.id,
+                                     'issuing_date': 'not a date'},
                                     user=self.user)
 
         # Assert
@@ -174,7 +181,7 @@ class TestEditDocumentView(TestBases.TestBase):
         self.assertEquals(Document.objects.all().count(), 1)
         self.assertEquals(Document.objects.all().first(), document)
 
-    def test_views__document_update__post__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_update__post__should_get_403_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -220,4 +227,4 @@ class TestEditDocumentView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 403)

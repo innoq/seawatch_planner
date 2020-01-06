@@ -23,8 +23,8 @@
             <td>{{ question.text }}</td>
             <td>{{ question.mandatory }}</td>
             <td>
-                <a href="{% url 'question_update' question.id %}">{% fa5_icon 'edit' 'fas' %}</a>
-                <a class="text-danger" href="{% url 'question_delete' question.id %}">{% fa5_icon 'trash' 'fas' %}</a>
+                <a name='edit' href="{% url 'question_update' question.id %}">{% fa5_icon 'edit' 'fas' %}</a>
+                <a name='delete' class="text-danger" href="{% url 'question_delete' question.id %}">{% fa5_icon 'trash' 'fas' %}</a>
             </td>
         </tr>
         {% endfor %}

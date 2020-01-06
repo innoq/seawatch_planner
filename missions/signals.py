@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from missions.models import Mission, DefaultAssignment, Assignment
+from missions.models import Assignment, DefaultAssignment, Mission
 
 
 @receiver(post_save, sender=Mission)
@@ -19,4 +19,3 @@ def createAssignmentsFromDefaultAssignments(sender, instance, created, **kwargs)
         if instance.tracker.has_changed('user'):
             Assignment.objects.filter(pk=instance.pk).update(confirmed=False)
             Assignment.objects.filter(pk=instance.pk).update(email_sent=False)
-

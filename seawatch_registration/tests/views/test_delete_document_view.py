@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 
-from seawatch_registration.models import Profile, DocumentType, Document
+from seawatch_registration.models import Document, DocumentType, Profile
 from seawatch_registration.tests.views.test_base import TestBases
 
 
@@ -18,7 +18,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
                          login_required=True,
                          profile_required=True)
 
-    def test_views__document_delete__get__should_get_404_when_document_doesnt_exist(self):
+    def test_views__document_delete__get__should_get_403_when_document_doesnt_exist(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -28,9 +28,9 @@ class TestDeleteDocumentView(TestBases.TestBase):
         response = self.client.get(self.url, user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 403)
 
-    def test_views__document_delete__get__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_delete__get__should_get_403_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -65,7 +65,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
         response = self.client.get(self.url, user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 403)
 
     def test_views__document_update__get__should_render_with_document_html_when_document_exists(self):
         # Arrange
@@ -121,7 +121,7 @@ class TestDeleteDocumentView(TestBases.TestBase):
         self.assertRedirects(response, reverse('document_list'))
         self.assertEquals(Document.objects.all().count(), 0)
 
-    def test_views__document_delete__post__should_get_404_when_user_is_not_owner_of_document(self):
+    def test_views__document_delete__post__should_get_403_when_user_is_not_owner_of_document(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -156,4 +156,4 @@ class TestDeleteDocumentView(TestBases.TestBase):
         response = self.client.post(self.url, {}, user=self.user)
 
         # Assert
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 403)

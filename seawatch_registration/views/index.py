@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.base import View, ContextMixin
+from django.views.generic.base import ContextMixin, View
 
 
 class IndexView(View, ContextMixin):

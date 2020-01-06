@@ -7,103 +7,30 @@
 {% block content %}
 
     <h1>{{ view.title }}</h1>
-   {% if success %}
-   <div class="alert alert-success" role="alert">
-   {{ view.success_alert }}
-   </div>
-   {% endif %}
-   {% if error %}
-   <div class="alert alert-danger" role="alert">
-   {{ error }}
-   </div>
-   {% endif %}
 
+    {% for registration_step in steps %}
     <div class="row">
-        <div class="col-sm-3">Profile</div>
-        <div class="col-sm-2">
-            {% if profile %}
-                <a class="btn text-primary" role="button"
-                href="{% url 'profile_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
-            {% else %}
-                <a class="btn text-primary" role="button"
-                href="{% url 'profile_create' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
-            {% endif %}
+        <div class="col-sm-3">
+            {{ registration_step.name }} {% if not registration_step.optional %}*{% endif %}
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">Additional questions</div>
         <div class="col-sm-2">
             <a class="btn text-primary" role="button"
-               href="{% url 'question_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-            {% if answers %}
+            href="{% url registration_step.view_url_edit %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+            {% if registration_step.completed %}
                 <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
             {% else %}
                 <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
             {% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-3">Requested Positions</div>
-        <div class="col-sm-2">
-            <a class="btn text-primary" role="button"
-               href="{% url 'requested_position_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-            {% if positions %}
-                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
-            {% else %}
-                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">Skills</div>
-        <div class="col-sm-2">
-            <a class="btn text-primary" role="button"
-               href="{% url 'skill_update' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-            {% if skills %}
-                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
-            {% else %}
-                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">Availability</div>
-        <div class="col-sm-2">
-            <a class="btn text-primary" role="button"
-               href="{% url 'availability_list' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-            {% if availabilities %}
-                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
-            {% else %}
-                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">Documents</div>
-        <div class="col-sm-2">
-            <a class="btn text-primary" role="button"
-               href="{% url 'document_list' %}?next=registration_process" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-            {% if documents %}
-                <a data-toggle="tooltip" title="complete">{% fa5_icon 'check' 'fas text-success' %}</a>
-            {% else %}
-                <a data-toggle="tooltip" title="missing">{% fa5_icon 'times-circle' 'fas text-danger' %}</a>
-            {% endif %}
-        </div>
-    </div>
+    {% endfor %}
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
-        <div class="form-check required">
-            <label class="form-check-label" for="confirmation">
-                <input class="form-check-input" id="confirmation" name="confirmation" title="" type="checkbox" value="check"/>
-                By clicking <q>Submit</q>, I agree that Seawatch can save and process my data.
-            </label>
-        </div>
-        <br>
+        {% bootstrap_form form %}
         {% buttons %}
-          <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
         {% endbuttons %}
     </form>
+
 {% endblock %}

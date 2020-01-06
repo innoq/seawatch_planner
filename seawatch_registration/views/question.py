@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import View
 
-from seawatch_registration.forms.dynamic_question_form import DynamicQuestionForm
-from seawatch_registration.models import Profile, Question, Answer
+from seawatch_registration.forms.dynamic_question_form import \
+    DynamicQuestionForm
+from seawatch_registration.models import Answer, Profile, Question
 
 
 class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -30,7 +31,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                  'view': self})
 
         for question in Question.objects.all():
-            answer_text = form.cleaned_data['question'+str(question.pk)]
+            answer_text = form.cleaned_data['question' + str(question.pk)]
             actual_answers = Answer.objects.filter(profile=profile, question=question)
             if actual_answers.exists():
                 actual_answers.delete()

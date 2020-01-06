@@ -1,91 +1,87 @@
-import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views import generic
 
 from seawatch_registration.forms.document_form import DocumentForm
-from seawatch_registration.models import Profile, Document
+from seawatch_registration.models import Document, Profile
 
 
-class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
+class UserOwnsDocuments(UserPassesTestMixin):
+    def test_func(self):
+        return (
+            Profile.objects.filter(user=self.request.user).exists() and
+            Document.objects.filter(
+                profile=self.request.user.profile,
+                id=self.kwargs.get('document_id')).exists())
+
+
+class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = Document
     nav_item = 'documents'
     title = 'Add Documents'
-    success_alert = 'Document is successfully saved!'
+    success_alert = 'Document has been saved.'
     submit_button = 'Next'
+    template_name = 'form.html'
+    form_class = DocumentForm
+    success_url = reverse_lazy('requested_position_update')
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'form.html', {'form': DocumentForm(user=request.user),
-                                             'view': self})
-
-    def post(self, request, *args, **kwargs):
-        form = DocumentForm(request.POST, request.FILES, user=request.user)
-        if not form.is_valid():
-            return render(request, 'form.html', {'form': form,
-                                                 'view': self
-                                                 })
-        form.save()
-        return redirect('requested_position_update')
-
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
-
-
-class DeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
-    nav_item = 'documents'
-
-    def get(self, request, document_id, *args, **kwargs):
-        profile = Profile.objects.get(user=self.request.user)
-        document = get_object_or_404(Document, profile=profile, pk=document_id)
-
-        return render(request, 'confirm-delete.html', {'title': 'Delete Document',
-                                                       'object': document,
-                                                       'view': self})
-
-    def post(self, request, document_id, *args, **kwargs):
-        profile = Profile.objects.get(user=self.request.user)
-        document = get_object_or_404(Document, profile=profile, pk=document_id)
-        document.delete()
-        return redirect('document_list')
+    def form_valid(self, form):
+        form.instance.profile = self.request.user.profile
+        return super().form_valid(form)
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
 
 
 class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
-    template_name = './seawatch_registration/document_list.html'
     model = Document
+    template_name = './seawatch_registration/document_list.html'
     context_object_name = 'documents'
     paginate_by = 5
     nav_item = 'documents'
 
     def get_queryset(self):
-        profile = Profile.objects.get(user=self.request.user)
-        return Document.objects.filter(profile=profile).order_by('id')
+        return Document.objects.filter(profile=self.request.user.profile).order_by('id')
 
     def test_func(self):
         return Profile.objects.filter(user=self.request.user).exists()
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
+class DeleteView(LoginRequiredMixin, UserOwnsDocuments, generic.DeleteView):
+    model = Document
     nav_item = 'documents'
-    title = 'Edit Document'
-    success_alert = 'Document is successfully updated!'
+    title = 'Delete Document'
+    template_name = 'confirm-delete.html'
+    success_url = reverse_lazy('document_list')
+    pk_url_kwarg = 'document_id'
+
+
+class UpdateView(LoginRequiredMixin, UserOwnsDocuments, generic.UpdateView):
+    model = Document
+    nav_item = 'documents'
+    title = 'Edit documents'
+    success_alert = 'Document has been updated.'
     submit_button = 'Save'
+    template_name = 'form.html'
+    form_class = DocumentForm
+    success_url = reverse_lazy('document_list')
+    pk_url_kwarg = 'document_id'
 
-    def get(self, request, document_id, *args, **kwargs):
-        profile = request.user.profile
-        document = get_object_or_404(Document, pk=document_id, profile=profile)
-        return render(request, 'form.html', {'form': DocumentForm(user=request.user, instance=document),
-                                             'view': self})
+    def form_valid(self, form):
+        form.instance.profile = self.request.user.profile
+        return super().form_valid(form)
 
-    def post(self, request, document_id, *args, **kwargs):
-        profile = request.user.profile
-        document = get_object_or_404(Document, pk=document_id, profile=profile)
-        form = DocumentForm(request.POST, request.FILES, user=request.user, instance=document)
-        if not form.is_valid():
-            return render(request, 'form.html', {'form': form,
-                                                 'view': self})
-        form.save()
-        return redirect('document_list')
 
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
+class GetDocumentAttachment(LoginRequiredMixin, UserOwnsDocuments, generic.View):
+
+    def get(self, request, document_id, file_name):
+        """ Ignore the filename since it is unsanitized user input and
+        cannot be trusted. The mixin checked whether the user owns the file or
+        not."""
+        document = get_object_or_404(Document, id=document_id)
+        with open(document.file.path, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="%s"' % document.file.name
+            return response

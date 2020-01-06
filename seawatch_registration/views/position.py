@@ -3,7 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import CheckboxSelectMultiple
 from django.urls import reverse_lazy
 
-from seawatch_registration.mixins import ModelFormWidgetMixin, RedirectNextMixin
+from seawatch_registration.mixins import (ModelFormWidgetMixin,
+                                          RedirectNextMixin)
 from seawatch_registration.models import Profile
 
 
@@ -21,7 +22,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, ModelFormWidgetMixin,
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
     }
-    success_url = reverse_lazy('question_update')
+    success_url = reverse_lazy('question_answer')
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)

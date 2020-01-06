@@ -1,15 +1,15 @@
 from django.urls import reverse
 
-from seawatch_registration.models import Profile, Question, Answer
+from seawatch_registration.models import Answer, Profile, Question
 from seawatch_registration.tests.views.test_base import TestBases
 
 
 class TestQuestionsView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('question_update'), login_required=True, profile_required=True)
+        self.base_set_up(url=reverse('question_answer'), login_required=True, profile_required=True)
 
-    def test_views__question_update__get__should_render_with_form_html_when_profile_exists(self):
+    def test_views__question_answer__get__should_render_with_form_html_when_profile_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -22,7 +22,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'form.html')
 
-    def test_views__question_update__get__should_show_existing_answer(self):
+    def test_views__question_answer__get__should_show_existing_answer(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -40,7 +40,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertTemplateUsed(response, 'form.html')
         self.assertContains(response, 'topSecretAnswer')
 
-    def test_views__question_update__post__should_update_answer_when_answer_exists(self):
+    def test_views__question_answer__post__should_update_answer_when_answer_exists(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -61,7 +61,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertEquals(Answer.objects.filter().count(), 1)
         self.assertEquals(Answer.objects.filter().first().text, 'Some answer to a random question!')
 
-    def test_views__question_update__post__should_not_create_answer_when_question_is_not_mandatory_and_answer_is_blank(self):
+    def test_views__question_answer__post__should_not_create_answer_when_question_is_not_mandatory_and_answer_is_blank(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -83,7 +83,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertEquals(Answer.objects.filter().count(), 1)
         self.assertEquals(Answer.objects.filter().first().text, 'Answer Required')
 
-    def test_views__question_update__post__should_not_update_answer_when_question_is_mandatory_and_answer_is_blank(self):
+    def test_views__question_answer__post__should_not_update_answer_when_question_is_mandatory_and_answer_is_blank(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -102,7 +102,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertEquals(Answer.objects.filter().count(), 1)
         self.assertEquals(Answer.objects.filter().first().text, 'Example Answer')
 
-    def test_views__question_update__post__should_not_add_answer_when_question_is_mandatory_and_answer_is_blank(self):
+    def test_views__question_answer__post__should_not_add_answer_when_question_is_mandatory_and_answer_is_blank(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -117,7 +117,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertTemplateUsed(response, 'form.html')
         self.assertEquals(Answer.objects.filter().count(), 0)
 
-    def test_views__question_update__post__should_remove_optional_answer_when_no_answer_for_question_is_sent(self):
+    def test_views__question_answer__post__should_remove_optional_answer_when_no_answer_for_question_is_sent(self):
         # Arrange
         profile: Profile = self.profile
         profile.save()
@@ -141,7 +141,7 @@ class TestQuestionsView(TestBases.TestBase):
         self.assertEquals(Answer.objects.all().count(), 1)
         self.assertEquals(Answer.objects.all().first().text, 'Answer required new')
 
-    def test_views__question_update__post__should_render_success_when_question_is_answered(self):
+    def test_views__question_answer__post__should_render_success_when_question_is_answered(self):
         # Arrange
         self.client.login(username=self.username, password=self.password)
         profile: Profile = self.profile
