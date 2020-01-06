@@ -8,25 +8,27 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 from django_filters.views import FilterView
-from django_filters import FilterSet, DateFilter
+from django_filters import FilterSet, DateFilter, CharFilter, ChoiceFilter, ModelMultipleChoiceFilter, \
+    MultipleChoiceFilter
 from django_tables2 import SingleTableMixin, RequestConfig, SingleTableView
 
 from missions.forms import AssignmentForm
 from missions.models import Assignment, Mission
 from missions.tables.candidates import CandidatesTable
 from seawatch_registration.models import Profile
+from seawatch_registration.widgets import DateInput
 
 
 class ProfileFilter(FilterSet):
 
-    availability_start_date = DateFilter(field_name='availability__start_date', lookup_expr='lt')
-    availability_end_date = DateFilter(field_name='availability__end_date', lookup_expr='gt')
+    start_date = DateFilter(widget=DateInput, field_name='availability__start_date', lookup_expr='lt')
+    end_date = DateFilter(widget=DateInput, field_name='availability__end_date', lookup_expr='gt', label='Avail. End.')
+    user__first_name = CharFilter(label='first name', lookup_expr='contains')
+    user__last_name = CharFilter(label='last name', lookup_expr='contains')
 
     class Meta:
         model = Profile
-        fields = {'user__first_name': ['contains'],
-                  'user__last_name': ['contains'],
-                  'requested_positions': ['exact']}
+        fields = ['user__first_name', 'user__last_name', 'requested_positions']
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
