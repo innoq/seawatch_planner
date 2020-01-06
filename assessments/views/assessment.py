@@ -10,6 +10,7 @@ from seawatch_registration.models import Answer, Document
 
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
+    nav_item = 'assessment'
     permission_required = 'assessments.can_assess_profiles'
     template_name = 'assessment-list.html'
     queryset = Assessment.objects.filter(status='pending')

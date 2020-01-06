@@ -8,6 +8,7 @@ from missions.views import question
 
 urlpatterns = [
     path('', mission.ListView.as_view(), name='mission_list'),
+    path('<int:pk>/sidebyside', mission.SideBySideView.as_view(), name='side_by_side_view'),
     path('new', mission.CreateView.as_view(), name='mission_create'),
     path('<int:pk>/', mission.DetailView.as_view(), name='mission_detail'),
     path('<int:pk>/delete', mission.DeleteView.as_view(), name='mission_delete'),

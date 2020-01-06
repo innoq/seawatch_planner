@@ -1,0 +1,58 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Missions | Seawatch Missions{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <section class="row">
+
+            <div class="col-6">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Position</th>
+                        <th scope="col">Taken by</th>
+                        <th scope="col">Other</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for assignment in mission.assignment_set.all|dictsort:"position.name" %}
+                        <tr>
+                            <td>{{ assignment.position }}</td>
+                            <td>{{ assignment.user.email }}</td>
+                            <td>
+                                <button id="assignment_pk" class="btn btn-primary" type="submit" name="assignment_pk"
+                                        value="{{ assignment.pk }}">
+                                    Assign
+                                </button>
+                                <label for="assignment_pk"></label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3"><a href="{% url 'assignment_create' mission.pk %}">Add assignment</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-6">
+                {% for candidate in candidates %}
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="assignee_pk"
+                                   value="{{ candidate.pk }}"
+                            />
+                            {{ candidate.user.email }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </section>
+    </form>
+{% endblock %}
