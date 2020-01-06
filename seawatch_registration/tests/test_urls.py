@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase, Client
+from django.test import Client, SimpleTestCase
 from django.urls import resolve, reverse
 
 import seawatch_registration.views.availability as availability
@@ -54,5 +54,3 @@ class TestUrls(SimpleTestCase):
     def test_urls_availabilities_create(self):
         url = reverse('availability_create')
         self.assertEquals(resolve(url).func.__name__, availability.CreateView.as_view().__name__)
-
-

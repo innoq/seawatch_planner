@@ -1,12 +1,12 @@
-from django.views import generic
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views import generic
 
 from assessments.forms.assessment_form import AssessmentForm
 from assessments.models import Assessment
-from seawatch_registration.models import Profile, Answer, Document
+from seawatch_registration.models import Answer, Document
 
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):

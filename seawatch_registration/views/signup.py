@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import View
 
 from seawatch_registration.forms.signup_form import SignupForm

@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from seawatch_registration.models import Profile, Question, Answer
+from seawatch_registration.models import Answer, Profile, Question
 from seawatch_registration.tests.views.test_base import TestBases
 
 

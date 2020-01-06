@@ -1,7 +1,7 @@
 from django import forms
 
 from assessments.models import Assessment
-from seawatch_registration.models import Position, Profile
+from seawatch_registration.models import Position
 
 
 class AssessmentForm(forms.ModelForm):

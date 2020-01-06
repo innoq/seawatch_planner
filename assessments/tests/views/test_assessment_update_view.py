@@ -7,7 +7,8 @@ from django.urls import reverse
 
 from assessments.models import Assessment
 from assessments.tests.test_base import TestBases
-from seawatch_registration.models import Position, Question, Answer, Skill, DocumentType, Document
+from seawatch_registration.models import (Answer, Document, DocumentType,
+                                          Position, Question, Skill)
 
 
 class TestAssessmentView(TestBases.TestBase):
@@ -134,7 +135,7 @@ class TestAssessmentView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(reverse('assessment_update',  kwargs={'pk': 123}),
+        response = self.client.post(reverse('assessment_update', kwargs={'pk': 123}),
                                     {'approved_positions': 1,
                                      'status': 'accepted',
                                      'comment': ''},
@@ -282,8 +283,8 @@ class TestAssessmentView(TestBases.TestBase):
             class_is_valid = 'is-valid '
         else:
             class_is_valid = ''
-        return '<input checked="" class="' + class_is_valid + 'form-check-input" id="id_' + name + '_' + str(id_number) \
-              + '" name="' + name + '" required="" title="" type="radio" value="' + value + '"/>'
+        return '<input checked="" class="' + class_is_valid + 'form-check-input" id="id_' + name + '_' + \
+            str(id_number) + '" name="' + name + '" required="" title="" type="radio" value="' + value + '"/>'
 
     @staticmethod
     def selected_option(position: Position):

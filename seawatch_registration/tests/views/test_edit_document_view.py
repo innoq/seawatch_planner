@@ -7,14 +7,20 @@ from django.test import override_settings
 from django.urls import reverse
 
 from assessments.tests.test_base import TestBases
-from seawatch_registration.models import Profile, DocumentType, Document
+from seawatch_registration.models import Document, DocumentType, Profile
 
 
 @override_settings(MEDIA_ROOT=tempfile.gettempdir())
 class TestEditDocumentView(TestBases.TestBase):
 
     def setUp(self) -> None:
-        self.base_set_up(url=reverse('document_update', kwargs={'document_id': 1}), login_required=True, profile_required=True)
+        self.base_set_up(
+            url=reverse(
+                'document_update',
+                kwargs={
+                    'document_id': 1}),
+            login_required=True,
+            profile_required=True)
 
     def test_views__document_update__get__should_get_403_when_document_doesnt_exist(self):
         # Arrange

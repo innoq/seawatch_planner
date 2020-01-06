@@ -1,8 +1,8 @@
 from datetime import date
 
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase, Client, override_settings
+from django.test import Client, TestCase, override_settings
 
 from seawatch_registration.models import Profile
 

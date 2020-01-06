@@ -1,4 +1,4 @@
-from django.forms import Form, CharField, Textarea
+from django.forms import CharField, Form, Textarea
 
 
 class DynamicQuestionForm(Form):

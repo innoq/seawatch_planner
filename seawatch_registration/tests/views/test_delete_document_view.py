@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 
-from seawatch_registration.models import Profile, DocumentType, Document
+from seawatch_registration.models import Document, DocumentType, Profile
 from seawatch_registration.tests.views.test_base import TestBases
 
 

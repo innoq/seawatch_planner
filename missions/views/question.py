@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -34,5 +35,3 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
     nav_item = 'questions'
     success_url = reverse_lazy('question_list')
     permission_required = 'seawatch_registration.change_question'
-
-
