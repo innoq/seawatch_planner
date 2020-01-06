@@ -4,9 +4,7 @@ from django.utils.html import format_html, format_html_join
 
 class CandidatesTable(tables.Table):
     id = tables.Column()
-    # user = tables.Column(order_by=('user__first_name', 'user__last_name'))
-    user__first_name = tables.Column()
-    user__last_name = tables.Column()
+    user = tables.Column(order_by=('user__first_name', 'user__last_name'))
     # TODO: change to approved positions?
     requested_positions = tables.ManyToManyColumn()
     availabilities = tables.ManyToManyColumn(accessor='availability_set')
@@ -17,8 +15,8 @@ class CandidatesTable(tables.Table):
     def render_id(self, value):
         return format_html('<input type="radio" name="assignee" value="{}" />', value)
 
-    # def render_user(self, value):
-    #     return format_html("{} {}", value.first_name, value.last_name)
+    def render_user(self, value):
+        return format_html("{} {}", value.first_name, value.last_name)
 
     def render_availabilities(self, value):
         return format_html_join("\n", "{} - {}<br>",

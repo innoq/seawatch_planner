@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 from django_filters.views import FilterView
-from django_filters import FilterSet
+from django_filters import FilterSet, DateFilter
 from django_tables2 import SingleTableMixin, RequestConfig, SingleTableView
 
 from missions.forms import AssignmentForm
@@ -18,9 +18,15 @@ from seawatch_registration.models import Profile
 
 
 class ProfileFilter(FilterSet):
+
+    availability_start_date = DateFilter(field_name='availability__start_date', lookup_expr='lt')
+    availability_end_date = DateFilter(field_name='availability__end_date', lookup_expr='gt')
+
     class Meta:
         model = Profile
-        fields = ['id', 'user__first_name', 'user__last_name', 'requested_positions']
+        fields = {'user__first_name': ['contains'],
+                  'user__last_name': ['contains'],
+                  'requested_positions': ['exact']}
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
@@ -37,13 +43,11 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
     nav_item = 'missions'
     permission_required = 'missions.change_assignment'
     table_class = CandidatesTable
-    table_data = Profile.objects.all()
     model = Profile
     filterset_class = ProfileFilter
 
-    def post(self, request, *args, **kwargs):
 
-        mission_id = kwargs.pop('mission__id')
+def post(self, request, *args, **kwargs):
 
         assignment_id = kwargs.pop('assignment__id')
         profile_id = request.POST['assignee']
@@ -52,7 +56,7 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
             assignment = Assignment.objects.get(pk=assignment_id)
             assignment.user = user
             assignment.save()
-            return redirect(reverse('mission_detail', kwargs={'pk': mission_id}))
+            return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
 
 
 
