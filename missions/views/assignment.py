@@ -48,8 +48,7 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
     model = Profile
     filterset_class = ProfileFilter
 
-
-def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
 
         assignment_id = kwargs.pop('assignment__id')
         profile_id = request.POST['assignee']
@@ -59,7 +58,6 @@ def post(self, request, *args, **kwargs):
             assignment.user = user
             assignment.save()
             return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
-
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
