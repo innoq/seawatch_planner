@@ -59,6 +59,12 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
             assignment.save()
             return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
 
+          
+class AssignmentForm(forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ['position']
+        
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = AssignmentForm
