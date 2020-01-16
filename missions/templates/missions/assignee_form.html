@@ -1,46 +1,23 @@
 {% extends "base-missions.html" %}
+{% load render_table from django_tables2 %}
+{% load bootstrap4 %}
 
 {% block content %}
-<h1>Assign volunteers</h1>
-<form method="post">{% csrf_token %}
-    {% include "partials/form-errors.html" %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Approved Positions</th>
-            <th scope="col">Availablities</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for candidate in candidates %}
-            <tr>
-                <th scope="row">
-                    <label for="assignee"></label>
-                    <input type="radio"
-                           id="assignee"
-                           name="assignee"
-                           value="{{ candidate.id }}"
-                            {% if candidate == currently_selected %} checked {% endif %}
-                    />
-                </th>
-                <td>{{ candidate.user.first_name }} {{ candidate.user.last_name }}</td>
-                <td>
-                    {% for position in candidate.requested_positions.all %}
-                        {{ position.name }}
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for availability in candidate.availability_set.all %}
-                        <p>{{ availability.start_date }} — {{ availability.end_date }}</p>
-                    {% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <input class="btn btn-primary" type="submit" value="Save">
-</form>
+    <h1>Assign volunteers</h1>
+    {% if filter %}
+        <form action="" method="get" class="form form-inline">
+            {% bootstrap_form filter.form layout='inline' %}
+            {% bootstrap_button 'filter' %}
+            <br>
+            <br>
+        </form>
+        <br>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {% include "partials/form-errors.html" %}
+        {{ form.as_p }}
+        {% render_table table %}
+        <input class="btn btn-primary" type="submit" value="Save" name="save">
+    </form>
 {% endblock %}
-

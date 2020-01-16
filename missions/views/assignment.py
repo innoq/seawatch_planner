@@ -7,10 +7,28 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django_filters.views import FilterView
+from django_filters import FilterSet, DateFilter, CharFilter, ChoiceFilter, ModelMultipleChoiceFilter, \
+    MultipleChoiceFilter
+from django_tables2 import SingleTableMixin, RequestConfig, SingleTableView
 from django.views import generic
 
 from missions.models import Assignment, Mission
+from missions.tables.candidates import CandidatesTable
 from seawatch_registration.models import Profile
+from seawatch_registration.widgets import DateInput
+
+
+class ProfileFilter(FilterSet):
+
+    start_date = DateFilter(widget=DateInput, field_name='availability__start_date', lookup_expr='lt')
+    end_date = DateFilter(widget=DateInput, field_name='availability__end_date', lookup_expr='gt', label='Avail. End.')
+    user__first_name = CharFilter(label='first name', lookup_expr='contains')
+    user__last_name = CharFilter(label='last name', lookup_expr='contains')
+
+    class Meta:
+        model = Profile
+        fields = ['user__first_name', 'user__last_name', 'requested_positions']
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
@@ -22,43 +40,24 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
         return reverse('mission_detail', kwargs={'pk': self.object.mission.id})
 
 
-class AssignmentForm(forms.ModelForm):
-    class Meta:
-        model = Assignment
-        fields = ['position']
-
-
-class AssigneeForm(forms.Form):
-    assignee = forms.CharField(
-        required=True,
-        error_messages={'required': 'Please select an assignee for the position.'})
-
-
-class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
+class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, FilterView):
     template_name = 'missions/assignee_form.html'
     nav_item = 'missions'
     permission_required = 'missions.change_assignment'
-    form_class = AssigneeForm
+    table_class = CandidatesTable
+    model = Profile
+    filterset_class = ProfileFilter
 
-    def get_context_data(self, **kwargs):
-        mission_id = self.kwargs.pop('mission__id')
-        assignment_id = self.kwargs.pop('assignment__id')
-        candidates = Profile.objects.exclude(
-            Q(user__assignments__mission__id=mission_id) &
-            ~Q(user__assignments__id=assignment_id))
-        return {**super().get_context_data(**kwargs),
-                'currently_selected': candidates.filter(user__assignments=assignment_id).first(),
-                'candidates': candidates}
+    def post(self, request, *args, **kwargs):
 
-    def form_valid(self, form):
-        assignment_id = self.kwargs.pop('assignment__id')
-        mission_id = self.kwargs.pop('mission__id')
-        profile_id = form.cleaned_data.get('assignee')
-        user = get_object_or_404(User, profile__pk=profile_id)
-        assignment = Assignment.objects.get(pk=assignment_id)
-        assignment.user = user
-        assignment.save()
-        return redirect(reverse('mission_detail', kwargs={'pk': mission_id}))
+        assignment_id = kwargs.pop('assignment__id')
+        profile_id = request.POST['assignee']
+        if profile_id:
+            user = get_object_or_404(User, profile__pk=profile_id)
+            assignment = Assignment.objects.get(pk=assignment_id)
+            assignment.user = user
+            assignment.save()
+            return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
