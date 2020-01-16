@@ -1,18 +1,18 @@
-import django.views.generic as generic
+from django import forms
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import User
 from django.core import mail
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.views import View
 from django_filters.views import FilterView
 from django_filters import FilterSet, DateFilter, CharFilter, ChoiceFilter, ModelMultipleChoiceFilter, \
     MultipleChoiceFilter
 from django_tables2 import SingleTableMixin, RequestConfig, SingleTableView
+from django.views import generic
 
-from missions.forms import AssignmentForm
 from missions.models import Assignment, Mission
 from missions.tables.candidates import CandidatesTable
 from seawatch_registration.models import Profile
@@ -60,30 +60,20 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
             return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
 
 
-class CreateView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = AssignmentForm
-    initial = {'key': 'value'}
     template_name = 'missions/assignment_form.html'
     nav_item = 'missions'
     permission_required = 'missions.add_assignment'
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form,
-                                                    'view': self})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        mission = get_object_or_404(Mission, pk=kwargs.pop('mission__id'))
-        if form.is_valid():
-            form.instance.mission_id = mission.id
-            form.save()
-            return redirect(reverse('mission_detail', kwargs={'pk': mission.id}))
-        return render(request, self.template_name, {'form': form,
-                                                    'view': self})
+    def form_valid(self, form):
+        mission = get_object_or_404(Mission, pk=self.kwargs.pop('mission__id'))
+        form.instance.mission_id = mission.id
+        form.save()
+        return redirect(reverse('mission_detail', kwargs={'pk': mission.id}))
 
 
-class EmailView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class EmailView(LoginRequiredMixin, PermissionRequiredMixin, generic.View):
     nav_item = 'missions'
     permission_required = 'missions.add_assignment'
     template_name = './missions/assignment_confirm_mail.html'
@@ -100,10 +90,10 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, View):
         message2 = render_to_string('missions/email_mission_assigned.html',
                                     {'name': name,
                                      'start_date': str(assignment.mission.start_date),
-                                        'end_date': str(assignment.mission.end_date),
-                                        'position': assignment.position.name,
-                                        'ship_name': assignment.mission.ship.name,
-                                        'stuff_name': 'Sea-Watch e.V.'})
+                                     'end_date': str(assignment.mission.end_date),
+                                     'position': assignment.position.name,
+                                     'ship_name': assignment.mission.ship.name,
+                                     'stuff_name': 'Sea-Watch e.V.'})
         from_email = 'team@sea-watch.org'
         recipient_list = [assignment.user.email]
 
