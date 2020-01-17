@@ -7,14 +7,13 @@ from django.views import generic
 from seawatch_registration.forms.user_update_form import UserUpdateForm
 from seawatch_registration.mixins import RedirectNextMixin, HasProfileMixin
 from seawatch_registration.models import Profile
-from seawatch_registration.widgets import DateInput, TextInput
+from seawatch_registration.widgets import DateInput
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['citizenship',
-                  'second_citizenship',
                   'date_of_birth',
                   'place_of_birth',
                   'country_of_birth',
@@ -24,8 +23,12 @@ class ProfileForm(forms.ModelForm):
                   'phone',
                   'emergency_contact',
                   'comments']
-        widgets = {'date_of_birth': DateInput(),
-                   'citizenship': TextInput(attrs={'autofocus': True})}
+        help_texts = {
+            'citizenship': 'This has to match the nationality of your passport(s).'
+        }
+        widgets = {
+            'date_of_birth': DateInput(),
+        }
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):

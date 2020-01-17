@@ -6,4 +6,4 @@ class MissionsConfig(AppConfig):
 
     # noinspection PyUnresolvedReferences
     def ready(self):
-        import missions.signals
+        import missions.signals  # noqa: F401

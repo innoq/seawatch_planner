@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'fontawesome_5',
     'django_tables2',
     'django_filters',
+    'django_countries',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +111,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
