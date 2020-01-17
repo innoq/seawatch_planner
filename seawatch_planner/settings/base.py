@@ -122,7 +122,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #  Add configuration for static files storage using whitenoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/accounts/registration'
+LOGIN_REDIRECT_URL = 'login_success'
 
 MEDIA_ROOT = 'media/'
 
