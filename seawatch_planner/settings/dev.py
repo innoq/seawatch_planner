@@ -1,7 +1,4 @@
-import os
-
 import dj_database_url
-
 import django_heroku
 
 from .base import *
@@ -26,11 +23,12 @@ django_heroku.settings(locals(), databases=not DEBUG)
 DATABASES = {}
 db_name = 'postgres'
 db_user = 'postgres'
-db_host = 'db'
+db_host = os.environ.get('DB_HOST', 'localhost')
 db_port = 5432
 DATABASES['default'] = \
-    dj_database_url.config(default='postgres://' + db_user + ':@' + db_host + ':' + str(db_port) + '/' + db_name,
-                           ssl_require=False)
+    dj_database_url.config(
+        default=f'postgres://{db_user}:@{db_host}:{str(db_port)}/{db_name}',
+        ssl_require=False)
 
 NOSE_ARGS = ['--nocapture',
              '--nologcapture']

@@ -10,6 +10,7 @@ services:
     command: sh docker-entrypoint.sh
     environment:
       SEAWATCH_PLANNER: "dev"
+      DB_HOST: "db"
     volumes:
       - .:/app
     ports:

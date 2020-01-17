@@ -10,11 +10,10 @@ from seawatch_registration.models import Document, Profile
 
 class UserOwnsDocuments(UserPassesTestMixin):
     def test_func(self):
-        return (
-            Profile.objects.filter(user=self.request.user).exists() and
-            Document.objects.filter(
-                profile=self.request.user.profile,
-                id=self.kwargs.get('document_id')).exists())
+        return (Profile.objects.filter(user=self.request.user).exists() and
+                Document.objects.filter(
+                    profile=self.request.user.profile,
+                    id=self.kwargs.get('document_id')).exists())
 
 
 class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):

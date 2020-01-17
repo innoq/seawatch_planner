@@ -1,12 +1,15 @@
 from django import forms
+from django.db.models import QuerySet
+from django.utils.functional import lazy
 
 from seawatch_registration.models import Document, DocumentType
 from seawatch_registration.widgets import DateInput
 
 
 class DocumentForm(forms.ModelForm):
-    document_type = forms.ModelChoiceField(queryset=DocumentType.objects.all(),
-                                           initial=DocumentType.objects.first())
+    document_type = forms.ModelChoiceField(
+        queryset=lazy(DocumentType.objects.all, QuerySet)(),
+        initial=lazy(DocumentType.objects.first, DocumentType)())
 
     class Meta:
         model = Document
