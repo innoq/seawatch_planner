@@ -32,7 +32,6 @@ class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
 
 class ListView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, generic.View):
-
     nav_item = 'availabilities'
     title = 'Availabilities'
     success_alert = 'Available Dates successfully saved!'

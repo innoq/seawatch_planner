@@ -14,20 +14,14 @@ class AssessmentForm(forms.ModelForm):
                               max_length=2000,
                               required=False)
 
-    def save(self):
+    def save(self, **kwargs):
         assessment = self.instance
-
         assessment.status = self.cleaned_data['status']
         assessment.comment = self.cleaned_data['comment']
         assessment.profile.approved_positions.set(self.cleaned_data['approved_positions'])
-
         assessment.save()
         assessment.profile.save()
         return assessment
-
-    def __init__(self, instance=None, **kwargs):
-        super().__init__(instance=instance, **kwargs)
-        self.fields['approved_positions'].queryset = instance.profile.requested_positions
 
     class Meta:
         model = Assessment
