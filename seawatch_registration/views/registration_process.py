@@ -2,6 +2,7 @@ from collections import namedtuple
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -29,10 +30,10 @@ class RegistrationForm(forms.Form):
         super().__init__(**kwargs)
 
 
-class View(LoginRequiredMixin, generic.FormView):
+class View(LoginRequiredMixin, SuccessMessageMixin, generic.FormView):
     nav_item = 'registration_process'
     title = 'Your registration status'
-    success_alert = 'Your registration is completed!'
+    success_message = 'Thank you for finishing the registration.'
     success_url = reverse_lazy('registration_process')
     submit_button = 'Confirm registration'
     template_name = 'seawatch_registration/registration_process.html'
