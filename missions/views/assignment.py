@@ -3,15 +3,13 @@ from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import User
 from django.core import mail
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django_filters.views import FilterView
-from django_filters import FilterSet, DateFilter, CharFilter, ChoiceFilter, ModelMultipleChoiceFilter, \
-    MultipleChoiceFilter
-from django_tables2 import SingleTableMixin, RequestConfig, SingleTableView
 from django.views import generic
+from django_filters import FilterSet, DateFilter, CharFilter
+from django_filters.views import FilterView
+from django_tables2 import SingleTableMixin
 
 from missions.models import Assignment, Mission
 from missions.tables.candidates import CandidatesTable
@@ -20,9 +18,8 @@ from seawatch_registration.widgets import DateInput
 
 
 class ProfileFilter(FilterSet):
-
-    start_date = DateFilter(widget=DateInput, field_name='availability__start_date', lookup_expr='lt')
-    end_date = DateFilter(widget=DateInput, field_name='availability__end_date', lookup_expr='gt', label='Avail. End.')
+    start_date = DateFilter(widget=DateInput, field_name='availability__start_date', lookup_expr='lte')
+    end_date = DateFilter(widget=DateInput, field_name='availability__end_date', lookup_expr='gte', label='Avail. End.')
     user__first_name = CharFilter(label='first name', lookup_expr='contains')
     user__last_name = CharFilter(label='last name', lookup_expr='contains')
 
@@ -45,11 +42,13 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
     nav_item = 'missions'
     permission_required = 'missions.change_assignment'
     table_class = CandidatesTable
-    model = Profile
     filterset_class = ProfileFilter
 
-    def post(self, request, *args, **kwargs):
+    def get_queryset(self):
+        # Joins related to the ProfileFilter will cause duplicate entries.
+        return Profile.objects.distinct()
 
+    def post(self, request, *args, **kwargs):
         assignment_id = kwargs.pop('assignment__id')
         profile_id = request.POST['assignee']
         if profile_id:
@@ -59,12 +58,12 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
             assignment.save()
             return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
 
-          
+
 class AssignmentForm(forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ['position']
-        
+
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = AssignmentForm
