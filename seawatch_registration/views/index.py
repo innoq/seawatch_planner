@@ -1,9 +1,6 @@
-from django.shortcuts import render
-from django.views.generic.base import ContextMixin, View
+from django.views.generic.base import TemplateView
 
 
-class IndexView(View, ContextMixin):
+class IndexView(TemplateView):
     nav_item = 'index'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, 'index.html', context=self.get_context_data())
+    template_name = 'index.html'

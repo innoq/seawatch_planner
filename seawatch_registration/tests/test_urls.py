@@ -41,7 +41,7 @@ class TestUrls(SimpleTestCase):
 
     def test_urls_skill_update(self):
         url = reverse('skill_update')
-        self.assertEquals(resolve(url).func.__name__, skill.UpdateView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, skill.SkillsUpdateView.as_view().__name__)
 
     def test_urls_question_answer(self):
         url = reverse('question_answer')

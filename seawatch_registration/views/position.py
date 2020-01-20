@@ -1,7 +1,7 @@
-import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import CheckboxSelectMultiple
 from django.urls import reverse_lazy
+from django.views import generic
 
 from seawatch_registration.mixins import (ModelFormWidgetMixin,
                                           RedirectNextMixin,
@@ -11,7 +11,6 @@ from seawatch_registration.models import Profile
 
 class UpdateView(LoginRequiredMixin, HasProfileMixin, ModelFormWidgetMixin,
                  RedirectNextMixin, generic.UpdateView):
-
     nav_item = 'positions'
     model = Profile
     fields = ['requested_positions']
@@ -25,5 +24,5 @@ class UpdateView(LoginRequiredMixin, HasProfileMixin, ModelFormWidgetMixin,
     }
     success_url = reverse_lazy('question_answer')
 
-    def get_object(self):
+    def get_object(self, **kwargs):
         return Profile.objects.get(user=self.request.user)

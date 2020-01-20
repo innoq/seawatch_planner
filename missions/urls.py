@@ -1,10 +1,6 @@
 from django.urls import path
 
-import missions.views.assignment as assignment
-import missions.views.default_assigments as default_assignments
-import missions.views.mission as mission
-import missions.views.ship as ship
-from missions.views import question
+from missions.views import (assignment, default_assignments, mission, ship, question)
 
 urlpatterns = [
     path('', mission.ListView.as_view(), name='mission_list'),
@@ -42,5 +38,4 @@ urlpatterns = [
     path('questions/add', question.CreateView.as_view(), name='question_create'),
     path('questions/<int:pk>/delete', question.DeleteView.as_view(), name='question_delete'),
     path('questions/<int:pk>/edit', question.UpdateView.as_view(), name='question_update'),
-
 ]
