@@ -152,7 +152,7 @@ class TestAssessmentView(TestBases.TestBase):
 
         # Act
         response = self.client.post(reverse('assessment_update', kwargs={'pk': assessment.pk}),
-                                    {'approved_positions': 1,
+                                    {'approved_positions': 100,  # a bit of a hack
                                      'status': 'accepted',
                                      'comment': ''},
                                     user=self.user)
@@ -284,7 +284,7 @@ class TestAssessmentView(TestBases.TestBase):
         else:
             class_is_valid = ''
         return '<input checked="" class="' + class_is_valid + 'form-check-input" id="id_' + name + '_' + \
-            str(id_number) + '" name="' + name + '" required="" title="" type="radio" value="' + value + '"/>'
+               str(id_number) + '" name="' + name + '" required="" title="" type="radio" value="' + value + '"/>'
 
     @staticmethod
     def selected_option(position: Position):
