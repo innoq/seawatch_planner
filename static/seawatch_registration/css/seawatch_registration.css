@@ -2,3 +2,27 @@
     content:" *";
     color:red;
   }
+
+#navbar .nav-link .active a{
+    color: #17affa;
+}
+
+h1 {
+    color: #17affa;
+    font: normal bold 3em / 2em "Source Sans Pro", Helvetica, Arial, Verdana, sans-serif;
+    }
+
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
+  color: #17affa;
+  font: normal bold 1.2em / 1.3em "Source Sans Pro", Helvetica, Arial, Verdana, sans-serif;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    font: normal bold 1.2em / 1.3em "Source Sans Pro", Helvetica, Arial, Verdana, sans-serif;
+    color: #4b4c4f;
+}
+
+.bg-light {
+    background-color: #ffffff!important;
+}
+
