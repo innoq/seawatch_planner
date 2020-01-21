@@ -51,7 +51,7 @@ class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
 
 
 class UpdateView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, generic.UpdateView):
-    navitem = 'profile'
+    nav_item = 'profile'
     model = Profile
     template_name = './seawatch_registration/profile.html'
     success_url = reverse_lazy('profile_detail')
