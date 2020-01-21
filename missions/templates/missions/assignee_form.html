@@ -4,6 +4,9 @@
 
 {% block content %}
     <h1>Assign volunteers</h1>
+    <p><strong>Mission:</strong> {{ mission.name }}<br>
+    <strong>Ship:</strong> {{ mission.ship.name }}<br>
+    <strong>Time period:</strong> {{ mission.start_date }} - {{ mission.end_date }}</p>
     {% if filter %}
         <form action="" method="get" class="form form-inline">
             {% bootstrap_form filter.form layout='inline' %}

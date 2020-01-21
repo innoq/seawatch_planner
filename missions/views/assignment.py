@@ -44,7 +44,13 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
     table_class = CandidatesTable
     filterset_class = ProfileFilter
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        mission_id = self.kwargs.pop('mission__id')
+        mission = get_object_or_404(Mission, id=mission_id)
+        return {**super().get_context_data(**kwargs),
+                'mission': mission}
+
+    def get_queryset(self, **kwargs):
         # Joins related to the ProfileFilter will cause duplicate entries.
         return Profile.objects.distinct()
 
