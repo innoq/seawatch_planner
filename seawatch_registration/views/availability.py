@@ -29,7 +29,7 @@ class CreateView(LoginRequiredMixin, HasProfileMixin, generic.CreateView):
         return form
 
 
-class ListView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, generic.View):
+class ListView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, generic.TemplateView):
     nav_item = 'availabilities'
     title = 'Availabilities'
     success_alert = 'Available Dates successfully saved!'
@@ -37,26 +37,22 @@ class ListView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, generic.V
     template_name = './seawatch_registration/availability_list.html'
     success_url = reverse_lazy('availability_list')
 
-    AvailableDatesFormset = inlineformset_factory(Profile,
-                                                  Availability,
-                                                  fields=('start_date', 'end_date', 'comment'),
-                                                  widgets={
-                                                      'start_date': DateInput,
-                                                      'end_date': DateInput},
-                                                  extra=0, max_num=4, min_num=1,
-                                                  can_delete=True)
+    AvailableDatesFormset = inlineformset_factory(
+        Profile,
+        Availability,
+        fields=('start_date', 'end_date', 'comment'),
+        widgets={
+            'start_date': DateInput,
+            'end_date': DateInput},
+        extra=0, max_num=4, min_num=1,
+        can_delete=True)
 
-    def get(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
-        formset = self.AvailableDatesFormset(instance=profile)
-        return render(request, self.template_name,
-                      {'formset': formset,
-                       'view': self
-                       })
+    def get_context_data(self, **kwargs):
+        return {**super().get_context_data(**kwargs),
+                'formset': self.AvailableDatesFormset(instance=self.request.user.profile)}
 
     def post(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
-        formset = self.AvailableDatesFormset(request.POST, instance=profile)
+        formset = self.AvailableDatesFormset(request.POST, instance=request.user.profile)
         error_msg = 'Input could not be saved. Please correct missing or invalid data!'
         if not formset.is_valid():
             return render(request, self.template_name,
@@ -64,6 +60,5 @@ class ListView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, generic.V
                            'view': self,
                            'error': error_msg,
                            })
-
         formset.save()
         return redirect(self.get_success_url())

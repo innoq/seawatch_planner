@@ -3,10 +3,19 @@
 
 .ENV
 .venv
-__PYCACHE__/
-__pycache__/
 venv/
-media
+media/
 staticfiles/
 sent_emails/
 e2e_tests/chromedriver
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+__PYCACHE__/
+local_settings.py
+
+.env
+db.sqlite3

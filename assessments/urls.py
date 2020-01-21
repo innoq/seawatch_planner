@@ -1,6 +1,6 @@
 from django.urls import path
 
-import assessments.views.assessment as assessment
+from assessments.views import assessment
 
 urlpatterns = [
     path('', assessment.ListView.as_view(), name='assessment_list'),

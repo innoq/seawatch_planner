@@ -45,7 +45,7 @@ class DetailView(LoginRequiredMixin, HasProfileMixin, generic.DetailView):
     model = Profile
     nav_item = 'profile'
 
-    def get_object(self):
+    def get_object(self, **kwargs):
         return Profile.objects.get(user=self.request.user)
 
 
@@ -82,6 +82,3 @@ class UpdateView(LoginRequiredMixin, RedirectNextMixin, generic.TemplateView):
             return render(request,
                           self.template_name,
                           {'user_form': user_form, 'view': self})
-
-
-
