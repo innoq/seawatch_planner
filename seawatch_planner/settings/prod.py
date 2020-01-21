@@ -1,5 +1,3 @@
-import os
-
 import django_heroku
 
 from .base import *
@@ -20,4 +18,4 @@ EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 # Heroku Deploy
 django_heroku.settings(locals())
 
-ALLOWED_HOSTS = ['.seawatch-planner.herokuapp.com/']
+ALLOWED_HOSTS = ['seawatch-planner.herokuapp.com']
