@@ -4,9 +4,9 @@ from seawatch_registration.views import (
     availability, document, position, profile, question, registration_process, skill, signup, signin)
 
 urlpatterns = [
-    path('show/', profile.DetailView.as_view(), name='profile_detail'),
-    path('add/', profile.CreateView.as_view(), name='profile_create'),
-    path('edit/', profile.UpdateView.as_view(), name='profile_update'),
+    path('profile/show/', profile.DetailView.as_view(), name='profile_detail'),
+    path('profile/add/', profile.CreateView.as_view(), name='profile_create'),
+    path('profile/edit/', profile.UpdateView.as_view(), name='profile_update'),
     path('signup/', signup.SignupView.as_view(), name='signup'),
     path('login/success/', signin.login_success, name='login_success'),
     path('documents/', document.ListView.as_view(), name='document_list'),

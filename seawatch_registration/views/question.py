@@ -1,13 +1,14 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views.generic.base import View
 
 from seawatch_registration.forms.dynamic_question_form import \
     DynamicQuestionForm
+from seawatch_registration.mixins import HasProfileMixin
 from seawatch_registration.models import Answer, Profile, Question
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
+class UpdateView(LoginRequiredMixin, HasProfileMixin, View):
     nav_item = 'questions'
     title = 'Questions'
     success_alert = 'Your answer has been saved.'
@@ -49,6 +50,3 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, View):
                                                    answers=Answer.objects.filter(profile=profile)),
                        'success': True,
                        'view': self})
-
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()

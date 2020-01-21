@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from seawatch_registration.forms.document_form import DocumentForm
+from seawatch_registration.mixins import HasProfileMixin
 from seawatch_registration.models import Document, Profile
 
 
@@ -16,7 +17,7 @@ class UserOwnsDocuments(UserPassesTestMixin):
                     id=self.kwargs.get('document_id')).exists())
 
 
-class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+class CreateView(LoginRequiredMixin, HasProfileMixin, generic.CreateView):
     model = Document
     nav_item = 'documents'
     title = 'Add Documents'
@@ -30,11 +31,8 @@ class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
         form.instance.profile = self.request.user.profile
         return super().form_valid(form)
 
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
 
-
-class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+class ListView(LoginRequiredMixin, HasProfileMixin, generic.ListView):
     model = Document
     template_name = './seawatch_registration/document_list.html'
     context_object_name = 'documents'
@@ -43,9 +41,6 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
 
     def get_queryset(self):
         return Document.objects.filter(profile=self.request.user.profile).order_by('id')
-
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
 
 
 class DeleteView(LoginRequiredMixin, UserOwnsDocuments, generic.DeleteView):

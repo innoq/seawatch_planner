@@ -1,0 +1,20 @@
+{% extends 'base-registration.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Personal Information | Seawatch Registration{% endblock %}
+
+{% block content %}
+  <h1>Personal Information</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form user_form %}
+    {% if profile_form %}
+      {% bootstrap_form profile_form %}
+    {% endif %}
+
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
+    {% endbuttons %}
+  </form>
+{% endblock %}

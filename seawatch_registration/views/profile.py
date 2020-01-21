@@ -1,9 +1,11 @@
-import django.views.generic as generic
 from django import forms
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views import generic
 
-from seawatch_registration.mixins import RedirectNextMixin
+from seawatch_registration.forms.user_update_form import UserUpdateForm
+from seawatch_registration.mixins import RedirectNextMixin, HasProfileMixin
 from seawatch_registration.models import Profile
 from seawatch_registration.widgets import DateInput, TextInput
 
@@ -39,31 +41,47 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class DetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+class DetailView(LoginRequiredMixin, HasProfileMixin, generic.DetailView):
     model = Profile
     nav_item = 'profile'
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
 
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
 
-
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, generic.UpdateView):
+class UpdateView(LoginRequiredMixin, RedirectNextMixin, generic.TemplateView):
     nav_item = 'profile'
-    model = Profile
-    template_name = './seawatch_registration/profile.html'
-    success_url = reverse_lazy('profile_detail')
     submit_button = 'Save'
-    form_class = ProfileForm
+    template_name = './seawatch_registration/profile_update.html'
+    success_url = reverse_lazy('profile_detail')
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        context = {**super().get_context_data(**kwargs),
+                   'user_form': UserUpdateForm(instance=self.request.user)}
+        if Profile.objects.filter(user=self.request.user).exists():
+            profile_form = ProfileForm(instance=self.request.user.profile)
+            context['profile_form'] = profile_form
+        return context
 
-    def get_object(self):
-        return Profile.objects.get(user=self.request.user)
+    def post(self, request):
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        if Profile.objects.filter(user=self.request.user).exists():
+            profile_form = ProfileForm(request.POST, instance=request.user.profile)
+            profile_form.instance.user = self.request.user
+            if profile_form.is_valid() and user_form.is_valid():
+                profile_form.save()
+                user_form.save()
+                return redirect(self.success_url)
+            else:
+                return render(request,
+                              self.template_name,
+                              {'user_form': user_form, 'profile_form': profile_form, 'view': self})
+        else:
+            if user_form.is_valid():
+                user_form.save()
+            return render(request,
+                          self.template_name,
+                          {'user_form': user_form, 'view': self})
 
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
+
+

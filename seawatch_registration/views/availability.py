@@ -1,15 +1,16 @@
 import django.views.generic as generic
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
+
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from seawatch_registration.mixins import RedirectNextMixin
+from seawatch_registration.mixins import RedirectNextMixin, HasProfileMixin
 from seawatch_registration.models import Availability, Profile
 from seawatch_registration.widgets import DateInput
 
 
-class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+class CreateView(LoginRequiredMixin, HasProfileMixin, generic.CreateView):
     model = Availability
     fields = ['start_date', 'end_date', 'comment']
     nav_item = 'availabilities'
@@ -27,11 +28,8 @@ class CreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
         form.fields['end_date'].widget = DateInput()
         return form
 
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
 
-
-class ListView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, generic.View):
+class ListView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, generic.View):
     nav_item = 'availabilities'
     title = 'Availabilities'
     success_alert = 'Available Dates successfully saved!'
@@ -69,6 +67,3 @@ class ListView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, gener
 
         formset.save()
         return redirect(self.get_success_url())
-
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()

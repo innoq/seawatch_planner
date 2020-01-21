@@ -23,7 +23,8 @@ class TestBases:
             self.user = User.objects.create_user(username=self.username,
                                                  password=self.password,
                                                  first_name='Test',
-                                                 last_name='User')
+                                                 last_name='User',
+                                                 email="test@test.de")
             self.user.save()
             self.profile = Profile(id=1,
                                    user=self.user,

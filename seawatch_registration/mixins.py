@@ -1,5 +1,8 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.forms.models import modelform_factory
 from django.urls import reverse
+
+from seawatch_registration.models import Profile
 
 
 class RedirectNextMixin(object):
@@ -14,3 +17,8 @@ class RedirectNextMixin(object):
 class ModelFormWidgetMixin(object):
     def get_form_class(self):
         return modelform_factory(self.model, fields=self.fields, widgets=self.widgets)
+
+
+class HasProfileMixin(UserPassesTestMixin):
+    def test_func(self):
+        return Profile.objects.filter(user=self.request.user).exists()

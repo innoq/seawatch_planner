@@ -1,14 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic.base import View
 
 from seawatch_registration.forms.skills_form import SkillsForm
-from seawatch_registration.mixins import RedirectNextMixin
-from seawatch_registration.models import Profile
+from seawatch_registration.mixins import RedirectNextMixin, HasProfileMixin
 
 
-class UpdateView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, View):
+class UpdateView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, View):
     nav_item = 'skills'
     title = 'Your Skills'
     success_alert = 'Skills are successfully saved!'
@@ -37,6 +36,3 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, RedirectNextMixin, Vie
             profile.skills.add(language)
 
         return redirect(self.get_success_url())
-
-    def test_func(self):
-        return Profile.objects.filter(user=self.request.user).exists()
