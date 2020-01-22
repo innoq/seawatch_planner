@@ -44,7 +44,7 @@ class TestEditDocumentView(TestBases.TestBase):
                                 citizenship='Deutsch',
                                 date_of_birth=date.today(),
                                 place_of_birth='Hansestadt Hamburg',
-                                country_of_birth='Deutschland',
+                                country_of_birth='DE',
                                 gender='m',
                                 needs_schengen_visa=False,
                                 phone='0987654321')
@@ -191,7 +191,7 @@ class TestEditDocumentView(TestBases.TestBase):
                                 citizenship='Deutsch',
                                 date_of_birth=date.today(),
                                 place_of_birth='Hansestadt Hamburg',
-                                country_of_birth='Deutschland',
+                                country_of_birth='DE',
                                 gender='m',
                                 needs_schengen_visa=False,
                                 phone='0987654321')

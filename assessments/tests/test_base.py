@@ -37,11 +37,10 @@ class TestBases:
             self.user.save()
             self.profile = Profile(id=1,
                                    user=self.user,
-                                   citizenship='Deutsch',
-                                   second_citizenship='American',
+                                   citizenship=('DE', 'US'),
                                    date_of_birth=date.today(),
                                    place_of_birth='New York',
-                                   country_of_birth='United States of America',
+                                   country_of_birth='US',
                                    gender='m',
                                    needs_schengen_visa=False,
                                    phone='0123456789')

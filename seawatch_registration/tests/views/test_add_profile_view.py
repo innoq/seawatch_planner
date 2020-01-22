@@ -18,10 +18,10 @@ class TestAddProfileView(TestBases.TestBase):
         # Act
         response = self.client.post(self.url,
                                     {'user': self.user.id,
-                                     'citizenship': 'Deutsch',
+                                     'citizenship': 'DE',
                                      'date_of_birth': date.today(),
                                      'place_of_birth': 'New York',
-                                     'country_of_birth': 'United States of America',
+                                     'country_of_birth': 'US',
                                      'gender': 'm',
                                      'needs_schengen_visa': False,
                                      'phone': '0123456789'},

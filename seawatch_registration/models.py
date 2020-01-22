@@ -1,7 +1,15 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
+from django_countries import Countries
+from django_countries.fields import CountryField
+
+from seawatch_registration.countries import data
+
+
+class Nationalities(Countries):
+    override = ((d['code'], _(d['demonym'] or d['name'])) for d in data)
 
 
 class Skill(models.Model):
@@ -26,11 +34,10 @@ class Position(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    citizenship = models.CharField(max_length=100)
-    second_citizenship = models.CharField(max_length=100, blank=True)
+    citizenship = CountryField(countries=Nationalities, multiple=True)
     date_of_birth = models.DateField()
     place_of_birth = models.CharField(max_length=100)
-    country_of_birth = models.CharField(max_length=100)
+    country_of_birth = CountryField()
     GENDER_CHOICES = [
         ('f', 'female'),
         ('m', 'male'),
@@ -49,6 +56,9 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.last_name + ", " + self.user.first_name
+
+    def get_joined_citizenship_list(self, delimiter=', '):
+        return delimiter.join(c.name for c in self.citizenship)
 
 
 class DocumentType(models.Model):
@@ -112,6 +122,6 @@ class Availability(models.Model):
         if self.start_date and self.end_date:
             if self.start_date > self.end_date:
                 raise ValidationError({
-                    'start_date': ValidationError(_('Start Date has to be before End Date.')),
-                    'end_date': ValidationError(_('End Date has to be after Start Date.')),
+                    'start_date': ValidationError(_('Cannot select an empty date range.')),
+                    'end_date': ValidationError(_('Cannot select an empty date range.')),
                 })

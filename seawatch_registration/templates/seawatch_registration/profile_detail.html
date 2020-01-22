@@ -16,10 +16,7 @@
     <dd class="col-sm-9">{{ profile.user.email }}</dd>
 
     <dt class="col-sm-3">Citizenship</dt>
-    <dd class="col-sm-9">{{ profile.citizenship }}</dd>
-
-    <dt class="col-sm-3">Second Citizenship</dt>
-    <dd class="col-sm-9">{{ profile.second_citizenship }}</dd>
+    <dd class="col-sm-9">{{ profile.get_joined_citizenship_list }}</dd>
 
     <dt class="col-sm-3">Date of Birth</dt>
     <dd class="col-sm-9">{{ profile.date_of_birth }}</dd>
@@ -28,7 +25,7 @@
     <dd class="col-sm-9">{{ profile.place_of_birth }}</dd>
 
     <dt class="col-sm-3">Country of Birth</dt>
-    <dd class="col-sm-9">{{ profile.country_of_birth }}</dd>
+    <dd class="col-sm-9">{{ profile.country_of_birth.name }}</dd>
 
     <dt class="col-sm-3">Gender</dt>
     <dd class="col-sm-9">{{ profile.gender }}</dd>
