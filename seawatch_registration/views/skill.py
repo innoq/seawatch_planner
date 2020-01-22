@@ -3,7 +3,7 @@ from django.forms import ModelMultipleChoiceField, CheckboxSelectMultiple, Model
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
-from seawatch_registration.mixins import HasProfileMixin, RedirectNextMixin
+from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Profile, Skill
 
 
@@ -33,13 +33,12 @@ class SkillsForm(ModelForm):
         fields = ('languages', 'skills')
 
 
-class SkillsUpdateView(LoginRequiredMixin, HasProfileMixin, RedirectNextMixin, UpdateView):
+class SkillsUpdateView(LoginRequiredMixin, RegistrationStepOrderMixin, HasProfileMixin, UpdateView):
     nav_item = 'skills'
     title = 'Your Skills'
     success_alert = 'Skills are successfully saved!'
     submit_button = 'Next'
     error_message = 'Choose at least one Language'
-    success_url = reverse_lazy('document_create')
     form_class = SkillsForm
     template_name = 'form.html'
 

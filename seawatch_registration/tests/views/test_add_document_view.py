@@ -38,7 +38,7 @@ class TestAddDocumentView(TestBases.TestBase):
         image = SimpleUploadedFile("testfile.jpg", b"file_content", content_type="image/jpg")
 
         # Act
-        response = self.client.post(self.url,
+        response = self.client.post(self.url + '?initial_registration=yes',
                                     {'document_type': document_type.id,
                                      'number': '1234',
                                      'issuing_date': date.today(),
@@ -51,7 +51,7 @@ class TestAddDocumentView(TestBases.TestBase):
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/positions/edit/')
+        self.assertRedirects(response, expected_url='/accounts/positions/edit/?initial_registration=yes')
         self.assertEquals(Document.objects.all().count(), 1)
 
     def test_views__document_create__post__should_render_when_form_is_invalid(self):

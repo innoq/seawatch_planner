@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
 from seawatch_registration.forms.document_form import DocumentForm
-from seawatch_registration.mixins import HasProfileMixin
+from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Document, Profile
 
 
@@ -17,15 +18,24 @@ class UserOwnsDocuments(UserPassesTestMixin):
                     id=self.kwargs.get('document_id')).exists())
 
 
-class CreateView(LoginRequiredMixin, HasProfileMixin, generic.CreateView):
+class DocumentCreateView(LoginRequiredMixin,
+                         RegistrationStepOrderMixin,
+                         HasProfileMixin, generic.CreateView):
     model = Document
     nav_item = 'documents'
-    title = 'Add Documents'
-    success_alert = 'Document has been saved.'
-    submit_button = 'Next'
+    title = _('Add Documents')
+    success_alert = _('Document has been saved.')
+    submit_button = _('Upload document')
     template_name = 'form.html'
     form_class = DocumentForm
-    success_url = reverse_lazy('requested_position_update')
+    success_url = reverse_lazy('document_list')
+    can_be_skipped = True
+    skip_button_text = _('Provide documents later')
+
+    def post(self, request, *args, **kwargs):
+        if 'skip' in request.POST:
+            return redirect(self.get_success_url())
+        return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.instance.profile = self.request.user.profile
@@ -46,7 +56,7 @@ class ListView(LoginRequiredMixin, HasProfileMixin, generic.ListView):
 class DeleteView(LoginRequiredMixin, UserOwnsDocuments, generic.DeleteView):
     model = Document
     nav_item = 'documents'
-    title = 'Delete Document'
+    title = _('Delete Document')
     template_name = 'confirm-delete.html'
     success_url = reverse_lazy('document_list')
     pk_url_kwarg = 'document_id'
@@ -55,9 +65,9 @@ class DeleteView(LoginRequiredMixin, UserOwnsDocuments, generic.DeleteView):
 class UpdateView(LoginRequiredMixin, UserOwnsDocuments, generic.UpdateView):
     model = Document
     nav_item = 'documents'
-    title = 'Edit documents'
-    success_alert = 'Document has been updated.'
-    submit_button = 'Save'
+    title = _('Edit documents')
+    success_alert = _('Document has been updated.')
+    submit_button = _('Save')
     template_name = 'form.html'
     form_class = DocumentForm
     success_url = reverse_lazy('document_list')
@@ -70,7 +80,7 @@ class UpdateView(LoginRequiredMixin, UserOwnsDocuments, generic.UpdateView):
 
 class GetDocumentAttachment(LoginRequiredMixin, UserOwnsDocuments, generic.View):
 
-    def get(self, request, document_id, file_name):
+    def get(self, request, document_id, **kwargs):
         """ Ignore the filename since it is unsanitized user input and
         cannot be trusted. The mixin checked whether the user owns the file or
         not."""

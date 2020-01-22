@@ -6,15 +6,15 @@
 {% block content %}
     <h1>{{ view.title }}</h1>
     {% if success or request.GET.success %}
-    <div class="alert alert-success" role="alert">
-        {{ view.success_message }}
-        {{ view.success_alert}}
-    </div>
+        <div class="alert alert-success" role="alert">
+            {{ view.success_message }}
+            {{ view.success_alert }}
+        </div>
     {% endif %}
-    {% if form.errors%}
-    <div class="alert alert-danger" role="alert">
-        {{ view.error_message }}
-    </div>
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ view.error_message }}
+        </div>
     {% endif %}
 
     <form method="post" enctype="multipart/form-data">
@@ -22,7 +22,17 @@
         {% bootstrap_form form %}
 
         {% buttons %}
-        <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
+            <button type="submit" class="btn btn-primary">{{ view.submit_button }}</button>
+            {% if view.can_be_skipped %}
+                <button form="skip_form" name="skip" value="skip" type="submit"
+                        class="btn btn-link">{{ view.skip_button_text }}</button>
+            {% endif %}
         {% endbuttons %}
     </form>
+
+    {% if view.can_be_skipped %}
+        <form method="post" id="skip_form">
+            {% csrf_token %}
+        </form>
+    {% endif %}
 {% endblock %}

@@ -21,7 +21,7 @@ class TestUrls(SimpleTestCase):
 
     def test_urls_profile_create(self):
         url = reverse('profile_create')
-        self.assertEquals(resolve(url).func.__name__, profile.CreateView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, profile.ProfileCreateView.as_view().__name__)
 
     def test_urls_profile_update(self):
         url = reverse('profile_update')
@@ -33,11 +33,11 @@ class TestUrls(SimpleTestCase):
 
     def test_urls_document_create(self):
         url = reverse('document_create')
-        self.assertEquals(resolve(url).func.__name__, document.CreateView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, document.DocumentCreateView.as_view().__name__)
 
     def test_urls_add_requested_positions(self):
         url = reverse('requested_position_update')
-        self.assertEquals(resolve(url).func.__name__, position.UpdateView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, position.PositionUpdateView.as_view().__name__)
 
     def test_urls_skill_update(self):
         url = reverse('skill_update')
@@ -45,11 +45,11 @@ class TestUrls(SimpleTestCase):
 
     def test_urls_question_answer(self):
         url = reverse('question_answer')
-        self.assertEquals(resolve(url).func.__name__, question.UpdateView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, question.AnsweringQuestionsView.as_view().__name__)
 
     def test_urls_availabilities(self):
         url = reverse('availability_list')
-        self.assertEquals(resolve(url).func.__name__, availability.ListView.as_view().__name__)
+        self.assertEquals(resolve(url).func.__name__, availability.AvailabilityListView.as_view().__name__)
 
     def test_urls_availabilities_create(self):
         url = reverse('availability_create')

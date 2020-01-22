@@ -1,19 +1,37 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
+from django.contrib.messages.views import SuccessMessageMixin
+from django.forms import CharField, Form, Textarea
+from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
-from seawatch_registration.forms.dynamic_question_form import \
-    DynamicQuestionForm
-from seawatch_registration.mixins import HasProfileMixin
+from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Answer, Question
 
 
-class UpdateView(LoginRequiredMixin, HasProfileMixin, FormView):
+class DynamicQuestionForm(Form):
+    def __init__(self, *args, **kwargs):
+        questions = kwargs.pop('questions')
+        answers = kwargs.pop('answers', None)
+        super(DynamicQuestionForm, self).__init__(*args, **kwargs)
+        for question in questions:
+            self.fields['question' + str(question.pk)] = \
+                CharField(label=question.text, max_length=1000, required=question.mandatory, widget=Textarea)
+            if answers:
+                answer = answers.filter(question=question).first()
+                if answer:
+                    self.fields['question' + str(question.pk)].initial = answer.text
+
+
+class AnsweringQuestionsView(LoginRequiredMixin, SuccessMessageMixin,
+                             RegistrationStepOrderMixin, HasProfileMixin,
+                             FormView):
     nav_item = 'questions'
-    title = 'Questions'
-    success_alert = 'Your answer has been saved.'
-    error_message = 'Your answers could not be saved.'
-    submit_button = 'Next'
+    title = _('Questions')
+    success_message = _('Your answer has been saved.')
+    success_url = reverse_lazy('question_answer')
+    error_message = _('Your answers could not be saved.')
+    submit_button = _('Next')
     form_class = DynamicQuestionForm
     template_name = 'form.html'
 
@@ -24,10 +42,7 @@ class UpdateView(LoginRequiredMixin, HasProfileMixin, FormView):
 
     def form_valid(self, form):
         self._save_all_answers(form)
-        redirect_to = self.request.GET.get('next')
-        if redirect_to:
-            return redirect(redirect_to)
-        return render(self.request, 'form.html', {'form': form, 'success': True, 'view': self})
+        return super().form_valid(form)
 
     def _save_all_answers(self, form):
         profile = self.request.user.profile

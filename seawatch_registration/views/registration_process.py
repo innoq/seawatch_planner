@@ -53,6 +53,8 @@ class View(LoginRequiredMixin, SuccessMessageMixin, generic.FormView):
         return super().form_valid(form)
 
     def _get_ordered_registration_steps(self):
+        """ Summarises the **edit** views for each step in the correct order.
+        The order during the creation of the profile, the skills, etc might differ. """
         profile = self.request.user.profile
         return [
             RegistrationStep(
@@ -80,14 +82,15 @@ class View(LoginRequiredMixin, SuccessMessageMixin, generic.FormView):
                 completed=profile.requested_positions.exists()
             ),
             RegistrationStep(
+                'Questions',
+                'question_answer',
+                optional=False,
+                completed=profile.answer_set.exists()
+            ),
+            RegistrationStep(
                 'Availabilities',
                 'availability_list',
                 optional=False,
                 completed=profile.availability_set.exists()
             ),
-            RegistrationStep(
-                'Questions',
-                'question_answer',
-                optional=False,
-                completed=profile.answer_set.exists()
-            )]
+        ]
