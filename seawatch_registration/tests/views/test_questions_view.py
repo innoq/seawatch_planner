@@ -51,9 +51,8 @@ class TestQuestionsView(TestBases.TestBase):
         self.client.login(username=self.username, password=self.password)
 
         # Act
-        response = self.client.post(self.url,
-                                    {'question' + str(question.pk): 'Some answer to a random question!'},
-                                    user=self.user)
+        data = {'question' + str(question.pk): 'Some answer to a random question!'}
+        response = self.client.post(self.url, data, user=self.user, follow=True)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -73,9 +72,7 @@ class TestQuestionsView(TestBases.TestBase):
 
         # Act
         data = {'question' + str(question_required.pk): 'Answer Required'}
-        response = self.client.post(self.url,
-                                    data,
-                                    user=self.user)
+        response = self.client.post(self.url, data, user=self.user, follow=True)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -133,7 +130,7 @@ class TestQuestionsView(TestBases.TestBase):
         data = {'question' + str(question_required.pk): 'Answer required new'}
 
         # Act
-        response = self.client.post(self.url, data, user=self.user)
+        response = self.client.post(self.url, data, user=self.user, follow=True)
 
         # Assert
         self.assertEquals(response.status_code, 200)
@@ -149,9 +146,8 @@ class TestQuestionsView(TestBases.TestBase):
         profile.save()
 
         # Act
-        response = self.client.post(self.url,
-                                    {'question' + str(question.pk): 'Some answer to a random question!'},
-                                    user=self.user)
+        data = {'question' + str(question.pk): 'Some answer to a random question!'}
+        response = self.client.post(self.url, data, user=self.user, follow=True)
 
         # Assert
         self.assertEquals(response.status_code, 200)

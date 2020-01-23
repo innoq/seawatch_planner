@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from seawatch_registration.forms.user_update_form import UserUpdateForm
-from seawatch_registration.mixins import RedirectNextMixin, HasProfileMixin
+from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Profile
 from seawatch_registration.widgets import DateInput
 
@@ -31,7 +31,7 @@ class ProfileForm(forms.ModelForm):
         }
 
 
-class CreateView(LoginRequiredMixin, generic.CreateView):
+class ProfileCreateView(LoginRequiredMixin, RegistrationStepOrderMixin, generic.CreateView):
     model = Profile
     nav_item = 'profile'
     template_name = './seawatch_registration/profile.html'
@@ -52,7 +52,7 @@ class DetailView(LoginRequiredMixin, HasProfileMixin, generic.DetailView):
         return Profile.objects.get(user=self.request.user)
 
 
-class UpdateView(LoginRequiredMixin, RedirectNextMixin, generic.TemplateView):
+class UpdateView(LoginRequiredMixin, generic.TemplateView):
     nav_item = 'profile'
     submit_button = 'Save'
     template_name = './seawatch_registration/profile_update.html'

@@ -64,10 +64,10 @@ class TestAddRequestedPositionsView(TestBases.TestBase):
         profile.save()
 
         # Act
-        response = self.client.post(self.url,
+        response = self.client.post(self.url + '?initial_registration',
                                     {'requested_positions': position.id},
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/questions/edit/')
+        self.assertRedirects(response, expected_url='/accounts/questions/edit/?initial_registration=yes')
         self.assertEquals(len(profile.requested_positions.all()), 1)

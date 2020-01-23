@@ -67,13 +67,13 @@ class TestAddSkillsView(TestBases.TestBase):
         profile.save()
 
         # Act
-        response = self.client.post(self.url,
+        response = self.client.post(self.url + '?initial_registration',
                                     {'languages': language.id},
                                     user=self.user)
 
         # Assert
         self.assertEquals(len(profile.skills.all()), 1)
-        self.assertRedirects(response, expected_url='/accounts/documents/add/')
+        self.assertRedirects(response, expected_url='/accounts/documents/add/?initial_registration=yes')
 
     def test_views__skill_update__post__should_redirect_to_document_when_skills_are_set_to_2(self):
         # Arrange
@@ -84,11 +84,11 @@ class TestAddSkillsView(TestBases.TestBase):
         profile.save()
 
         # Act
-        response = self.client.post(self.url,
+        response = self.client.post(self.url + '?initial_registration',
                                     {'skills': skill.id,
                                      'languages': language.id},
                                     user=self.user)
 
         # Assert
-        self.assertRedirects(response, expected_url='/accounts/documents/add/')
+        self.assertRedirects(response, expected_url='/accounts/documents/add/?initial_registration=yes')
         self.assertEquals(len(profile.skills.all()), 2)

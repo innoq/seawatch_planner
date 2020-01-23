@@ -1,28 +1,26 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import CheckboxSelectMultiple
-from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
 from seawatch_registration.mixins import (ModelFormWidgetMixin,
-                                          RedirectNextMixin,
-                                          HasProfileMixin)
+                                          HasProfileMixin, RegistrationStepOrderMixin)
 from seawatch_registration.models import Profile
 
 
-class UpdateView(LoginRequiredMixin, HasProfileMixin, ModelFormWidgetMixin,
-                 RedirectNextMixin, generic.UpdateView):
+class PositionUpdateView(LoginRequiredMixin, RegistrationStepOrderMixin, HasProfileMixin, ModelFormWidgetMixin,
+                         generic.UpdateView):
     nav_item = 'positions'
     model = Profile
     fields = ['requested_positions']
     template_name = 'form.html'
-    submit_button = 'Save'
-    error_message = 'Error your selection was not saved! Select at least one position.'
-    success_message = 'Your requested positions are successfully saved!'
-    title = 'Requested Positions'
+    submit_button = _('Save')
+    error_message = _('Error your selection was not saved! Select at least one position.')
+    success_message = _('Your requested positions are successfully saved!')
+    title = _('Requested Positions')
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
     }
-    success_url = reverse_lazy('question_answer')
 
     def get_object(self, **kwargs):
         return Profile.objects.get(user=self.request.user)
