@@ -11,3 +11,4 @@ flake8~=3.7
 gunicorn~=20.0
 psycopg2-binary~=2.7
 selenium~=3.141
+django-modeltranslation~=0.14.2

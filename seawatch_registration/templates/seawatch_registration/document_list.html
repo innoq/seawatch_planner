@@ -1,26 +1,27 @@
 {% extends 'base-registration.html' %}
 {% load fontawesome_5 %}
+{% load i18n %}
 
 {% block title %}Documents Overview | Seawatch Registration{% endblock %}
 
 {% block content %}
 
 
-    <h1>Documents</h1>
+    <h1>{% trans 'Documents' %}</h1>
 
     {% if documents %}
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Type</th>
-                <th>Number</th>
-                <th>Issuing date</th>
-                <th>Expiry date</th>
-                <th>Issuing authority</th>
-                <th>Issuing place</th>
-                <th>Issuing country</th>
-                <th>File</th>
+                <th>{% trans 'Id' %}</th>
+                <th>{% trans 'Type' %}</th>
+                <th>{% trans 'Number' %}</th>
+                <th>{% trans 'Issuing date' %}</th>
+                <th>{% trans 'Expiry date' %}</th>
+                <th>{% trans 'Issuing authority' %}</th>
+                <th>{% trans 'Issuing place' %}</th>
+                <th>{% trans 'Issuing country' %}</th>
+                <th>{% trans 'File' %}</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -44,7 +45,7 @@
         </tbody>
     </table>
     {% else %}
-    <p>You didn't upload any documents, yet!</p>
+    <p>{% trans "You didn't upload any documents, yet!" %}</p>
     {% endif %}
     <a href="{% url 'document_create' %}" class="btn btn-primary">{% fa5_icon 'plus' 'fas' %}</a>
     {% include 'pagination.html' %}

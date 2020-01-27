@@ -1,51 +1,52 @@
 {% extends 'base-registration.html' %}
+{% load i18n %}
 
 {% block title %}Personal Information | Seawatch Registration{% endblock %}
 
 {% block content %}
-  <h1>Personal Information</h1>
+  <h1>{% trans 'Personal Information' %}</h1>
 
   <dl class="row">
-    <dt class="col-sm-3">First name</dt>
+    <dt class="col-sm-3">{% trans 'First name' %}</dt>
     <dd class="col-sm-9">{{ profile.user.first_name }}</dd>
 
-    <dt class="col-sm-3">Last name</dt>
+    <dt class="col-sm-3">{% trans 'Last name' %}</dt>
     <dd class="col-sm-9">{{ profile.user.last_name }}</dd>
 
-    <dt class="col-sm-3">Email</dt>
+    <dt class="col-sm-3">{% trans 'Email' %}</dt>
     <dd class="col-sm-9">{{ profile.user.email }}</dd>
 
-    <dt class="col-sm-3">Citizenship</dt>
+    <dt class="col-sm-3">{% trans 'Citizenship' %}</dt>
     <dd class="col-sm-9">{{ profile.get_joined_citizenship_list }}</dd>
 
-    <dt class="col-sm-3">Date of Birth</dt>
+    <dt class="col-sm-3">{% trans 'Date of Birth' %}</dt>
     <dd class="col-sm-9">{{ profile.date_of_birth }}</dd>
 
-    <dt class="col-sm-3">Place of Birth</dt>
+    <dt class="col-sm-3">{% trans 'Place of Birth' %}</dt>
     <dd class="col-sm-9">{{ profile.place_of_birth }}</dd>
 
-    <dt class="col-sm-3">Country of Birth</dt>
+    <dt class="col-sm-3">{% trans 'Country of Birth' %}</dt>
     <dd class="col-sm-9">{{ profile.country_of_birth.name }}</dd>
 
-    <dt class="col-sm-3">Gender</dt>
+    <dt class="col-sm-3">{% trans 'Gender' %}</dt>
     <dd class="col-sm-9">{{ profile.gender }}</dd>
 
-    <dt class="col-sm-3">Address</dt>
+    <dt class="col-sm-3">{% trans 'Address' %}</dt>
     <dd class="col-sm-9">{{ profile.address }}</dd>
 
-    <dt class="col-sm-3">Needs Schengen Visa</dt>
+    <dt class="col-sm-3">{% trans 'Needs Schengen Visa' %}</dt>
     <dd class="col-sm-9">{{ profile.needs_schengen_visa }}</dd>
 
-    <dt class="col-sm-3">Phone</dt>
+    <dt class="col-sm-3">{% trans 'Phone' %}</dt>
     <dd class="col-sm-9">{{ profile.phone }}</dd>
 
-    <dt class="col-sm-3">Emergency Contact</dt>
+    <dt class="col-sm-3">{% trans 'Emergency Contact' %}</dt>
     <dd class="col-sm-9">{{ profile.emergency_contact }}</dd>
 
-    <dt class="col-sm-3">Comments</dt>
+    <dt class="col-sm-3">{% trans 'Comments' %} </dt>
     <dd class="col-sm-9">{{ profile.comments }}</dd>
   </dl>
 
-   <a class="btn btn-primary" href="{% url 'profile_update'%}" role="button">Edit</a>
+   <a class="btn btn-primary" href="{% url 'profile_update'%}" role="button">{% trans 'Edit' %}</a>
 
 {% endblock %}

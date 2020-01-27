@@ -1,17 +1,18 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block title %}Account Creation | Seawatch Registration{% endblock %}
 
 {% block content %}
-  <h1>Account Creation</h1>
+  <h1>{% trans 'Account Creation' %}</h1>
 
   <form method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
 
     {% buttons %}
-      <button type="submit" class="btn btn-primary">Sign up</button>
+      <button type="submit" class="btn btn-primary">{% trans 'Sign up' %}</button>
     {% endbuttons %}
   </form>
 {% endblock %}

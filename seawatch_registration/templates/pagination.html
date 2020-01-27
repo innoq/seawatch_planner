@@ -1,13 +1,15 @@
+{% load i18n %}
+
 {% if is_paginated %}
     <nav aria-label="...">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
+                <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{% trans 'Previous' %}</a>
             </li>
             {% else %}
             <li class="page-item disabled">
-                <span class="page-link">Previous</span>
+                <span class="page-link">{% trans 'Previous' %}</span>
             </li>
             {% endif %}
             {% for number in paginator.page_range %}
@@ -15,7 +17,7 @@
                 <li class="page-item active">
                     <span class="page-link">
                         {{ page_obj.number }}
-                    <span class="sr-only">(current)</span>
+                    <span class="sr-only">({% trans 'current' %})</span>
                     </span>
                 </li>
                 {% else %}
@@ -24,11 +26,11 @@
             {% endfor %}
             {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{% trans 'Next' %}</a>
             </li>
             {% else %}
             <li class="page-item disabled">
-                <span class="page-link">Next</span>
+                <span class="page-link">{% trans 'Next' %}</span>
             </li>
             {% endif %}
         </ul>

@@ -1,12 +1,13 @@
 {% extends "base-missions.html" %}
 {% load render_table from django_tables2 %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block content %}
-    <h1>Assign volunteers</h1>
-    <p><strong>Mission:</strong> {{ mission.name }}<br>
-    <strong>Ship:</strong> {{ mission.ship.name }}<br>
-    <strong>Time period:</strong> {{ mission.start_date }} - {{ mission.end_date }}</p>
+    <h1>{% trans "Assign volunteers" %}</h1>
+    <p><strong>{% trans "Mission" %}:</strong> {{ mission.name }}<br>
+    <strong>{% trans "Ship" %}:</strong> {{ mission.ship.name }}<br>
+    <strong>{% trans "Time period" %}:</strong> {{ mission.start_date }} - {{ mission.end_date }}</p>
     {% if filter %}
         <form action="" method="get" class="form form-inline">
             {% bootstrap_form filter.form layout='inline' %}

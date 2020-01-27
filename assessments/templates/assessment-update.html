@@ -1,66 +1,68 @@
 {% extends 'base-registration.html' %}
- {% load bootstrap4 %}
+{% load bootstrap4 %}
+{% load i18n %}
+
 
 {% block title %}Assessment | Seawatch Registration{% endblock %}
 
 {% block content %}
-    <h1>Assessment {{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+    <h1>{% trans "Assessment" %} {{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
     <br>
     <div class="row">
         <div class="col-6">
-            <h3>Profile data</h3>
+            <h3>{% trans "Profile data" %}</h3>
             <dl class="row">
-                <dt class="col-sm-6">First name</dt>
+                <dt class="col-sm-6">{% trans "First name" %}</dt>
                 <dd class="col-sm-6">{{ profile.user.first_name }}</dd>
 
-                <dt class="col-sm-6">Last name</dt>
+                <dt class="col-sm-6">{% trans "Last name" %}</dt>
                 <dd class="col-sm-6 ">{{ profile.user.last_name }}</dd>
 
-                <dt class="col-sm-6">Citizenship</dt>
+                <dt class="col-sm-6">{% trans "Citizenship" %}</dt>
                 <dd class="col-sm-6">{{ profile.get_joined_citizenship_list }}</dd>
 
-                <dt class="col-sm-6">Date of Birth</dt>
+                <dt class="col-sm-6">{% trans "Date of Birth" %}</dt>
                 <dd class="col-sm-6">{{ profile.date_of_birth }}</dd>
 
-                <dt class="col-sm-6">Place of Birth</dt>
+                <dt class="col-sm-6">{% trans "Place of Birth" %}</dt>
                 <dd class="col-sm-6">{{ profile.place_of_birth }}</dd>
 
-                <dt class="col-sm-6">Country of Birth</dt>
+                <dt class="col-sm-6">{% trans "Country of Birth" %}</dt>
                 <dd class="col-sm-6">{{ profile.country_of_birth.name }}</dd>
 
-                <dt class="col-sm-6">Gender</dt>
+                <dt class="col-sm-6">{% trans "Gender" %}</dt>
                 <dd class="col-sm-6">{{ profile.gender }}</dd>
 
-                <dt class="col-sm-6">Address</dt>
+                <dt class="col-sm-6">{% trans "Address" %}</dt>
                 {% if profile.address %}
                 <dd class="col-sm-6">{{ profile.address }}</dd>
                 {% else %}
-                <dd class="col-sm-6 text-danger">Not specified</dd>
+                <dd class="col-sm-6 text-danger">{% trans "Not specified" %}</dd>
                 {% endif %}
 
-                <dt class="col-sm-6">Needs Schengen Visa</dt>
+                <dt class="col-sm-6">{% trans "Needs Schengen Visa" %}</dt>
                 <dd class="col-sm-6">{{ profile.needs_schengen_visa }}</dd>
 
-                <dt class="col-sm-6">Phone</dt>
+                <dt class="col-sm-6">{% trans "Phone" %}</dt>
                 <dd class="col-sm-6">{{ profile.phone }}</dd>
 
-                <dt class="col-sm-6">Emergency Contact</dt>
+                <dt class="col-sm-6">{% trans "Emergency Contact" %}</dt>
                 {% if profile.emergency_contact %}
                 <dd class="col-sm-6">{{ profile.emergency_contact }}</dd>
                 {% else %}
-                <dd class="col-sm-6 text-danger">Not specified</dd>
+                <dd class="col-sm-6 text-danger">{% trans "Not specified" %}</dd>
                 {% endif %}
 
-                <dt class="col-sm-6">Comments</dt>
+                <dt class="col-sm-6">{% trans "Comments" %}</dt>
                 {% if profile.comments %}
                 <dd class="col-sm-6">{{ profile.comments }}</dd>
                 {% else %}
-                <dd class="col-sm-6 text-danger">Not specified</dd>
+                <dd class="col-sm-6 text-danger">{% trans "Not specified" %}</dd>
                 {% endif %}
             </dl>
         </div>
         <div class="col-3">
-            <h3>Skills</h3>
+            <h3>{% trans "Skills" %}</h3>
             {% if skills %}
             <ul class="list-group">
                 {% for skill in skills %}
@@ -68,12 +70,12 @@
                 {% endfor %}
             </ul>
             {% else%}
-            <p class="text-danger">No skills specified.</p>
+            <p class="text-danger">{% trans "No skills specified." %}</p>
             {% endif %}
 
         </div>
         <div class="col-3">
-            <h3>Requested Positions</h3>
+            <h3>{% trans "Requested Positions" %}</h3>
             {% if profile.requested_positions.all%}
             <ul class="list-group">
                 {% for position in profile.requested_positions.all %}
@@ -81,12 +83,12 @@
                 {% endfor %}
             </ul>
             {% else%}
-            <p class="text-danger">No requested positions specified.</p>
+            <p class="text-danger">{% trans "No requested positions specified." %}</p>
             {% endif %}
         </div>
     </div>
 
-    <h3>Questions</h3>
+    <h3>{% trans "Questions" %}</h3>
     {% if answers %}
     <dl class="row">
         {% for answer in answers %}
@@ -95,23 +97,23 @@
         {% endfor %}
     </dl>
     {% else%}
-    <p class="text-danger">No questions answered.</p>
+    <p class="text-danger">{% trans "No questions answered." %}</p>
     {% endif %}
 
 
-    <h3>Documents</h3>
+    <h3>{% trans "Documents" %}</h3>
     {% if documents %}
     <table class="table">
         <tr>
-            <th>Id</th>
-            <th>Document Type</th>
-            <th>Number</th>
-            <th>Issuing Date</th>
-            <th>Expiry Date</th>
-            <th>Issuing Authority</th>
-            <th>Issuing Place</th>
-            <th>Issuing Country</th>
-            <th>File</th>
+            <th>{% trans "Id" %}</th>
+            <th>{% trans "Document Type" %}</th>
+            <th>{% trans "Number" %}</th>
+            <th>{% trans "Issuing Date" %}</th>
+            <th>{% trans "Expiry Date" %}</th>
+            <th>{% trans "Issuing Authority" %}</th>
+            <th>{% trans "Issuing Place" %}</th>
+            <th>{% trans "Issuing Country" %}</th>
+            <th>{% trans "File" %}</th>
         </tr>
         {% for document in documents %}
         <tr>
@@ -128,17 +130,17 @@
         {% endfor %}
     </table>
     {% else %}
-    <p class="text-danger">No Documents uploaded.</p>
+    <p class="text-danger">{% trans "No Documents uploaded." %}</p>
     {% endif %}
 
-    <h3>Assessment</h3>
+    <h3>{% trans "Assessment" %}</h3>
     {% include 'partials/form-errors.html' %}
     <form method="post">
      {% csrf_token %}
      {% bootstrap_form form %}
 
      {% buttons %}
-       <button type="submit" class="btn btn-primary">Submit assessment</button>
+       <button type="submit" class="btn btn-primary">{% trans "Submit assessment" %}</button>
      {% endbuttons %}
    </form>
 

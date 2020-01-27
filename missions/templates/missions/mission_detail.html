@@ -1,6 +1,7 @@
 {% extends "base-missions.html" %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
+{% load i18n %}
 
 
 {% block content %}
@@ -10,19 +11,19 @@ alert(first_name + " " + last_name + " is assigned multiple times for this missi
 }
 </script>
 
-<h1>{{ object.ship.name }}: Mission ”{{ object.name }}”</h1>
-<p>From {{ object.start_date }} to {{ object.end_date }}</p>
-<h2>Assignments</h2>
+<h1>{% blocktrans with ship_name=object.ship.name mission_name=object.name %}{{ ship_name }}: Mission ”{{ mission_name }}”{% endblocktrans %}</h1>
+<p>{% blocktrans with start_date=object.start_date end_date=object.end_date%}From {{ start_date }} to {{ end_date }}{% endblocktrans %}</p>
+<h2>{% trans 'Assignments' %}</h2>
 <table class="table">
     <thead>
     <tr>
         {% if multiple_assigned_users%}
         <th scope="col"></th>
         {% endif %}
-        <th scope="col">Position</th>
-        <th scope="col">Assignment</th>
-        <th scope="col">Confirmation</th>
-        <th scope="col">Actions</th>
+        <th scope="col">{% trans 'Position' %}</th>
+        <th scope="col">{% trans 'Assignment' %}</th>
+        <th scope="col">{% trans 'Confirmation' %}</th>
+        <th scope="col">{% trans 'Actions' %}</th>
     </tr>
     </thead>
     <tbody>
@@ -42,19 +43,19 @@ alert(first_name + " " + last_name + " is assigned multiple times for this missi
         <td>{{ assignment.user.first_name }} {{ assignment.user.last_name }}</td>
         <td>{{ assignment.confirmed }}</td>
         <td>
-            <a href="{% url 'assignee' object.id assignment.id %}"  data-toggle="tooltip" title="assign volunteer">
+            <a href="{% url 'assignee' object.id assignment.id %}"  data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'assign volunteer' %}">
                 {% fa5_icon 'user' 'fas' %}
             </a>
             {% if not assignment.email_sent and assignment.user %}
-            <a href="{% url 'assignment_mail' object.id assignment.id %}"  data-toggle="tooltip" title="send mission information email">
+            <a href="{% url 'assignment_mail' object.id assignment.id %}"  data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
                 {% fa5_icon 'envelope' 'fas' %}
             </a>
             {% else %}
-            <a class="text-black-50" data-toggle="tooltip" title="send mission information email">
+            <a class="text-black-50" data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
                 {% fa5_icon 'envelope' 'fas' %}
             </a>
             {% endif %}
-            <a class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"  data-toggle="tooltip" title="delete">
+            <a class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"  data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'delete' %}">
                 {% fa5_icon 'trash' 'fas' %}
             </a>
         </td>
