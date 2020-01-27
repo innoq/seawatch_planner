@@ -4,12 +4,21 @@
 
 
 {% block content %}
+<script type="text/javascript">
+function AlertMultipleAssignments(first_name, last_name) {
+alert(first_name + " " + last_name + " is assigned multiple times for this mission")
+}
+</script>
+
 <h1>{{ object.ship.name }}: Mission ”{{ object.name }}”</h1>
 <p>From {{ object.start_date }} to {{ object.end_date }}</p>
 <h2>Assignments</h2>
 <table class="table">
     <thead>
     <tr>
+        {% if multiple_assigned_users%}
+        <th scope="col"></th>
+        {% endif %}
         <th scope="col">Position</th>
         <th scope="col">Assignment</th>
         <th scope="col">Confirmation</th>
@@ -19,6 +28,16 @@
     <tbody>
     {% for assignment in object.assignment_set.all %}
     <tr>
+        {% if multiple_assigned_users %}
+
+        <td>
+            {% if assignment.user in multiple_assigned_users %}
+            <a class="text-danger" href="javascript:AlertMultipleAssignments('{{ assignment.user.first_name}}','{{assignment.user.last_name}}');">
+                {% fa5_icon 'exclamation-triangle' 'fas' %}
+            </a>
+            {% endif %}
+        </td>
+        {% endif %}
         <td>{{ assignment.position.name }}</td>
         <td>{{ assignment.user.first_name }} {{ assignment.user.last_name }}</td>
         <td>{{ assignment.confirmed }}</td>

@@ -25,6 +25,17 @@ class DetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView
     nav_item = 'missions'
     permission_required = 'missions.view_mission'
 
+    def get_context_data(self, **kwargs):
+        mission = self.get_object()
+        multiple_assigned_users = list()
+
+        for assignment in mission.assignment_set.all():
+            if assignment.user is not None:
+                intersection = [value for value in assignment.user.assignments.all() if value in mission.assignment_set.all()]
+                if len(intersection) > 1:
+                    multiple_assigned_users.append(assignment.user)
+        return {**super().get_context_data(**kwargs), 'multiple_assigned_users': multiple_assigned_users}
+
 
 class MissionCreateForm(forms.ModelForm):
     create_default_assignments = forms.BooleanField(
