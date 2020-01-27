@@ -3,11 +3,11 @@
 
 {% block content %}
 
-    <h1>Create new position</h1>
+    <h1>{% trans "Create new position" %}</h1>
     <form method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input class="btn btn-primary" type="submit" value="Save">
+        <input class="btn btn-primary" type="submit" value="{% trans 'Save' %}">
     </form>
 
 {% endblock %}

@@ -1,9 +1,10 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block title %}Mission | Seawatch Missions{% endblock %}
 
 {% block content %}
-<h1>Ship {{ object.name }}</h1>
-<p><strong>Name: </strong>{{ object.name }}</p>
+<h1>{% blocktrans with name=obejct.name %}Ship {{ name }}{% endblocktrans %}</h1>
+<p><strong>{% trans 'Name:' %} </strong>{{ object.name }}</p>
 {% endblock %}

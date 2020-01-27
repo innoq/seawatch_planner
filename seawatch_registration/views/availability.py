@@ -2,7 +2,7 @@ import django.views.generic as generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Availability, Profile
@@ -34,7 +34,7 @@ class AvailabilityListView(LoginRequiredMixin,
                            generic.FormView):
     nav_item = 'availabilities'
     title = _('Availabilities')
-    success_alert = _('Available Dates successfully saved!')
+    success_alert = _('Available Dates saved!')
     submit_button = _('Save')
     template_name = './seawatch_registration/availability_list.html'
     success_url = reverse_lazy('availability_list')

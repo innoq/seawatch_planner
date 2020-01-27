@@ -1,12 +1,13 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
 
  {% block content %}
    <h1>{{ view.title }}</h1>
      <p>
-        Congratulations, your registration is complete!
+        {% trans 'Congratulations, your registration is complete!' %}
     </p>
 
  {% endblock %}

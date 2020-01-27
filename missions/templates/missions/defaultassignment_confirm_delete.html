@@ -1,13 +1,14 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block title %}Default Assignment | Seawatch Missions{% endblock %}
 
 {% block content %}
-    <h1>Delete default assignment "{{ object.quantity }}x {{ object.position }}" of ship "{{ ship.name }}"</h1>
+    <h1>{% blocktrans with quantity=object.quantity position=object.position ship_name=ship.name %}Delete default assignment "{{ quantity }}x {{ position }}" of ship "{{ ship_name }}"{% endblocktrans %}</h1>
 
     <form method="post">{% csrf_token %}
-        <p>Are you sure you want to delete default assignment "{{ object.quantity }}x {{ object.position }}" of ship "{{ ship.name }}"?</p>
-        <input class="btn btn-primary" type="submit" value="Confirm"> <a class="btn btn-primary"href="{% url 'default_assignment_list' ship.id %}" role="button">Cancel</a>
+        <p>{% blocktrans with quantity=object.quantity position=object.position ship_name=ship.name %}Are you sure you want to delete default assignment "{{ quantity }}x {{ position }}" of ship "{{ ship_name }}"?{% endblocktrans %}</p>
+        <input class="btn btn-primary" type="submit" value="{% trans 'Confirm' %}"> <a class="btn btn-primary"href="{% url 'default_assignment_list' ship.id %}" role="button">{% trans 'Cancel' %}</a>
     </form>
 {% endblock %}

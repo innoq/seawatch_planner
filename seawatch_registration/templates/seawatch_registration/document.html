@@ -1,13 +1,14 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block title %}Documents | Seawatch Registration{% endblock %}
 
 {% block content %}
-  <h1>Document Upload</h1>
+  <h1>{% trans 'Document Upload' %}</h1>
   {% if success %}
   <div class="alert alert-success" role="alert">
-  Document was created successfully!
+  {% trans 'Document was created!' %}
   </div>
   {% endif %}
 
@@ -16,7 +17,7 @@
     {% bootstrap_form form %}
 
     {% buttons %}
-      <button type="submit" class="btn btn-primary">Next</button>
+      <button type="submit" class="btn btn-primary">{% trans 'Next' %}</button>
     {% endbuttons %}
   </form>
 {% endblock %}

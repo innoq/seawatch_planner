@@ -1,5 +1,7 @@
 {% load bootstrap4 %}
 {% load static %}
+{% load i18n %}
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'index' %}">
@@ -15,31 +17,31 @@
         <ul class="nav navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {% if view.nav_item == 'index' %}active{% else %}{{ view.nav_item }}{% endif %}"
-                   href="{% url 'index' %}">Home</a>
+                   href="{% url 'index' %}">{% trans "Home" %}</a>
             </li>
             {% if request.user.is_authenticated %}
                 {% if perms.assessments.can_assess_profiles %}
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'assessment' %}active{% endif %}"
-                           href="{% url 'assessment_list' %}">Assessments</a>
+                           href="{% url 'assessment_list' %}">{% trans "Assessments" %}</a>
                     </li>
                 {% endif %}
                 {% if perms.missions.view_mission %}
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'missions' %}active{% endif %}"
-                           href="{% url 'mission_list' %}">Missions</a>
+                           href="{% url 'mission_list' %}">{% trans "Missions" %}</a>
                     </li>
                 {% endif %}
                 {% if perms.missions.view_ship %}
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'ships' %}active{% endif %}"
-                           href="{% url 'ship_list' %}">Ships</a>
+                           href="{% url 'ship_list' %}">{% trans "Ships" %}</a>
                     </li>
                 {% endif %}
                 {% if perms.seawatch_registration.view_question %}
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}"
-                           href="{% url 'question_list' %}">Questions</a>
+                           href="{% url 'question_list' %}">{% trans "Questions" %}</a>
                     </li>
                 {% endif %}
                 {% if request.user.profile %}
@@ -48,27 +50,27 @@
                     {% endcomment %}
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'profile' %}active{% endif %}"
-                           href="{% url 'profile_detail' %}">Profile</a>
+                           href="{% url 'profile_detail' %}">{% trans "Profile" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'skills' %}active{% endif %}"
-                           href="{% url 'skill_update' %}">Skills</a>
+                           href="{% url 'skill_update' %}">{% trans "Skills" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'documents' %}active{% endif %}"
-                           href="{% url 'document_list' %}">Documents</a>
+                           href="{% url 'document_list' %}">{% trans "Documents" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'positions' %}active{% endif %}"
-                           href="{% url 'requested_position_update' %}">Requested Positions</a>
+                           href="{% url 'requested_position_update' %}">{% trans "Requested Positions" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'questions' %}active{% endif %}"
-                           href="{% url 'question_answer' %}">Questions</a>
+                           href="{% url 'question_answer' %}">{% trans "Questions" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if view.nav_item == 'availabilities' %}active{% endif %}"
-                           href="{% url 'availability_list' %}">Availabilities</a>
+                           href="{% url 'availability_list' %}">{% trans "Availabilities" %}</a>
                     </li>
                 {% endif %}
             {% endif %}
@@ -82,24 +84,24 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% if request.user.profile %}
-                            <a class="dropdown-item" href="{% url 'profile_detail' %}">Show profile</a>
-                            <a class="dropdown-item" href="{% url 'registration_process' %}">Registration Status</a>
+                            <a class="dropdown-item" href="{% url 'profile_detail' %}">{% trans "Show profile" %}</a>
+                            <a class="dropdown-item" href="{% url 'registration_process' %}">{% trans "Registration Status" %}</a>
                             <div class="dropdown-divider"></div>
                         {% endif %}
-                        <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+                        <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    <a class="nav-link" href="{% url 'logout' %}">{% trans 'Logout' %}</a>
                 </li>
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link
                             {% url 'login' as login_url %}{% if request.get_full_path == login_url %}active{% endif %}"
-                       href="{% url 'login' %}">Login</a>
+                       href="{% url 'login' %}">{% trans "Login" %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if view.nav_item == 'signup' %}active{% endif %}" href="{% url 'signup' %}">Signup</a>
+                    <a class="nav-link {% if view.nav_item == 'signup' %}active{% endif %}" href="{% url 'signup' %}">{% trans "Signup" %}</a>
                 </li>
             {% endif %}
         </ul>

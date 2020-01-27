@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_countries import Countries
 from django_countries.fields import CountryField
 
@@ -13,8 +13,8 @@ class Nationalities(Countries):
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=500, blank=True)
+    name = models.CharField(max_length=50, verbose_name=_('Name'))
+    description = models.CharField(max_length=500, blank=True, verbose_name=_('Description'))
     SKILL_GROUPS = [
         ('lang', 'language'),
         ('other', 'other')
@@ -26,7 +26,7 @@ class Skill(models.Model):
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name=_('Name'))
 
     def __str__(self):
         return self.name
@@ -34,25 +34,30 @@ class Position(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    citizenship = CountryField(countries=Nationalities, multiple=True)
-    date_of_birth = models.DateField()
-    place_of_birth = models.CharField(max_length=100)
-    country_of_birth = CountryField()
+    citizenship = CountryField(countries=Nationalities, multiple=True, verbose_name=_('Citizenship'))
+    date_of_birth = models.DateField(verbose_name=_('Date of birth'))
+    place_of_birth = models.CharField(max_length=100, verbose_name=_('Place of birth'))
+    country_of_birth = CountryField(verbose_name=_('Country of birth'))
     GENDER_CHOICES = [
         ('f', 'female'),
         ('m', 'male'),
         ('d', 'diverse')
     ]
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    address = models.CharField(max_length=200, blank=True)
-    needs_schengen_visa = models.BooleanField()
-    phone = models.CharField(max_length=100)
-    emergency_contact = models.TextField(blank=True)
-    comments = models.TextField(blank=True)
-    skills = models.ManyToManyField(Skill)
-    custom_skills = models.CharField(max_length=500, blank=True)
-    requested_positions = models.ManyToManyField(Position, related_name='requested_profiles')
-    approved_positions = models.ManyToManyField(Position, related_name='approved_profiles', blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name=_('Gender'))
+    address = models.CharField(max_length=200, blank=True, verbose_name=_('Address'))
+    needs_schengen_visa = models.BooleanField(verbose_name=_('Needs Schengen Visa'))
+    phone = models.CharField(max_length=100, verbose_name=_('Phone'))
+    emergency_contact = models.TextField(blank=True, verbose_name=_('Emergency contact'))
+    comments = models.TextField(blank=True, verbose_name=_('Comments'))
+    skills = models.ManyToManyField(Skill, verbose_name=_('Skills'))
+    custom_skills = models.CharField(max_length=500, blank=True, verbose_name=_('Custom skills'))
+    requested_positions = models.ManyToManyField(Position,
+                                                 related_name='requested_profiles',
+                                                 verbose_name=_('Requested Positions'))
+    approved_positions = models.ManyToManyField(Position,
+                                                related_name='approved_profiles',
+                                                blank=True,
+                                                verbose_name=_('Approved Positions'))
 
     def __str__(self):
         return self.user.last_name + ", " + self.user.first_name
@@ -62,7 +67,7 @@ class Profile(models.Model):
 
 
 class DocumentType(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name=_('Name'))
     DOCUMENT_TYPE_GROUPS = [
         ('ident', 'identification documents and visa'),
         ('nautic', 'nautical qualification'),
@@ -70,50 +75,50 @@ class DocumentType(models.Model):
         ('seafarer', 'seafarer qualification'),
         ('other', 'other qualification')
     ]
-    group = models.CharField(max_length=10, choices=DOCUMENT_TYPE_GROUPS)
+    group = models.CharField(max_length=10, choices=DOCUMENT_TYPE_GROUPS, verbose_name=_('Category'))
 
     def __str__(self):
         return self.name
 
 
 class Document(models.Model):
-    document_type = models.ForeignKey(DocumentType, on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    number = models.CharField(max_length=100, blank=True)
-    issuing_date = models.DateField(null=True, blank=True)
-    expiry_date = models.DateField(null=True, blank=True)
-    issuing_authority = models.CharField(max_length=100, blank=True)
-    issuing_place = models.CharField(max_length=100, blank=True)
-    issuing_country = models.CharField(max_length=100, blank=True)
-    file = models.FileField()
+    document_type = models.ForeignKey(DocumentType, on_delete=models.CASCADE, verbose_name=_('Document type'))
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Profile'))
+    number = models.CharField(max_length=100, blank=True, verbose_name=_('Number'))
+    issuing_date = models.DateField(null=True, blank=True, verbose_name=_('Issuing date'))
+    expiry_date = models.DateField(null=True, blank=True, verbose_name=_('Expiry date'))
+    issuing_authority = models.CharField(max_length=100, blank=True, verbose_name=_('Issuing authority'))
+    issuing_place = models.CharField(max_length=100, blank=True, verbose_name=_('Issuing place'))
+    issuing_country = models.CharField(max_length=100, blank=True, verbose_name=_('Issuing country'))
+    file = models.FileField(verbose_name=_('File'))
 
     def __str__(self):
         return f'{self.number} ({self.document_type})'
 
 
 class Question(models.Model):
-    text = models.CharField(max_length=500)
-    mandatory = models.BooleanField()
-    profiles = models.ManyToManyField(Profile, through='Answer')
+    text = models.CharField(max_length=500, verbose_name=_('Text'))
+    mandatory = models.BooleanField(verbose_name=_('Madatory'))
+    profiles = models.ManyToManyField(Profile, through='Answer', verbose_name=_('Profiles'))
 
     def __str__(self):
         return self.text
 
 
 class Answer(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    text = models.TextField()
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Profile'))
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name=_('Question'))
+    text = models.TextField(verbose_name=_('Text'))
 
     def __str__(self):
         return self.text
 
 
 class Availability(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    comment = models.CharField(max_length=255, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Profile'))
+    start_date = models.DateField(verbose_name=_('Start date'))
+    end_date = models.DateField(verbose_name=_('End date'))
+    comment = models.CharField(max_length=255, blank=True, verbose_name=_('Comment'))
 
     def __str__(self):
         return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")} ({self.profile})'

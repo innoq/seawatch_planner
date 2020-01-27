@@ -1,5 +1,6 @@
 {% extends 'base-registration.html' %}
 {% load bootstrap4 %}
+{% load i18n %}
 
 {% block title %}{{ view.title }} | Seawatch Registration{% endblock %}
 
@@ -8,7 +9,7 @@
 
     <form method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"?</p>
-        <input class="btn btn-primary" type="submit" value="Confirm">
+        <p>{% blocktrans with object=object%}Are you sure you want to delete "{{ object }}"?{% endblocktrans %}</p>
+        <input class="btn btn-primary" type="submit" value="{% trans 'Confirm' %}">
     </form>
 {% endblock %}

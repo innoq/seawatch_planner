@@ -1,18 +1,19 @@
 {% extends "base-missions.html" %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
+{% load i18n %}
 
 {% block content %}
-<h1>Missions</h1>
+<h1>{% trans 'Missions' %}</h1>
 {% if object_list %}
 <table class="table table-hover">
     <thead>
         <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Period</th>
-            <th>Ship</th>
-            <th>Actions</th>
+            <th>{% trans 'Name' %}</th>
+            <th>{% trans 'Period' %}</th>
+            <th>{% trans 'Ship' %}</th>
+            <th>{% trans 'Actions' %}</th>
         </tr>
     </thead>
     <tbody>
@@ -40,7 +41,7 @@
     </tbody>
 </table>
 {% else %}
-    <p>No missions yet.</p>
+    <p>{% trans 'No missions yet.' %}</p>
 {% endif %}
 <a class="btn btn-primary" href="{% url 'mission_create' %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
 {% endblock %}

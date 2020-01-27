@@ -20,6 +20,7 @@ class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
 
 
 class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView):
+    nav_item = 'assessment'
     model = Assessment
     template_name = 'assessment-update.html'
     permission_required = 'assessments.can_assess_profiles'

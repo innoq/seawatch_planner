@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import CheckboxSelectMultiple
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from seawatch_registration.mixins import (ModelFormWidgetMixin,
@@ -16,7 +16,7 @@ class PositionUpdateView(LoginRequiredMixin, RegistrationStepOrderMixin, HasProf
     template_name = 'form.html'
     submit_button = _('Save')
     error_message = _('Error your selection was not saved! Select at least one position.')
-    success_message = _('Your requested positions are successfully saved!')
+    success_message = _('Your requested positions are saved!')
     title = _('Requested Positions')
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
