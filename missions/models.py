@@ -24,6 +24,9 @@ class Mission(models.Model):
     def __str__(self):
         return self.ship.name + ": " + self.name
 
+    def get_assigned_users(self):
+        return User.objects.filter(assignments__mission=self).distinct()
+
 
 class Assignment(models.Model):
     mission = models.ForeignKey(Mission, on_delete=models.CASCADE, verbose_name=_('Mission'))

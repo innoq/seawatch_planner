@@ -6,8 +6,11 @@
 
 {% block content %}
 <script type="text/javascript">
-function AlertMultipleAssignments(first_name, last_name) {
+function AlertMultipleAssignmentsInSameMission(first_name, last_name) {
 alert(first_name + " " + last_name + " is assigned multiple times for this mission")
+}
+function AlertMultipleAssignmentsInDifferentMission(first_name, last_name) {
+alert(first_name + " " + last_name + " is assigned to a different mission in the same timeperiod")
 }
 </script>
 
@@ -17,7 +20,7 @@ alert(first_name + " " + last_name + " is assigned multiple times for this missi
 <table class="table">
     <thead>
     <tr>
-        {% if multiple_assigned_users%}
+        {% if multiple_assigned_users or multiple_assigned_users_in_different_missions%}
         <th scope="col"></th>
         {% endif %}
         <th scope="col">{% trans 'Position' %}</th>
@@ -29,11 +32,16 @@ alert(first_name + " " + last_name + " is assigned multiple times for this missi
     <tbody>
     {% for assignment in object.assignment_set.all %}
     <tr>
-        {% if multiple_assigned_users %}
+        {% if multiple_assigned_users or multiple_assigned_users_in_different_missions %}
 
         <td>
             {% if assignment.user in multiple_assigned_users %}
-            <a class="text-danger" href="javascript:AlertMultipleAssignments('{{ assignment.user.first_name}}','{{assignment.user.last_name}}');">
+            <a class="text-danger" href="javascript:AlertMultipleAssignmentsInSameMission('{{ assignment.user.first_name}}','{{assignment.user.last_name}}');">
+                {% fa5_icon 'exclamation-triangle' 'fas' %}
+            </a>
+            {% endif %}
+            {% if assignment.user in multiple_assigned_users_in_different_missions %}
+            <a class="text-danger" href="javascript:AlertMultipleAssignmentsInDifferentMission('{{ assignment.user.first_name}}','{{assignment.user.last_name}}');">
                 {% fa5_icon 'exclamation-triangle' 'fas' %}
             </a>
             {% endif %}

@@ -2,6 +2,8 @@ import django.views.generic as generic
 from django import forms
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
 from django.urls import reverse, reverse_lazy
 
 from missions.models import Mission, Assignment
@@ -27,14 +29,23 @@ class DetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView
 
     def get_context_data(self, **kwargs):
         mission = self.get_object()
-        multiple_assigned_users = list()
+        multiple_assignments_in_mission = \
+            User.objects.annotate(assignment_cnt=Count('assignments', filter=Q(assignments__mission=mission)))\
+                .filter(assignment_cnt__gt=1)
 
-        for assignment in mission.assignment_set.all():
-            if assignment.user is not None:
-                intersection = [value for value in assignment.user.assignments.all() if value in mission.assignment_set.all()]
-                if len(intersection) > 1:
-                    multiple_assigned_users.append(assignment.user)
-        return {**super().get_context_data(**kwargs), 'multiple_assigned_users': multiple_assigned_users}
+        multiple_assignments_in_different_missions = \
+            User.objects.annotate(assignment_cnt=Count('assignments',
+                                  filter=
+                                  Q(assignments__mission__start_date__range=(mission.start_date, mission.end_date)) |
+                                  Q(assignments__mission__end_date__range=(mission.start_date, mission.end_date)) |
+                                  (Q(assignments__mission__start_date__lte=mission.start_date) &
+                                   Q(assignments__mission__end_date__gte=mission.end_date)))
+                                  - Count('assignments', filter=Q(assignments__mission=mission)) + 1) \
+                .filter(assignment_cnt__gt=1)
+
+        return {**super().get_context_data(**kwargs),
+                'multiple_assigned_users': multiple_assignments_in_mission,
+                'multiple_assigned_users_in_different_missions': multiple_assignments_in_different_missions}
 
 
 class MissionCreateForm(forms.ModelForm):
