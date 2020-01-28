@@ -5,69 +5,33 @@
 
 {% block content %}
     <h1>{% trans "Assessments" %}</h1>
-
     {% if pending_assessments %}
-    <table class="table table-hover">
-        <thead>
+        <table class="table table-hover">
+            <thead>
             <tr>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Requested positions" %}</th>
                 <th>{% trans "Status" %}</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for assessment in pending_assessments %}
-            {% with profile=assessment.profile %}
-            <tr onclick="window.location='{% url 'assessment_update' assessment.pk %}';">
-                <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
-                <td>
-                    {% for position in profile.requested_positions.all %}
-                    {{ position.name }}
-                    {% endfor %}
-                </td>
-                <td>{{ assessment.status }}</td>
-            </tr>
-            {% endwith %}
+                {% with profile=assessment.profile %}
+                    <tr onclick="window.location='{% url 'assessment_update' assessment.pk %}';">
+                        <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
+                        <td>
+                            {% for position in profile.requested_positions.all %}
+                                {{ position.name }}
+                            {% endfor %}
+                        </td>
+                        <td>{{ assessment.status }}</td>
+                    </tr>
+                {% endwith %}
             {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
     {% else %}
-    <p>{% trans "There are no pending assessments!" %}</p>
+        <p>{% trans "There are no pending assessments!" %}</p>
     {% endif %}
-    {% if is_paginated %}
-    <nav aria-label="...">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">{% trans "Previous" %}</span>
-            </li>
-            {% endif %}
-            {% for number in paginator.page_range %}
-                {% if page_obj.number == number %}
-                <li class="page-item active">
-                    <span class="page-link">
-                        {{ page_obj.number }}
-                    <span class="sr-only">{% trans "(current)" %}</span>
-                    </span>
-                </li>
-                {% else %}
-                <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ number }}">{{ number }}</a></li>
-                {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">{% trans "Next" %}</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+    {% include 'partials/pagination.html' %}
 {% endblock %}

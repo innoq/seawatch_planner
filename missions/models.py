@@ -54,3 +54,6 @@ class DefaultAssignment(models.Model):
                 raise ValidationError({
                     'quantity': ValidationError(_('Quantity must be at least one.'))
                 })
+
+    class Meta:
+        unique_together = ('position', 'ship')

@@ -4,31 +4,36 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{% trans 'Default Assignments' %}</h1>
-{% if object_list %}
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>{% trans 'Position' %}</th>
-            <th>{% trans 'Quantity' %}</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for default_assignment in object_list %}
-        <tr>
-            <td>{{ default_assignment.position }}</td>
-            <td>{{ default_assignment.quantity }}</td>
-            <td>
-                <a href="{% url 'default_assignment_update' ship.id default_assignment.id %}" data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
-                <a class="text-danger" href="{% url 'default_assignment_delete' ship.id default_assignment.id %}" data-toggle="tooltip" title="delete">{% fa5_icon 'trash' 'fas' %}</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-    <p>{% trans 'No default assignments yet.' %}</p>
-{% endif %}
-<a class="btn btn-primary" href="{% url 'default_assignment_create' ship.id%}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+    <h1>{% trans 'Default Assignments' %}</h1>
+    {% if object_list %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>{% trans 'Position' %}</th>
+                <th>{% trans 'Quantity' %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for default_assignment in object_list %}
+                <tr>
+                    <td>{{ default_assignment.position }}</td>
+                    <td>{{ default_assignment.quantity }}</td>
+                    <td>
+                        <a href="{% url 'default_assignment_update' ship.id default_assignment.id %}"
+                           data-toggle="tooltip" title="edit">{% fa5_icon 'edit' 'fas' %}</a>
+                        <a class="text-danger"
+                           href="{% url 'default_assignment_delete' ship.id default_assignment.id %}"
+                           data-toggle="tooltip" title="delete">{% fa5_icon 'trash' 'fas' %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>{% trans 'No default assignments yet.' %}</p>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'default_assignment_create' ship.id %}"
+       role="button">{% fa5_icon 'plus' 'fas' %}</a>
+    {% include 'partials/pagination.html' %}
 {% endblock %}

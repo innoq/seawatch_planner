@@ -28,10 +28,10 @@ class SkillTranslationOptions(TranslationOptions):
 class SkillAdmin(TranslationAdmin):
     pass
 
+
 translator.register(Position, PositionTranslationOptions)
 admin.site.register(Position, PositionAdmin)
 translator.register(Question, QuestionTranslationOptions)
 admin.site.register(Question, QuestionAdmin)
 translator.register(Skill, SkillTranslationOptions)
 admin.site.register(Skill, SkillAdmin)
-

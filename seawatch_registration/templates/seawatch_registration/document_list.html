@@ -48,5 +48,5 @@
     <p>{% trans "You didn't upload any documents, yet!" %}</p>
     {% endif %}
     <a href="{% url 'document_create' %}" class="btn btn-primary">{% fa5_icon 'plus' 'fas' %}</a>
-    {% include 'pagination.html' %}
+    {% include 'partials/pagination.html' %}
 {% endblock %}
