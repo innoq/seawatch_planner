@@ -3,7 +3,7 @@ from django.db.models import QuerySet
 from django.utils.functional import lazy
 
 from seawatch_registration.models import Document, DocumentType
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import CustomDateInput
 
 
 class DocumentForm(forms.ModelForm):
@@ -21,5 +21,5 @@ class DocumentForm(forms.ModelForm):
                   'issuing_place',
                   'issuing_country',
                   'file']
-        widgets = {'issuing_date': DateInput(),
-                   'expiry_date': DateInput()}
+        widgets = {'issuing_date': CustomDateInput(),
+                   'expiry_date': CustomDateInput()}

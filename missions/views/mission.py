@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import (LoginRequiredMixin,
 from django.urls import reverse, reverse_lazy
 
 from missions.models import Mission, Assignment
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import CustomDateInput
 
 
 class ListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
@@ -46,8 +46,8 @@ class MissionCreateForm(forms.ModelForm):
         model = Mission
         fields = ['name', 'start_date', 'end_date', 'ship', 'create_default_assignments']
         widgets = {
-            'start_date': DateInput(),
-            'end_date': DateInput()}
+            'start_date': CustomDateInput(),
+            'end_date': CustomDateInput()}
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
@@ -90,6 +90,6 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['start_date'].widget = DateInput()
-        form.fields['end_date'].widget = DateInput()
+        form.fields['start_date'].widget = CustomDateInput()
+        form.fields['end_date'].widget = CustomDateInput()
         return form

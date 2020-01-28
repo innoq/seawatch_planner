@@ -1,5 +1,5 @@
-from django.forms.widgets import TextInput
+from django.forms.widgets import DateInput
 
 
-class DateInput(TextInput):
+class CustomDateInput(DateInput):
     input_type = 'date'

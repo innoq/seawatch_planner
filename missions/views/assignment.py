@@ -6,6 +6,7 @@ from django.core import mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django_filters import FilterSet, DateFilter, CharFilter
 from django_filters.views import FilterView
@@ -14,12 +15,13 @@ from django_tables2 import SingleTableMixin
 from missions.models import Assignment, Mission
 from missions.tables.candidates import CandidatesTable
 from seawatch_registration.models import Profile
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import CustomDateInput
 
 
 class ProfileFilter(FilterSet):
-    start_date = DateFilter(widget=DateInput, field_name='availability__start_date', lookup_expr='lte')
-    end_date = DateFilter(widget=DateInput, field_name='availability__end_date', lookup_expr='gte', label='Avail. End.')
+    start_date = DateFilter(widget=CustomDateInput, field_name='availability__start_date', lookup_expr='lte')
+    end_date = DateFilter(widget=CustomDateInput, field_name='availability__end_date', lookup_expr='gte',
+                          label=_('Avail. End.'))
     user__first_name = CharFilter(label='first name', lookup_expr='contains')
     user__last_name = CharFilter(label='last name', lookup_expr='contains')
 
@@ -97,7 +99,7 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, generic.View):
         assignment = get_object_or_404(Assignment, pk=kwargs.pop('pk'), mission__id=kwargs.pop('mission__id'))
         name = assignment.user.first_name + " " + assignment.user.last_name
 
-        subject = 'Sea-Watch.org: You have been assigned to a mission'
+        subject = _('Sea-Watch.org: You have been assigned to a mission')
         message2 = render_to_string('missions/email_mission_assigned.html',
                                     {'name': name,
                                      'start_date': str(assignment.mission.start_date),

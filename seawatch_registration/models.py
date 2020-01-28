@@ -16,8 +16,8 @@ class Skill(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     description = models.CharField(max_length=500, blank=True, verbose_name=_('Description'))
     SKILL_GROUPS = [
-        ('lang', 'language'),
-        ('other', 'other')
+        ('lang', _('language')),
+        ('other', _('other'))
     ]
     group = models.CharField(max_length=10, choices=SKILL_GROUPS)
 
@@ -39,9 +39,9 @@ class Profile(models.Model):
     place_of_birth = models.CharField(max_length=100, verbose_name=_('Place of birth'))
     country_of_birth = CountryField(verbose_name=_('Country of birth'))
     GENDER_CHOICES = [
-        ('f', 'female'),
-        ('m', 'male'),
-        ('d', 'diverse')
+        ('f', _('female')),
+        ('m', _('male')),
+        ('d', _('diverse'))
     ]
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name=_('Gender'))
     address = models.CharField(max_length=200, blank=True, verbose_name=_('Address'))
@@ -69,11 +69,11 @@ class Profile(models.Model):
 class DocumentType(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     DOCUMENT_TYPE_GROUPS = [
-        ('ident', 'identification documents and visa'),
-        ('nautic', 'nautical qualification'),
-        ('engineer', 'engineer qualification'),
-        ('seafarer', 'seafarer qualification'),
-        ('other', 'other qualification')
+        ('ident', _('identification documents and visa')),
+        ('nautic', _('nautical qualification')),
+        ('engineer', _('engineer qualification')),
+        ('seafarer', _('seafarer qualification')),
+        ('other', _('other qualification'))
     ]
     group = models.CharField(max_length=10, choices=DOCUMENT_TYPE_GROUPS, verbose_name=_('Category'))
 

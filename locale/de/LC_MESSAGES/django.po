@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-27 14:16+0100\n"
-"PO-Revision-Date: 2020-01-27 14:20+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2020-01-28 10:25+0100\n"
+"PO-Revision-Date: 2020-01-28 10:29+0100\n"
+"Last-Translator: Joshua Töpfer <joshua.toepfer@innoq.com>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -20,11 +20,24 @@ msgstr ""
 
 #: assessments/models.py:8 seawatch_registration/models.py:86
 #: seawatch_registration/models.py:109 seawatch_registration/models.py:118
-#: seawatch_registration/templates/navbar.html:46
+#: seawatch_registration/templates/navbar.html:54
+#: seawatch_registration/views/registration_process.py:62
 msgid "Profile"
 msgstr "Profil"
 
-#: assessments/models.py:14 assessments/templates/assessment-list.html:17
+#: assessments/models.py:10
+msgid "pending"
+msgstr "offen"
+
+#: assessments/models.py:11
+msgid "accepted"
+msgstr "akzeptiert"
+
+#: assessments/models.py:12
+msgid "rejected"
+msgstr "abgelehnt"
+
+#: assessments/models.py:14 assessments/templates/assessment-list.html:15
 msgid "Status"
 msgstr "Status"
 
@@ -32,12 +45,16 @@ msgstr "Status"
 msgid "Comment"
 msgstr "Kommentar"
 
+#: assessments/models.py:18
+msgid "Set assessments for profiles"
+msgstr "Bewertet Profile"
+
 #: assessments/templates/assessment-list.html:7
-#: seawatch_registration/templates/navbar.html:22
+#: seawatch_registration/templates/navbar.html:26
 msgid "Assessments"
 msgstr "Beurteilungen"
 
-#: assessments/templates/assessment-list.html:15 missions/models.py:12
+#: assessments/templates/assessment-list.html:13 missions/models.py:12
 #: missions/models.py:19 missions/templates/missions/mission_list.html:13
 #: missions/templates/missions/ship_list.html:13
 #: seawatch_registration/models.py:16 seawatch_registration/models.py:29
@@ -45,33 +62,35 @@ msgstr "Beurteilungen"
 msgid "Name"
 msgstr "Name"
 
-#: assessments/templates/assessment-list.html:16
+#: assessments/templates/assessment-list.html:14
 msgid "Requested positions"
 msgstr "Gewünschte Positionen"
 
-#: assessments/templates/assessment-list.html:37
+#: assessments/templates/assessment-list.html:35
 msgid "There are no pending assessments!"
 msgstr "Es gibt keine offenen Beurteilungen!"
 
-#: assessments/templates/assessment-list.html:44
-#: assessments/templates/assessment-list.html:48
+#: assessments/templates/assessment-list.html:42
+#: assessments/templates/assessment-list.html:46
 #: seawatch_registration/templates/pagination.html:8
 #: seawatch_registration/templates/pagination.html:12
 msgid "Previous"
 msgstr "Vorherige"
 
-#: assessments/templates/assessment-list.html:56
+#: assessments/templates/assessment-list.html:54
 msgid "(current)"
 msgstr "(aktuell)"
 
-#: assessments/templates/assessment-list.html:65
-#: assessments/templates/assessment-list.html:69
+#: assessments/templates/assessment-list.html:63
+#: assessments/templates/assessment-list.html:67
 #: seawatch_registration/templates/pagination.html:29
 #: seawatch_registration/templates/pagination.html:33
 #: seawatch_registration/templates/seawatch_registration/document.html:20
+#: seawatch_registration/views/profile.py:40
 #: seawatch_registration/views/question.py:34
+#: seawatch_registration/views/skill.py:40
 msgid "Next"
-msgstr "Nächste"
+msgstr "Weiter"
 
 #: assessments/templates/assessment-update.html:9
 #: assessments/templates/assessment-update.html:136
@@ -156,7 +175,7 @@ msgstr "Kommentare"
 
 #: assessments/templates/assessment-update.html:65
 #: seawatch_registration/models.py:52
-#: seawatch_registration/templates/navbar.html:49
+#: seawatch_registration/templates/navbar.html:58
 msgid "Skills"
 msgstr "Fähigkeiten"
 
@@ -166,18 +185,18 @@ msgstr "Es wurden keine Fähigkeiten angegeben."
 
 #: assessments/templates/assessment-update.html:78
 #: seawatch_registration/models.py:56
-#: seawatch_registration/templates/navbar.html:55
+#: seawatch_registration/templates/navbar.html:66
 #: seawatch_registration/views/position.py:20
 msgid "Requested Positions"
-msgstr "Gewünschte Positionen"
+msgstr "Wunschpositionen"
 
 #: assessments/templates/assessment-update.html:86
 msgid "No requested positions specified."
 msgstr "Keine gewünschten Positionen angegeben."
 
 #: assessments/templates/assessment-update.html:91
-#: seawatch_registration/templates/navbar.html:37
-#: seawatch_registration/templates/navbar.html:58
+#: seawatch_registration/templates/navbar.html:44
+#: seawatch_registration/templates/navbar.html:70
 #: seawatch_registration/views/question.py:30
 msgid "Questions"
 msgstr "Fragen"
@@ -187,7 +206,7 @@ msgid "No questions answered."
 msgstr "Es wurden keine Fragen beantwortet."
 
 #: assessments/templates/assessment-update.html:104
-#: seawatch_registration/templates/navbar.html:52
+#: seawatch_registration/templates/navbar.html:62
 #: seawatch_registration/templates/seawatch_registration/document_list.html:10
 msgid "Documents"
 msgstr "Dokumente"
@@ -242,6 +261,10 @@ msgstr "Es wurden keine Dokumente hochgeladen."
 msgid "Submit assessment"
 msgstr "Beurteilung speichern"
 
+#: assessments/views/assessment.py:28
+msgid "Updated assessment."
+msgstr "Bewertung aktualisiert."
+
 #: missions/models.py:20 seawatch_registration/models.py:119
 msgid "Start date"
 msgstr "Startdatum"
@@ -283,11 +306,11 @@ msgstr "Anzahl"
 
 #: missions/models.py:52
 msgid "Quantity must be at least one."
-msgstr "Die Anzahl muss mindestens eins sein."
+msgstr "Anzahl muss größer eins sein."
 
-#: missions/templates/base-missions.html:15
+#: missions/templates/base-missions.html:5
 msgid "Missions Overview"
-msgstr "Missionsübersicht"
+msgstr "Missions Übersicht"
 
 #: missions/templates/missions/assignee_form.html:7
 msgid "Assign volunteers"
@@ -356,8 +379,9 @@ msgstr "Neue Position anlegen"
 #: seawatch_registration/views/availability.py:38
 #: seawatch_registration/views/document.py:70
 #: seawatch_registration/views/position.py:17
+#: seawatch_registration/views/profile.py:58
 msgid "Save"
-msgstr "Speichern"
+msgstr "Sichern"
 
 #: missions/templates/missions/defaultassignment_confirm_delete.html:8
 #, python-format
@@ -437,7 +461,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 #: missions/templates/missions/mission_list.html:7
-#: seawatch_registration/templates/navbar.html:27
+#: seawatch_registration/templates/navbar.html:32
 msgid "Missions"
 msgstr "Missionen"
 
@@ -465,7 +489,7 @@ msgid "Ship %(object.name)s"
 msgstr "Schiff %(object.name)s"
 
 #: missions/templates/missions/ship_list.html:7
-#: seawatch_registration/templates/navbar.html:32
+#: seawatch_registration/templates/navbar.html:38
 msgid "Ships"
 msgstr "Schiffe"
 
@@ -473,17 +497,37 @@ msgstr "Schiffe"
 msgid "No ships yet."
 msgstr "Es wurden bisher keine Schiffe angelegt."
 
-#: seawatch_planner/settings/base.py:125
+#: missions/views/assignment.py:24
+msgid "Avail. End."
+msgstr "Ende der Verfügbarkeit"
+
+#: missions/views/assignment.py:102
+msgid "Sea-Watch.org: You have been assigned to a mission"
+msgstr "Sea-Watch.org: Sie wurden einer Mission zugewiesen"
+
+#: missions/views/default_assignments.py:23
+msgid "There is already a default assignment for this position for this ship!"
+msgstr "Für dieses Schiff gibt es bereits eine Standardbesatzung!"
+
+#: seawatch_planner/settings/base.py:126
 msgid "English"
 msgstr "Englisch"
 
-#: seawatch_planner/settings/base.py:126
+#: seawatch_planner/settings/base.py:127
 msgid "German"
 msgstr "Deutsch"
 
 #: seawatch_registration/models.py:17
 msgid "Description"
 msgstr "Beschreibung"
+
+#: seawatch_registration/models.py:19
+msgid "language"
+msgstr "Sprache"
+
+#: seawatch_registration/models.py:20
+msgid "other"
+msgstr "andere"
 
 #: seawatch_registration/models.py:38
 msgid "Date of birth"
@@ -497,6 +541,18 @@ msgstr "Geburtsort"
 msgid "Country of birth"
 msgstr "Geburtsland"
 
+#: seawatch_registration/models.py:42
+msgid "female"
+msgstr "weiblich"
+
+#: seawatch_registration/models.py:43
+msgid "male"
+msgstr "männlich"
+
+#: seawatch_registration/models.py:44
+msgid "diverse"
+msgstr "divers"
+
 #: seawatch_registration/models.py:50
 msgid "Emergency contact"
 msgstr "Notfallkontakt"
@@ -508,6 +564,26 @@ msgstr "Besondere Fähigkeiten"
 #: seawatch_registration/models.py:60
 msgid "Approved Positions"
 msgstr "Bestätigte Positionen"
+
+#: seawatch_registration/models.py:72
+msgid "identification documents and visa"
+msgstr "Ausweisdokumente und VISA"
+
+#: seawatch_registration/models.py:73
+msgid "nautical qualification"
+msgstr ""
+
+#: seawatch_registration/models.py:74
+msgid "engineer qualification"
+msgstr ""
+
+#: seawatch_registration/models.py:75
+msgid "seafarer qualification"
+msgstr ""
+
+#: seawatch_registration/models.py:76
+msgid "other qualification"
+msgstr ""
 
 #: seawatch_registration/models.py:78
 msgid "Category"
@@ -561,45 +637,49 @@ msgstr "Fragen"
 
 #: seawatch_registration/models.py:130 seawatch_registration/models.py:131
 msgid "Cannot select an empty date range."
-msgstr "Leere Zeiträume können nicht ausgewählt werden."
+msgstr "Es ist nicht möglich, leere Zeiträume auszuwählen."
+
+#: seawatch_registration/templates/base-registration.html:5
+msgid "Registration"
+msgstr "Registrierung"
 
 #: seawatch_registration/templates/confirm-delete.html:12
 #, python-format
 msgid "Are you sure you want to delete \"%(object)s\"?"
 msgstr "Sind Sie sicher, dass Sie „%(object)s“ löschen möchten?"
 
-#: seawatch_registration/templates/navbar.html:17
+#: seawatch_registration/templates/navbar.html:20
 msgid "Home"
-msgstr "Start"
-
-#: seawatch_registration/templates/navbar.html:61
-#: seawatch_registration/views/availability.py:36
-msgid "Availabilities"
-msgstr "Verfügbarkeiten"
+msgstr ""
 
 #: seawatch_registration/templates/navbar.html:74
+#: seawatch_registration/views/availability.py:36
+msgid "Availabilities"
+msgstr "Verfügbarkeit"
+
+#: seawatch_registration/templates/navbar.html:88
 msgid "Show profile"
 msgstr "Zeige mein Profil"
 
-#: seawatch_registration/templates/navbar.html:75
+#: seawatch_registration/templates/navbar.html:89
 msgid "Registration Status"
 msgstr "Registrierungsstatus"
 
-#: seawatch_registration/templates/navbar.html:78
+#: seawatch_registration/templates/navbar.html:92
 #: seawatch_registration/templates/registration/password_change_form.html:8
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: seawatch_registration/templates/navbar.html:82
+#: seawatch_registration/templates/navbar.html:96
 msgid "Logout"
 msgstr "Logout"
 
-#: seawatch_registration/templates/navbar.html:86
+#: seawatch_registration/templates/navbar.html:102
 #: seawatch_registration/templates/registration/login.html:15
 msgid "Login"
 msgstr "Login"
 
-#: seawatch_registration/templates/navbar.html:89
+#: seawatch_registration/templates/navbar.html:105
 msgid "Signup"
 msgstr "Registrieren"
 
@@ -662,7 +742,7 @@ msgid ""
 "the email shortly!"
 msgstr ""
 "Wir haben dir eine Email zum Zurücksetzten deines Passwortes geschickt. Du "
-"solltest die Email in Kürze empfangen. "
+"solltest die Email in Kürze empfangen!"
 
 #: seawatch_registration/templates/registration/password_reset_form.html:8
 #: seawatch_registration/templates/registration/password_reset_form.html:13
@@ -690,7 +770,7 @@ msgid "Document Upload"
 msgstr "Dokumente hochladen"
 
 #: seawatch_registration/templates/seawatch_registration/document.html:11
-msgid "Document was created!"
+msgid "Document has been created!"
 msgstr "Das Dokument wurde angelegt!"
 
 #: seawatch_registration/templates/seawatch_registration/document_list.html:17
@@ -724,24 +804,24 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 #: seawatch_registration/views/availability.py:37
-msgid "Available Dates saved!"
-msgstr "Verfügbarkeiten wurden gespeichert!"
+msgid "Available dates have been saved!"
+msgstr "Verfügbarkeit wurde gespeichert!"
 
 #: seawatch_registration/views/document.py:26
 msgid "Add Documents"
-msgstr "Dokumente hinzufügen"
+msgstr "Dokument hinzufügen"
 
 #: seawatch_registration/views/document.py:27
 msgid "Document has been saved."
-msgstr "Das Dokument wurde gespeichert."
+msgstr "Dokument wurde hinzugefügt."
 
 #: seawatch_registration/views/document.py:28
 msgid "Upload document"
-msgstr "Dokumente hochladen"
+msgstr "Dokument hochladen"
 
 #: seawatch_registration/views/document.py:33
 msgid "Provide documents later"
-msgstr "Dokumente später hochladen"
+msgstr "Dokument später hochladen"
 
 #: seawatch_registration/views/document.py:59
 msgid "Delete Document"
@@ -753,24 +833,71 @@ msgstr "Dokumente bearbeiten"
 
 #: seawatch_registration/views/document.py:69
 msgid "Document has been updated."
-msgstr "Das Dokument wurde gespeichert."
+msgstr "Das Dokument wurde aktualisiert."
 
 #: seawatch_registration/views/position.py:18
-msgid "Error your selection was not saved! Select at least one position."
+msgid "Your selection could not be saved. Please select at least one position."
 msgstr ""
-"Deine Auswahl wurde nicht gespeichert! Wähle mindestens eine Position aus."
+"Ihre Auswahl konnte nicht gespeichert werden. Bitte wählen Sie mindestens "
+"eine Position aus."
 
 #: seawatch_registration/views/position.py:19
-msgid "Your requested positions are saved!"
-msgstr "Deine gewünschten Positionen wurdem gespeichert!"
+msgid "Your requested positions have been saved."
+msgstr "Ihre Wunschpositionen wurden gespeichert."
+
+#: seawatch_registration/views/profile.py:28
+msgid "This has to match the nationality of your passport(s)."
+msgstr "Die Eingabe muss mit der Nationalität ihrer Ausweise übereinstimmen."
 
 #: seawatch_registration/views/question.py:31
 msgid "Your answer has been saved."
-msgstr "Deine Antwort wurde gespeichert."
+msgstr "Ihre Antwort wurde gesichert."
 
 #: seawatch_registration/views/question.py:33
 msgid "Your answers could not be saved."
-msgstr "Deine Antwort konnte nicht gespeichert werden."
+msgstr "Ihre Antworten konnten nicht gesichert werden."
+
+#: seawatch_registration/views/registration_process.py:19
+msgid "You have to agree to our terms and conditions."
+msgstr "Sie müssen den AGB zustimmen."
+
+#: seawatch_registration/views/registration_process.py:20
+msgid "I agree that Seawatch can save and process my data."
+msgstr "Ich stimme zu, dass SeaWatch meine Daten verarbeiten darf."
+
+#: seawatch_registration/views/registration_process.py:24
+msgid "Registration process not complete. Please provide all required data."
+msgstr ""
+"Die Registrierung kann nicht abgeschlossen werden. Machen Sie erst alle "
+"benötigten Angaben."
+
+#: seawatch_registration/views/registration_process.py:26
+msgid "Already registered."
+msgstr "Bereits registriert."
+
+#: seawatch_registration/views/registration_process.py:36
+msgid "Your registration status"
+msgstr "Registrationsstatus"
+
+#: seawatch_registration/views/registration_process.py:37
+msgid "Thank you for finishing the registration."
+msgstr "Danke, dass Sie die Registrierung abgeschlossen haben."
+
+#: seawatch_registration/views/registration_process.py:39
+msgid "Confirm registration"
+msgstr "Registrierung bestätigen"
+
+#: seawatch_registration/views/skill.py:38
+msgid "Your Skills"
+msgstr "Ihre Fähigkeiten"
+
+#: seawatch_registration/views/skill.py:39
+msgid "Skills have been saved!"
+msgstr "Deine Fähigkeiten wurden gespeichert."
+
+#: seawatch_registration/views/skill.py:41
+msgid "Choose at least one Language"
+msgstr "Bitte wählen Sie mindestens eine Sprache aus"
 
 #: venv/lib/python3.7/site-packages/bootstrap4/components.py:17
 #: venv/lib/python3.7/site-packages/bootstrap4/templates/bootstrap4/form_errors.html:3
@@ -1972,6 +2099,13 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+#~ msgid "Error your selection was not saved! Select at least one position."
+#~ msgstr ""
+#~ "Deine Auswahl wurde nicht gespeichert! Wähle mindestens eine Position aus."
+
+#~ msgid "Your requested positions are saved!"
+#~ msgstr "Deine gewünschten Positionen wurdem gespeichert!"
+
 #~ msgid "Mission:"
 #~ msgstr "Mission:"
 
@@ -1989,7 +2123,3 @@ msgstr ""
 
 #~ msgid "Delete missison \"{{ object.name }}\""
 #~ msgstr "Lösche Mission “{{ object.name }}“"
-
-#~ msgid "Are you sure you want to delete mission \"{{ object.name }}\"?"
-#~ msgstr ""
-#~ "Sind Sie sicher, dass Sie die Mission „{{ object.name }}“ löschen möchten?"

@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import ModelMultipleChoiceField, CheckboxSelectMultiple, ModelForm
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView
 
 from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
@@ -34,10 +35,10 @@ class SkillsForm(ModelForm):
 
 class SkillsUpdateView(LoginRequiredMixin, RegistrationStepOrderMixin, HasProfileMixin, UpdateView):
     nav_item = 'skills'
-    title = 'Your Skills'
-    success_alert = 'Skills are saved!'
-    submit_button = 'Next'
-    error_message = 'Choose at least one Language'
+    title = _('Your Skills')
+    success_alert = _('Skills have been saved!')
+    submit_button = _('Next')
+    error_message = _('Choose at least one Language')
     form_class = SkillsForm
     template_name = 'form.html'
 

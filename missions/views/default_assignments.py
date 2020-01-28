@@ -20,7 +20,7 @@ class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
     def form_valid(self, form):
         ship_id = self.kwargs.get('ship_id')
         if DefaultAssignment.objects.filter(position=form.cleaned_data['position'], ship=ship_id).exists():
-            form.add_error('position', 'There is already a default assignment for this position for this ship!')
+            form.add_error('position', _('There is already a default assignment for this position for this ship!'))
             return self.form_invalid(form)
 
         form.instance.ship = get_object_or_404(Ship, pk=ship_id)

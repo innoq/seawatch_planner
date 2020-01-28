@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from assessments.forms.assessment_form import AssessmentForm
@@ -24,7 +25,7 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
     model = Assessment
     template_name = 'assessment-update.html'
     permission_required = 'assessments.can_assess_profiles'
-    success_message = 'Updated assessment.'
+    success_message = _('Updated assessment.')
     success_url = reverse_lazy('assessment_list')
     form_class = AssessmentForm
 

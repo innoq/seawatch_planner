@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from assessments.models import Assessment
@@ -15,14 +16,14 @@ RegistrationStep = namedtuple('RegistrationStep',
 class RegistrationForm(forms.Form):
     confirmation = forms.BooleanField(
         required=True,
-        error_messages={'required': 'You have to agree to our terms and conditions.'},
-        label='I agree that Seawatch can save and process my data.')
+        error_messages={'required': _('You have to agree to our terms and conditions.')},
+        label=_('I agree that Seawatch can save and process my data.'))
 
     def clean(self):
         if not all(step.completed or step.optional for step in self.steps):
-            raise forms.ValidationError('Registration process not complete. Please provide all required data.')
+            raise forms.ValidationError(_('Registration process not complete. Please provide all required data.'))
         if self.user.profile.assessment_set.exists():
-            raise forms.ValidationError('Already registered.')
+            raise forms.ValidationError(_('Already registered.'))
 
     def __init__(self, user=None, steps=None, **kwargs):
         self.steps = steps
@@ -32,10 +33,10 @@ class RegistrationForm(forms.Form):
 
 class View(LoginRequiredMixin, SuccessMessageMixin, generic.FormView):
     nav_item = 'registration_process'
-    title = 'Your registration status'
-    success_message = 'Thank you for finishing the registration.'
+    title = _('Your registration status')
+    success_message = _('Thank you for finishing the registration.')
     success_url = reverse_lazy('registration_process')
-    submit_button = 'Confirm registration'
+    submit_button = _('Confirm registration')
     template_name = 'seawatch_registration/registration_process.html'
     form_class = RegistrationForm
 
@@ -58,7 +59,7 @@ class View(LoginRequiredMixin, SuccessMessageMixin, generic.FormView):
         profile = self.request.user.profile
         return [
             RegistrationStep(
-                'Profile',
+                _('Profile'),
                 'profile_update',
                 optional=False,
                 completed=profile is not None

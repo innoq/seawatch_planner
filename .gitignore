@@ -13,6 +13,7 @@ e2e_tests/chromedriver
 *.log
 *.pot
 *.pyc
+*.mo
 __pycache__/
 __PYCACHE__/
 local_settings.py

@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Availability, Profile
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import CustomDateInput
 
 
 class CreateView(LoginRequiredMixin, HasProfileMixin, generic.CreateView):
@@ -23,8 +23,8 @@ class CreateView(LoginRequiredMixin, HasProfileMixin, generic.CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['start_date'].widget = DateInput()
-        form.fields['end_date'].widget = DateInput()
+        form.fields['start_date'].widget = CustomDateInput()
+        form.fields['end_date'].widget = CustomDateInput()
         return form
 
 
@@ -34,7 +34,7 @@ class AvailabilityListView(LoginRequiredMixin,
                            generic.FormView):
     nav_item = 'availabilities'
     title = _('Availabilities')
-    success_alert = _('Available Dates saved!')
+    success_alert = _('Available dates have been saved!')
     submit_button = _('Save')
     template_name = './seawatch_registration/availability_list.html'
     success_url = reverse_lazy('availability_list')
@@ -44,8 +44,8 @@ class AvailabilityListView(LoginRequiredMixin,
         Availability,
         fields=('start_date', 'end_date', 'comment'),
         widgets={
-            'start_date': DateInput,
-            'end_date': DateInput},
+            'start_date': CustomDateInput,
+            'end_date': CustomDateInput},
         extra=0, max_num=4, min_num=1,
         can_delete=True)
 

@@ -2,12 +2,13 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from seawatch_registration.forms.user_update_form import UserUpdateForm
 from seawatch_registration.mixins import HasProfileMixin, RegistrationStepOrderMixin
 from seawatch_registration.models import Profile
-from seawatch_registration.widgets import DateInput
+from seawatch_registration.widgets import CustomDateInput
 
 
 class ProfileForm(forms.ModelForm):
@@ -24,10 +25,10 @@ class ProfileForm(forms.ModelForm):
                   'emergency_contact',
                   'comments']
         help_texts = {
-            'citizenship': 'This has to match the nationality of your passport(s).'
+            'citizenship': _('This has to match the nationality of your passport(s).')
         }
         widgets = {
-            'date_of_birth': DateInput(),
+            'date_of_birth': CustomDateInput(),
         }
 
 
@@ -36,7 +37,7 @@ class ProfileCreateView(LoginRequiredMixin, RegistrationStepOrderMixin, generic.
     nav_item = 'profile'
     template_name = './seawatch_registration/profile.html'
     success_url = reverse_lazy('skill_update')
-    submit_button = 'Next'
+    submit_button = _('Next')
     form_class = ProfileForm
 
     def form_valid(self, form):
@@ -54,7 +55,7 @@ class DetailView(LoginRequiredMixin, HasProfileMixin, generic.DetailView):
 
 class UpdateView(LoginRequiredMixin, generic.TemplateView):
     nav_item = 'profile'
-    submit_button = 'Save'
+    submit_button = _('Save')
     template_name = './seawatch_registration/profile_update.html'
     success_url = reverse_lazy('profile_detail')
 

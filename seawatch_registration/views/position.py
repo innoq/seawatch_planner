@@ -15,8 +15,8 @@ class PositionUpdateView(LoginRequiredMixin, RegistrationStepOrderMixin, HasProf
     fields = ['requested_positions']
     template_name = 'form.html'
     submit_button = _('Save')
-    error_message = _('Error your selection was not saved! Select at least one position.')
-    success_message = _('Your requested positions are saved!')
+    error_message = _('Your selection could not be saved. Please select at least one position.')
+    success_message = _('Your requested positions have been saved.')
     title = _('Requested Positions')
     widgets = {
         'requested_positions': CheckboxSelectMultiple,
