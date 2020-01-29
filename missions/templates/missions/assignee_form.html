@@ -4,24 +4,60 @@
 {% load i18n %}
 
 {% block content %}
-    <h1>{% trans "Assign volunteers" %}</h1>
-    <p><strong>{% trans "Mission" %}:</strong> {{ mission.name }}<br>
-    <strong>{% trans "Ship" %}:</strong> {{ mission.ship.name }}<br>
-    <strong>{% trans "Time period" %}:</strong> {{ mission.start_date }} - {{ mission.end_date }}</p>
-    {% if filter %}
-        <form action="" method="get" class="form form-inline">
-            {% bootstrap_form filter.form layout='inline' %}
-            {% bootstrap_button 'filter' %}
-            <br>
-            <br>
-        </form>
-        <br>
-    {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        {% include "partials/form-errors.html" %}
-        {{ form.as_p }}
-        {% render_table table %}
-        <input class="btn btn-primary" type="submit" value="Save" name="save">
-    </form>
+    <article>
+        <h1>{% trans "Assign volunteers" %}</h1>
+        <section>
+            <ul>
+                <li>
+                    {% trans "Mission" %}: <strong>{{ mission.name }}</strong>
+                </li>
+                <li>
+                    {% trans "Ship" %}: <strong>{{ mission.ship.name }}</strong>
+                </li>
+                <li>
+                    {% trans "Time period" %}: <strong>{{ mission.start_date }} - {{ mission.end_date }}</strong>
+                </li>
+                <li>
+                    {% trans "Selected position" %} <strong>{{ object.position.name }}</strong>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <button id="collapse-button" class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#filter-collapse"
+                    aria-expanded="{{ request.GET.show_filter|default:'false' }}" aria-controls="filter-collapse">
+                {% trans "Show filter" %}
+            </button>
+            <div class="collapse {% if request.GET.show_filter == 'true' %}show{% endif %} card card-body"
+                 id="filter-collapse">
+                <form method="get" class="form">
+                    {% bootstrap_form filter_form %}
+                    {# The filter should not disappear after hitting the filter button #}
+                    <input type="hidden" name="show_filter" value="true">
+                    {% buttons submit='Filter' reset="Reset to mission parameters" %}
+                    {% endbuttons %}
+                </form>
+            </div>
+            <script>
+                document.getElementById('collapse-button').addEventListener('click', _ => {
+                    const params = new URLSearchParams(location.search);
+                    params.set('show_filter', params.get('show_filter') === 'true' ? 'false' : 'true');
+                    window.history.replaceState({}, '', `${location.pathname}?${params}`);
+                });
+            </script>
+        </section>
+
+        <section>
+            <form method="post">
+                {% csrf_token %}
+                {% include "partials/form-errors.html" %}
+                {% render_table table %}
+                <button type="submit" class="btn btn-primary" name="Save" value="save">Save</button>
+                <button type="submit" class="btn btn-primary-outline" name="return_to_mission" value="true">
+                    Cancel and back to mission
+                </button>
+            </form>
+        </section>
+    </article>
 {% endblock %}

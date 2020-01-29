@@ -5,72 +5,86 @@
 
 
 {% block content %}
-<script type="text/javascript">
-function AlertMultipleAssignmentsInSameMission(first_name, last_name) {
-alert(first_name + " " + last_name + " is assigned multiple times for this mission")
-}
-function AlertMultipleAssignmentsInDifferentMission(first_name, last_name) {
-alert(first_name + " " + last_name + " is assigned to a different mission in the same timeperiod")
-}
-</script>
+    <script type="text/javascript">
+        function AlertMultipleAssignmentsInSameMission(first_name, last_name) {
+            alert(first_name + " " + last_name + " is assigned multiple times for this mission")
+        }
 
-<h1>{% blocktrans with ship_name=object.ship.name mission_name=object.name %}{{ ship_name }}: Mission ”{{ mission_name }}”{% endblocktrans %}</h1>
-<p>{% blocktrans with start_date=object.start_date end_date=object.end_date%}From {{ start_date }} to {{ end_date }}{% endblocktrans %}</p>
-<h2>{% trans 'Assignments' %}</h2>
-<table class="table">
-    <thead>
-    <tr>
-        {% if multiple_assigned_users or multiple_assigned_users_in_different_missions%}
-        <th scope="col"></th>
-        {% endif %}
-        <th scope="col">{% trans 'Position' %}</th>
-        <th scope="col">{% trans 'Assignment' %}</th>
-        <th scope="col">{% trans 'Confirmation' %}</th>
-        <th scope="col">{% trans 'Actions' %}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for assignment in object.assignment_set.all %}
-    <tr>
-        {% if multiple_assigned_users or multiple_assigned_users_in_different_missions %}
+        function AlertMultipleAssignmentsInDifferentMission(first_name, last_name) {
+            alert(first_name + " " + last_name + " is assigned to a different mission in the same timeperiod")
+        }
+    </script>
 
-        <td>
-            {% if assignment.user in multiple_assigned_users %}
-            <a class="text-danger" href="javascript:AlertMultipleAssignmentsInSameMission('{{ assignment.user.first_name}}','{{assignment.user.last_name}}');">
-                {% fa5_icon 'exclamation-triangle' 'fas' %}
-            </a>
+    <h1>{% blocktrans with ship_name=object.ship.name mission_name=object.name %}{{ ship_name }}: Mission ”
+        {{ mission_name }}”{% endblocktrans %}</h1>
+    <p>{% blocktrans with start_date=object.start_date end_date=object.end_date %}From {{ start_date }} to
+        {{ end_date }}{% endblocktrans %}</p>
+    <h2>{% trans 'Assignments' %}</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            {% if multiple_assigned_users or multiple_assigned_users_in_different_missions %}
+                <th scope="col"></th>
             {% endif %}
-            {% if assignment.user in multiple_assigned_users_in_different_missions %}
-            <a class="text-danger" href="javascript:AlertMultipleAssignmentsInDifferentMission('{{ assignment.user.first_name}}','{{assignment.user.last_name}}');">
-                {% fa5_icon 'exclamation-triangle' 'fas' %}
-            </a>
-            {% endif %}
-        </td>
-        {% endif %}
-        <td>{{ assignment.position.name }}</td>
-        <td>{{ assignment.user.first_name }} {{ assignment.user.last_name }}</td>
-        <td>{{ assignment.confirmed }}</td>
-        <td>
-            <a href="{% url 'assignee' object.id assignment.id %}"  data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'assign volunteer' %}">
-                {% fa5_icon 'user' 'fas' %}
-            </a>
-            {% if not assignment.email_sent and assignment.user %}
-            <a href="{% url 'assignment_mail' object.id assignment.id %}"  data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
-                {% fa5_icon 'envelope' 'fas' %}
-            </a>
-            {% else %}
-            <a class="text-black-50" data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
-                {% fa5_icon 'envelope' 'fas' %}
-            </a>
-            {% endif %}
-            <a class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"  data-toggle="tooltip" title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'delete' %}">
-                {% fa5_icon 'trash' 'fas' %}
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+            <th scope="col">{% trans 'Position' %}</th>
+            <th scope="col">{% trans 'Assignment' %}</th>
+            <th scope="col">{% trans 'Confirmation' %}</th>
+            <th scope="col">{% trans 'Actions' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for assignment in object.assignment_set.all %}
+            <tr>
+                {% if multiple_assigned_users or multiple_assigned_users_in_different_missions %}
 
-<a class="btn btn-primary" href="{% url 'assignment_create' object.id %}" role="button">{% fa5_icon 'plus' 'fas' %}</a>
+                    <td>
+                        {% if assignment.user in multiple_assigned_users %}
+                            <a class="text-danger"
+                               href="javascript:AlertMultipleAssignmentsInSameMission('{{ assignment.user.first_name }}','{{ assignment.user.last_name }}');">
+                                {% fa5_icon 'exclamation-triangle' 'fas' %}
+                            </a>
+                        {% endif %}
+                        {% if assignment.user in multiple_assigned_users_in_different_missions %}
+                            <a class="text-danger"
+                               href="javascript:AlertMultipleAssignmentsInDifferentMission('{{ assignment.user.first_name }}','{{ assignment.user.last_name }}');">
+                                {% fa5_icon 'exclamation-triangle' 'fas' %}
+                            </a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+                <td>{{ assignment.position.name }}</td>
+                <td>{{ assignment.user.first_name }} {{ assignment.user.last_name }}</td>
+                <td>{{ assignment.confirmed }}</td>
+                <td>
+                    {% with date_format="Y-m-d" %}
+                        <a href="{% url 'assignee' object.id assignment.id %}?position={{ assignment.position.name|urlencode }}&start_date={{ mission.start_date|date:date_format }}&end_date={{ mission.end_date|date:date_format }}"
+                           data-toggle="tooltip"
+                           title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'assign volunteer' %}">
+                            {% fa5_icon 'user' 'fas' %}
+                        </a>
+                    {% endwith %}
+                    {% if not assignment.email_sent and assignment.user %}
+                        <a href="{% url 'assignment_mail' object.id assignment.id %}" data-toggle="tooltip"
+                           title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
+                            {% fa5_icon 'envelope' 'fas' %}
+                        </a>
+                    {% else %}
+                        <a class="text-black-50" data-toggle="tooltip"
+                           title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
+                            {% fa5_icon 'envelope' 'fas' %}
+                        </a>
+                    {% endif %}
+                    <a class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"
+                       data-toggle="tooltip"
+                       title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'delete' %}">
+                        {% fa5_icon 'trash' 'fas' %}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{% url 'assignment_create' object.id %}"
+       role="button">{% fa5_icon 'plus' 'fas' %}</a>
 {% endblock %}

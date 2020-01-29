@@ -1,33 +1,106 @@
+import functools
+
 from django import forms
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import User
 from django.core import mail
-from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django_filters import FilterSet, DateFilter, CharFilter
-from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
 
 from missions.models import Assignment, Mission
 from missions.tables.candidates import CandidatesTable
-from seawatch_registration.models import Profile
+from seawatch_registration.models import Profile, Position
 from seawatch_registration.widgets import CustomDateInput
 
 
-class ProfileFilter(FilterSet):
-    start_date = DateFilter(widget=CustomDateInput, field_name='availability__start_date', lookup_expr='lte')
-    end_date = DateFilter(widget=CustomDateInput, field_name='availability__end_date', lookup_expr='gte',
-                          label=_('Avail. End.'))
-    user__first_name = CharFilter(label='first name', lookup_expr='contains')
-    user__last_name = CharFilter(label='last name', lookup_expr='contains')
+class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, generic.UpdateView):
+    class AssignmentFilterForm(forms.Form):
+        name = forms.CharField(required=False, help_text=_('Searches first and last name case-insensitive.'))
+        start_date = forms.DateField(widget=CustomDateInput(), required=False)
+        end_date = forms.DateField(widget=CustomDateInput(), required=False)
+        position = forms.ModelChoiceField(queryset=Position.objects.all(),
+                                          to_field_name='name',
+                                          required=False)
 
-    class Meta:
-        model = Profile
-        fields = ['user__first_name', 'user__last_name', 'requested_positions']
+    class AssignmentAssigneeForm(forms.ModelForm):
+        assignee = forms.IntegerField(error_messages={'required': _('Please select an assignee for the position.')})
+
+        def save(self, **kwargs):
+            self.instance.user = User.objects.get(profile__pk=self.cleaned_data['assignee'])
+            super().save(**kwargs)
+
+        class Meta:
+            model = Assignment
+            fields = 'assignee',
+
+    model = Assignment
+    form_class = AssignmentAssigneeForm
+    template_name = 'missions/assignee_form.html'
+    nav_item = 'missions'
+    permission_required = 'missions.change_assignment'
+    table_class = CandidatesTable
+    pk_url_kwarg = 'assignment__id'
+
+    def get_table_data(self):
+        return self._get_candidate_profiles(**self.request.GET.dict())
+
+    def get_table_kwargs(self):
+        return {'selected_user': self.object.user}
+
+    def get_context_data(self, **kwargs):
+        mission = get_object_or_404(Mission, id=(self.kwargs.pop('mission__id')))
+        filter_form = self._get_filter_form()
+        return {**super().get_context_data(**kwargs),
+                'filter_form': filter_form,
+                'mission': mission}
+
+    def _get_filter_form(self):
+        return self.AssignmentFilterForm(initial=self.request.GET.dict())
+
+    def _get_candidate_profiles(self, *, start_date=None, end_date=None, position=None, name=None, **kwargs):
+        filter_fields = ((('requested_positions__name', 'approved_positions__name'), position),
+                         (('availability__start_date__gte',), start_date),
+                         (('availability__end_date__lte',), end_date),
+                         (('full_name__icontains',), name))
+        return Profile.objects \
+            .annotate(full_name=Concat('user__first_name', Value(' '), 'user__last_name')) \
+            .distinct() \
+            .filter(Q(user__assignments=self.object) | self._to_cnf(filter_fields))
+
+    @staticmethod
+    def _to_cnf(kwarg_tuples) -> Q:
+        return functools.reduce(
+            lambda p, q: p & q,
+            (functools.reduce(lambda r, s: r | s, (Q(**{kwarg: value}) for kwarg in kwarg_list), Q())
+             for (kwarg_list, value) in kwarg_tuples if value), Q())
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('return_to_mission'):
+            return redirect(self.get_success_url())
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('mission_detail', kwargs={'pk': self.kwargs.pop('mission__id')})
+
+
+class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+    model = Assignment
+    fields = ['position']
+    nav_item = 'missions'
+    permission_required = 'missions.add_assignment'
+
+    def form_valid(self, form):
+        mission = get_object_or_404(Mission, pk=self.kwargs.pop('mission__id'))
+        form.instance.mission_id = mission.id
+        form.save()
+        return redirect(reverse('mission_detail', kwargs={'pk': mission.id}))
 
 
 class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
@@ -39,64 +112,15 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
         return reverse('mission_detail', kwargs={'pk': self.object.mission.id})
 
 
-class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, FilterView):
-    template_name = 'missions/assignee_form.html'
-    nav_item = 'missions'
-    permission_required = 'missions.change_assignment'
-    table_class = CandidatesTable
-    filterset_class = ProfileFilter
-
-    def get_context_data(self, **kwargs):
-        mission_id = self.kwargs.pop('mission__id')
-        mission = get_object_or_404(Mission, id=mission_id)
-        return {**super().get_context_data(**kwargs),
-                'mission': mission}
-
-    def get_queryset(self, **kwargs):
-        # Joins related to the ProfileFilter will cause duplicate entries.
-        return Profile.objects.distinct()
-
-    def post(self, request, *args, **kwargs):
-        assignment_id = kwargs.pop('assignment__id')
-        profile_id = request.POST['assignee']
-        if profile_id:
-            user = get_object_or_404(User, profile__pk=profile_id)
-            assignment = Assignment.objects.get(pk=assignment_id)
-            assignment.user = user
-            assignment.save()
-            return redirect(reverse('mission_detail', kwargs={'pk': kwargs.pop('mission__id')}))
-
-
-class AssignmentForm(forms.ModelForm):
-    class Meta:
-        model = Assignment
-        fields = ['position']
-
-
-class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
-    form_class = AssignmentForm
-    template_name = 'missions/assignment_form.html'
-    nav_item = 'missions'
-    permission_required = 'missions.add_assignment'
-
-    def form_valid(self, form):
-        mission = get_object_or_404(Mission, pk=self.kwargs.pop('mission__id'))
-        form.instance.mission_id = mission.id
-        form.save()
-        return redirect(reverse('mission_detail', kwargs={'pk': mission.id}))
-
-
-class EmailView(LoginRequiredMixin, PermissionRequiredMixin, generic.View):
+class EmailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
+    model = Assignment
+    context_object_name = 'assignment'
     nav_item = 'missions'
     permission_required = 'missions.add_assignment'
     template_name = './missions/assignment_confirm_mail.html'
 
-    def get(self, request, *args, **kwargs):
-        assignment = get_object_or_404(Assignment, pk=kwargs.pop('pk'), mission__id=kwargs.pop('mission__id'))
-        return render(request, self.template_name, {'assignment': assignment})
-
     def post(self, request, *args, **kwargs):
-        assignment = get_object_or_404(Assignment, pk=kwargs.pop('pk'), mission__id=kwargs.pop('mission__id'))
+        assignment = self.get_object()
         name = assignment.user.first_name + " " + assignment.user.last_name
 
         subject = _('Sea-Watch.org: You have been assigned to a mission')
