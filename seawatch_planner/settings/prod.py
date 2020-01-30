@@ -18,4 +18,5 @@ EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 # Heroku Deploy
 django_heroku.settings(locals())
 
-ALLOWED_HOSTS = ['seawatch-planner.herokuapp.com']
+ALLOWED_HOSTS = ['seawatch-planner.herokuapp.com',
+                 'seawatch-planner-docker.herokuapp.com']
