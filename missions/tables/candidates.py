@@ -20,9 +20,13 @@ class CandidatesTable(tables.Table):
                            'checked' if self.selected_user and self.selected_user.profile.id == value else '', value)
 
     def render_user(self, value: User):
-        return format_html('<a href="{}">{} {}</a>',
-                           reverse('assessment_update', kwargs={'pk': value.profile.assessment_set.first().pk}),
-                           value.first_name, value.last_name)
+        if value.profile.assessment_set.exists():
+            return format_html('<a href="{}">{} {}</a>',
+                               reverse('assessment_update',
+                                       kwargs={'pk': value.profile.assessment_set.values_list('id', flat=True)[0]}),
+                               value.first_name, value.last_name)
+        else:
+            return format_html('{} {}', value.first_name, value.last_name)
 
     def render_availabilities(self, value: QuerySet):
         return format_html_join("\n", "{} - {}<br>",

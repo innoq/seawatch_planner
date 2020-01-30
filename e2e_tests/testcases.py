@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import LiveServerTestCase
@@ -13,7 +15,8 @@ class TestCases:
             chrome_options = Options()
             chrome_options.add_argument("--headless")
             chrome_options.add_argument("--window-size=1920x1080")
-            self.browser = webdriver.Chrome(chrome_options=chrome_options, executable_path='e2e_tests/chromedriver')
+            self.browser = webdriver.Chrome(chrome_options=chrome_options,
+                                            executable_path=os.environ.get('CHROME_DRIVER', 'e2e_tests/chromedriver'))
             self.nav_item = None
             self.model_classes = list()
             self.nav_item_url = None
@@ -47,15 +50,21 @@ class TestCases:
             table_rows = table_body.find_elements_by_tag_name('tr')
             return len(table_rows)
 
+        def get_current_path(self):
+            return '/' + '/'.join(self.browser.current_url.split('/')[3:])
+
+        def get_current_path_without_parameters(self):
+            return self.get_current_path().split('?')[0]
+
     class SeleniumLoginTestCase(SeleniumTestCase):
 
         def setUp(self):
             super().setUp()
-            self.username = 'TestUser'
+            self.username = 'testuser'
             self.email = 'testmail@seawatch.org'
             self.first_name = 'Max'
             self.last_name = 'Mustermann'
-            self.password = 'TopSecretPassword'
+            self.password = 'testpassword'
             self.login_url = self.live_server_url + reverse('login')
 
         def login(self):
@@ -64,12 +73,12 @@ class TestCases:
                                             email=self.email,
                                             first_name=self.first_name,
                                             last_name=self.last_name)
-            if len(self.model_classes) > 0:
-                permissions = list()
-                for model_class in self.model_classes:
-                    content_type = ContentType.objects.get_for_model(model_class)
-                    permissions += list(Permission.objects.filter(content_type=content_type))
-                user.user_permissions.set(permissions)
+
+            user.user_permissions.set(
+                permission
+                for model_class in self.model_classes
+                for permission in Permission.objects.filter(
+                    content_type=ContentType.objects.get_for_model(model_class)))
 
             self.browser.get(self.login_url)
             username_input = self.browser.find_element_by_name('username')
@@ -80,4 +89,3 @@ class TestCases:
 
             self.assertEquals(login_button.text, 'Login')
             login_button.click()
-

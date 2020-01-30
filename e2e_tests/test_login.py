@@ -17,7 +17,6 @@ class TestLogin(TestCases.SeleniumTestCase):
         self.password = 'TopSecretPassword'
 
         self.nav_item_url = self.live_server_url + reverse('login')
-        self.registration_process_url = self.live_server_url + reverse('registration_process')
 
     def test_user_can_login(self):
         User.objects.create_user(username=self.username,
@@ -35,7 +34,6 @@ class TestLogin(TestCases.SeleniumTestCase):
         password_input.send_keys(self.password)
         self.click_primary_button()
 
-        self.assertEquals(self.browser.current_url, self.registration_process_url)
         logout_link = self.browser.find_element_by_link_text('Logout')
         self.assertIsNotNone(logout_link)
 

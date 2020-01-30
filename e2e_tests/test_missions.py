@@ -57,7 +57,7 @@ class TestMission(TestCases.SeleniumLoginTestCase):
 
         self.login()
         self.click_menu_item_from_index()
-        self.browser.find_element_by_name('edit').click()
+        self.browser.find_element_by_id('edit').click()
         self.assert_active_navbar()
         self.assertEquals(self.browser.current_url,
                           self.live_server_url + reverse('mission_update', kwargs={'pk': mission.id}))
@@ -90,7 +90,7 @@ class TestMission(TestCases.SeleniumLoginTestCase):
         self.login()
         self.click_menu_item_from_index()
 
-        self.browser.find_element_by_name('delete').click()
+        self.browser.find_element_by_id('delete').click()
         self.assert_active_navbar()
         self.assertEquals(self.browser.current_url,
                           self.live_server_url + reverse('mission_delete', kwargs={'pk': mission.id}))
@@ -108,7 +108,7 @@ class TestMission(TestCases.SeleniumLoginTestCase):
         self.login()
         self.click_menu_item_from_index()
 
-        self.browser.find_element_by_name('delete').click()
+        self.browser.find_element_by_id('delete').click()
         self.assert_active_navbar()
         self.assertEquals(self.browser.current_url,
                           self.live_server_url + reverse('mission_delete', kwargs={'pk': mission.id}))

@@ -66,13 +66,13 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
 
     def _get_candidate_profiles(self, *, start_date=None, end_date=None, position=None, name=None, **kwargs):
         filter_fields = ((('requested_positions__name', 'approved_positions__name'), position),
-                         (('availability__start_date__gte',), start_date),
-                         (('availability__end_date__lte',), end_date),
+                         (('availability__start_date__lte',), start_date),
+                         (('availability__end_date__gte',), end_date),
                          (('full_name__icontains',), name))
         return Profile.objects \
             .annotate(full_name=Concat('user__first_name', Value(' '), 'user__last_name')) \
             .distinct() \
-            .filter(Q(user__assignments=self.object) | self._to_cnf(filter_fields))
+            .filter(Q(user__assignments=self.object) | self._to_cnf(filter_fields)) or Profile.objects.all()
 
     @staticmethod
     def _to_cnf(kwarg_tuples) -> Q:

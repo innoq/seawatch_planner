@@ -121,7 +121,7 @@ class Availability(models.Model):
     comment = models.CharField(max_length=255, blank=True, verbose_name=_('Comment'))
 
     def __str__(self):
-        return f'{self.start_date.strftime("%x")} – {self.start_date.strftime("%x")} ({self.profile})'
+        return f'{self.start_date.strftime("%x")} – {self.end_date.strftime("%x")} ({self.profile})'
 
     def clean(self):
         if self.start_date and self.end_date:

@@ -57,14 +57,14 @@
                 <td>{{ assignment.confirmed }}</td>
                 <td>
                     {% with date_format="Y-m-d" %}
-                        <a href="{% url 'assignee' object.id assignment.id %}?position={{ assignment.position.name|urlencode }}&start_date={{ mission.start_date|date:date_format }}&end_date={{ mission.end_date|date:date_format }}"
+                        <a id="assignee" href="{% url 'assignee' object.id assignment.id %}?position={{ assignment.position.name|urlencode }}&start_date={{ mission.start_date|date:date_format }}&end_date={{ mission.end_date|date:date_format }}"
                            data-toggle="tooltip"
                            title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'assign volunteer' %}">
                             {% fa5_icon 'user' 'fas' %}
                         </a>
                     {% endwith %}
                     {% if not assignment.email_sent and assignment.user %}
-                        <a href="{% url 'assignment_mail' object.id assignment.id %}" data-toggle="tooltip"
+                        <a id="assignment_mail" href="{% url 'assignment_mail' object.id assignment.id %}" data-toggle="tooltip"
                            title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'send mission information email' %}">
                             {% fa5_icon 'envelope' 'fas' %}
                         </a>
@@ -74,7 +74,7 @@
                             {% fa5_icon 'envelope' 'fas' %}
                         </a>
                     {% endif %}
-                    <a class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"
+                    <a id="assignment_delete" class="text-danger" href="{% url 'assignment_delete' object.id assignment.id %}"
                        data-toggle="tooltip"
                        title="{% comment %}Translators: Text for Tooltip{% endcomment %}{% trans 'delete' %}">
                         {% fa5_icon 'trash' 'fas' %}
