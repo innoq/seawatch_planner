@@ -1,14 +1,21 @@
+from typing import List
+
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.urls import reverse_lazy
 from django.views import generic
 
+from seawatch_planner.settings import LANGUAGES
 from seawatch_registration.models import Question
+
+
+def get_all_languages_fieldname(fieldname: str) -> List[str]:
+    return [fieldname + '_' + code.replace('-', '_') for code, language in LANGUAGES]
 
 
 class CreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Question
-    fields = ['text', 'mandatory']
+    fields = [*get_all_languages_fieldname('text'), 'mandatory']
     nav_item = 'questions'
     success_url = reverse_lazy('question_list')
     permission_required = 'seawatch_registration.add_question'
@@ -31,7 +38,10 @@ class DeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView
 
 class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     model = Question
-    fields = ['text', 'mandatory']
+    fields = [*get_all_languages_fieldname('text'), 'mandatory']
     nav_item = 'questions'
     success_url = reverse_lazy('question_list')
     permission_required = 'seawatch_registration.change_question'
+
+
+
