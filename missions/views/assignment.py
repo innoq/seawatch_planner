@@ -100,7 +100,7 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, generic.View):
         name = assignment.user.first_name + " " + assignment.user.last_name
 
         subject = _('Sea-Watch.org: You have been assigned to a mission')
-        message2 = render_to_string('missions/email_mission_assigned.html',
+        message = render_to_string('missions/email_mission_assigned.html',
                                     {'name': name,
                                      'start_date': str(assignment.mission.start_date),
                                      'end_date': str(assignment.mission.end_date),
@@ -109,8 +109,11 @@ class EmailView(LoginRequiredMixin, PermissionRequiredMixin, generic.View):
                                      'stuff_name': 'Sea-Watch e.V.'})
         from_email = 'team@sea-watch.org'
         recipient_list = [assignment.user.email]
-
-        mail.send_mail(subject, message2, from_email, recipient_list)
+        mail.send_mail(subject=subject,
+                       message='',
+                       html_message=message,
+                       from_email=from_email,
+                       recipient_list=recipient_list)
         assignment.email_sent = True
         assignment.save()
         return redirect(reverse('mission_detail', kwargs={'pk': assignment.mission.id}))
