@@ -1,5 +1,4 @@
 {% extends "base-missions.html" %}
-{% load render_table from django_tables2 %}
 {% load bootstrap4 %}
 {% load i18n %}
 
@@ -35,7 +34,10 @@
                     {% bootstrap_form filter_form %}
                     {# The filter should not disappear after hitting the filter button #}
                     <input type="hidden" name="show_filter" value="true">
-                    {% buttons submit='Filter' reset="Reset to mission parameters" %}
+                    {% buttons submit='Filter' %}
+                        <a id="reset-button" class="btn btn-outline-danger" href="{{ reset_url }}&show_filter=true">
+                            {% trans 'Reset to mission parameters' %}
+                        </a>
                     {% endbuttons %}
                 </form>
             </div>
@@ -52,12 +54,63 @@
             <form method="post">
                 {% csrf_token %}
                 {% include "partials/form-errors.html" %}
-                {% render_table table %}
-                <button type="submit" class="btn btn-primary" name="Save" value="save">Save</button>
-                <button type="submit" class="btn btn-primary-outline" name="return_to_mission" value="true">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">{% trans 'Assignee' %}</th>
+                        <th scope="col">{% trans 'Requested positions' %}</th>
+                        <th scope="col">{% trans 'Approved positions' %}</th>
+                        <th scope="col">{% trans 'Availability' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for profile in profiles %}
+                        <tr class="assignee-row" data-assignee-id="{{ profile.pk }}">
+                            <td><input id="assignee_{{ profile.pk }}" type="radio" name="assignee"
+                                       value="{{ profile.pk }}"
+                                       {% if profile.user.pk == assignment.user.pk %}checked{% endif %}></td>
+                            <td>
+                                {% with name=profile.user.first_name|add:" "|add:profile.user.last_name %}
+                                    {% if profile.assessment_set.exists %}
+                                        <a class="assessment-link"
+                                           href="{% url 'assessment_update' pk=profile.assessment_set.first.pk %}">
+                                            {{ name }}
+                                        </a>
+                                    {% else %}
+                                        <label for="assignee_{{ profile.pk }}">{{ name }}</label>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td>{{ profile.requested_positions.all|join:", " }}</td>
+                            <td>{{ profile.approved_positions.all|join:", " }}</td>
+                            <td>
+                                {% for availability in profile.availability_set.all %}
+                                    {{ availability.start_date }} - {{ availability.end_date }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button id="save-button" type="submit" class="btn btn-primary" name="Save" value="save">Save</button>
+                <button id="return-button" type="submit" class="btn btn-primary-outline" name="return_to_mission"
+                        value="true">
                     Cancel and back to mission
                 </button>
             </form>
+            <script>
+                for (let row of document.getElementsByClassName('assignee-row')) {
+                    let inputId = 'assignee_' + row.dataset.assigneeId;
+                    row.addEventListener('click', _ => {
+                        document.getElementById(inputId).checked = true;
+                    });
+                }
+
+                for (let link of document.getElementsByClassName('assessment-link')) {
+                    link.addEventListener('click', event => event.stopPropagation());
+                }
+            </script>
         </section>
     </article>
 {% endblock %}

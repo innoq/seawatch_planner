@@ -1,5 +1,8 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from assessments.models import Assessment
 from e2e_tests.testcases import TestCases
@@ -145,6 +148,51 @@ class TestAssigneeView(TestCases.SeleniumLoginTestCase):
 
         # assert
         self.assertTrue('show_filter=true' in self.browser.current_url)
+
+    def test__assign_view__filter_allows_to_reset_to_mission_parameters(self):
+        self._local_setup()
+
+        # prepare: navigate to assignee view
+        assignment = Assignment.objects.create(mission=self.mission, position=self.position)
+        self._navigate_to_assignee_view_directly(assignment)
+        self.browser.find_element_by_id('collapse-button').click()
+
+        # act: push the button!
+        WebDriverWait(self.browser, 2) \
+            .until(EC.element_to_be_clickable((By.ID, "reset-button"))) \
+            .click()
+
+        # assert: filter fields are set correctly
+        self.assertEqual(
+            self.mission.start_date,
+            self.browser.find_element_by_id('id_start_date').get_attribute('value'))
+        self.assertEqual(
+            self.mission.end_date,
+            self.browser.find_element_by_id('id_end_date').get_attribute('value'))
+        self.assertEqual(
+            assignment.position.name,
+            self.browser.find_element_by_id('id_position').get_attribute('value'))
+
+    def test__assign_view__the_correct_user_is_assigned_to_the_assignment(self):
+        self._local_setup()
+
+        # prepare: create some candidates
+        assignment = Assignment.objects.create(mission=self.mission, position=self.position)
+        for name in ('fee', 'fi', 'fo', 'fam'):
+            self._get_candidate(username=name + '@bigfoot.com')
+
+        # prepare: navigate to assignee view
+        self._navigate_to_assignee_view_directly(assignment)
+
+        # act: select assignee and submit
+        self.browser.find_element_by_xpath("//*[contains(text(), 'fee@bigfoot.com')]/..").click()
+        self.browser.find_element_by_id('save-button').click()
+
+        # assert: position was set
+        self._assert_current_path_is_mission_detail()
+        self.assertEqual(
+            1, len(self.browser.find_elements_by_xpath(
+                "//table/tbody/tr/td[contains(text(), 'fee@bigfoot.com')]")))
 
     @staticmethod
     def _get_candidate(username):

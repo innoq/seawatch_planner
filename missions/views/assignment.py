@@ -1,4 +1,5 @@
 import functools
+from urllib.parse import urlencode
 
 from django import forms
 from django.contrib.auth.mixins import (LoginRequiredMixin,
@@ -12,15 +13,13 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django_tables2 import SingleTableMixin
 
 from missions.models import Assignment, Mission
-from missions.tables.candidates import CandidatesTable
 from seawatch_registration.models import Profile, Position
 from seawatch_registration.widgets import CustomDateInput
 
 
-class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, generic.UpdateView):
+class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     class AssignmentFilterForm(forms.Form):
         name = forms.CharField(required=False, help_text=_('Searches first and last name case-insensitive.'))
         start_date = forms.DateField(widget=CustomDateInput(), required=False)
@@ -45,11 +44,7 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
     template_name = 'missions/assignee_form.html'
     nav_item = 'missions'
     permission_required = 'missions.change_assignment'
-    table_class = CandidatesTable
     pk_url_kwarg = 'assignment__id'
-
-    def get_table_data(self):
-        return self._get_candidate_profiles(**self.request.GET.dict())
 
     def get_table_kwargs(self):
         return {'selected_user': self.object.user}
@@ -59,7 +54,19 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
         filter_form = self._get_filter_form()
         return {**super().get_context_data(**kwargs),
                 'filter_form': filter_form,
+                'profiles': self._get_candidate_profiles(**self.request.GET.dict()),
+                'reset_url': self.get_default_filter_url_for_assignment(self.object),
                 'mission': mission}
+
+    @staticmethod
+    def get_default_filter_url_for_assignment(assignment):
+        url_params = '?' + '&'.join(f'{kwarg}={str(value)}' for kwarg, value in (
+            ('position', assignment.position),
+            ('start_date', assignment.mission.start_date),
+            ('end_date', assignment.mission.end_date)
+        ))
+        return reverse('assignee', kwargs={'mission__id': assignment.mission.pk,
+                                                     'assignment__id': assignment.pk}) + url_params
 
     def _get_filter_form(self):
         return self.AssignmentFilterForm(initial=self.request.GET.dict())
@@ -70,9 +77,9 @@ class UpdateView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, 
                          (('availability__end_date__gte',), end_date),
                          (('full_name__icontains',), name))
         return Profile.objects \
-            .annotate(full_name=Concat('user__first_name', Value(' '), 'user__last_name')) \
-            .distinct() \
-            .filter(Q(user__assignments=self.object) | self._to_cnf(filter_fields)) or Profile.objects.all()
+                   .annotate(full_name=Concat('user__first_name', Value(' '), 'user__last_name')) \
+                   .distinct() \
+                   .filter(Q(user__assignments=self.object) | self._to_cnf(filter_fields)) or Profile.objects.all()
 
     @staticmethod
     def _to_cnf(kwarg_tuples) -> Q:
